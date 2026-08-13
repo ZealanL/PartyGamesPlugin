@@ -50,7 +50,7 @@ public class BossBarMgr extends AutoListener {
             final float TELEPORT_DIST = 50;
             var playerLoc = player.getLocation();
             return playerLoc.toVector().add(
-                    playerLoc.getDirection().multiply(-TELEPORT_DIST)
+                    playerLoc.getDirection().multiply(TELEPORT_DIST)
             );
         }
 
