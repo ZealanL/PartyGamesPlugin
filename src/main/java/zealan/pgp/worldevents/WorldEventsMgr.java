@@ -203,9 +203,14 @@ public class WorldEventsMgr extends AutoListener {
 
     @EventHandler
     void handle(PlayerDeathEvent event) {
+        var player = event.getEntity();
+
         WorldEvents worldEvents = getWorldEventsFromEvent(event);
         if (worldEvents == null) return;
-        worldEvents.onPlayerDeath(event.getEntity());
+        worldEvents.onPlayerDeath(player);
+
+        // Never actually allow a player death
+        player.setHealth(player.getMaxHealth());
     }
 
     // //////////
@@ -216,9 +221,5 @@ public class WorldEventsMgr extends AutoListener {
         for (Player player : needsInvUpdateSet)
             player.updateInventory();
         needsInvUpdateSet.clear();
-
-        for (Player player : Bukkit.getOnlinePlayers())
-            if (player.isDead())
-                player.spigot().respawn();
     }
 }

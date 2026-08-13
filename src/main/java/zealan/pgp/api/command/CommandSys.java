@@ -221,7 +221,8 @@ public class CommandSys extends AutoListener {
         CommandCtx ctx = new CommandCtx(event.getPlayer());
         CommandResult result = onPlayerExecute(ctx, event.getMessage());
         if (result != null) {
-            Display.sendMsg(event.getPlayer(), result.msg);
+            if (result.msg != null)
+                Display.sendMsg(event.getPlayer(), result.msg);
             event.setCancelled(true);
         }
     }

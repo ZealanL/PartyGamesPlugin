@@ -1,11 +1,12 @@
 package zealan.pgp.game;
 
 import org.bukkit.Location;
+import zealan.pgp.math.Vec3i;
 
 public class GameLoadInfo {
-    public final Location[] spawns;
+    public final GameSpawn[] spawns;
 
-    public GameLoadInfo(Location... spawns) {
+    public GameLoadInfo(GameSpawn... spawns) {
         this.spawns = spawns;
     }
 }

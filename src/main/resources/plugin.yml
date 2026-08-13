@@ -4,4 +4,4 @@ main: zealan.pgp.PartyGamesPlugin
 api-version: 1.8 # Optional for 1.8, but good practice
 description: Party Games replication plugin
 author: ZealanL
-depend: [packetevents, FastAsyncWorldEdit]
+depend: [packetevents]

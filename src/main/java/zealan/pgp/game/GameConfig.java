@@ -1,7 +1,10 @@
 package zealan.pgp.game;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
+import zealan.pgp.game.games.GameAnvilSpleef;
+import zealan.pgp.math.Vec3i;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -18,16 +21,15 @@ public enum GameConfig {
                     new GameSpawn[]{new GameSpawn(GameAnimalSlaughter.CENTER_BLOCK_POS)}
             )
     ),
+    */
     AnvilSpleef(
-            GameAnvilSpleef.class, "Anvil Spleef", Items.ANVIL,
-            GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
+            GameAnvilSpleef.class, "Anvil Spleef", Material.ANVIL,
+            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    new BlockPos(-223, 0, -3588),
-                    new GameSpawn[]{
-                            new GameSpawn(-243, 1, -3608)
-                    }
+                    new GameSpawn(-243, 1, -3608)
             )
-    ),
+    )
+    /*
     Avalanche(
             GameAvalanche.class, "Avalanche", Items.ICE,
             GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
@@ -263,22 +265,34 @@ public enum GameConfig {
     )*/
     ;
 
-    public static final int MAX_GAME_DURATION = 300;
+    public static final int MAX_GAME_DURATION = 60 * 60 * 100; // 100 hours
 
     public final Class<? extends Game> cls;
     public final String properName;
+    public final String snakeCaseName;
     public final Material iconItem;
     public final GameStyle style;
+    public final GameMode gameMode;
     public final int maxDurationSecs;
     public final GameLoadInfo loadInfo;
 
     public final GameVariant[] variants;
 
-    GameConfig(Class<? extends Game> cls, String properName, Material iconItem, GameStyle gameStyle, int maxDurationSecs, GameLoadInfo loadInfo) {
+    GameConfig(
+            Class<? extends Game> cls,
+            String properName,
+            Material iconItem,
+            GameStyle gameStyle,
+            GameMode gameMode,
+            int maxDurationSecs,
+            GameLoadInfo loadInfo
+    ) {
         this.cls = cls;
         this.properName = properName;
+        this.snakeCaseName = properName.toLowerCase().replace(" ", "_");
         this.iconItem = iconItem;
         this.style = gameStyle;
+        this.gameMode = gameMode;
         this.maxDurationSecs = maxDurationSecs;
         this.loadInfo = loadInfo;
 
@@ -311,10 +325,6 @@ public enum GameConfig {
         }
 
         return null;
-    }
-
-    public String snakeCaseName() {
-        return this.properName.toLowerCase().replace(" ", "_");
     }
 }
 

@@ -1,64 +1,142 @@
 package zealan.pgp;
 
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import zealan.pgp.math.Vec3i;
 import zealan.pgp.util.WorldUtil;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 
-import static zealan.pgp.Globals.PLAYER_MGR;
-import static zealan.pgp.Globals.PLOG;
+import static zealan.pgp.Globals.*;
 
 public class WorldMgr extends AutoListener {
     private final HashSet<World> fixedWorlds = new HashSet<>();
     private final ArrayList<World> tempWorlds = new ArrayList<>();
-    private final static int MAX_RUNTIME_WORLDS = 12;
+    private final static Random RAND = new Random();
 
-    private World createBlankWorldSlot(String name) {
-        WorldCreator creator = new WorldCreator(name);
+    private static List<String> getClosestRegionFiles(int blockX, int blockY) {
+        int relX = Math.floorMod(blockX, 512);
+        int relY = Math.floorMod(blockY, 512);
+        int offsetX = relX >= 256 ? 1 : -1;
+        int offsetZ = relY >= 256 ? 1 : -1;
 
-        creator.type(WorldType.FLAT);
-        creator.generatorSettings("{\"layers\": [], \"biome\": \"minecraft:plains\"}");
-        creator.generateStructures(false);
+        int px = Math.floorDiv(blockX, 512);
+        int pz = Math.floorDiv(blockY, 512);
 
-        World world = Bukkit.createWorld(creator);
-        if (world == null)
-            throw new RuntimeException("Failed to initialize Bukkit world slot: " + name);
+        int nx = px + offsetX;
+        int nz = pz + offsetZ;
 
+        return List.of(
+                String.format("r.%d.%d.mca", px, pz),
+                String.format("r.%d.%d.mca", nx, pz),
+                String.format("r.%d.%d.mca", px, nz),
+                String.format("r.%d.%d.mca", nx, nz)
+        );
+    }
+
+    private World createTempWorldAroundInner(Vec3i aroundBlockPos) throws IOException {
+        Path mainWorldPath = WorldUtil.getWorldDir(WorldUtil.getMainWorld().getName()).toPath();
+        String tempWorldName = "temp-world-" + RAND.nextInt();
+        Path tempWorldPath = Bukkit.getWorldContainer().toPath().resolve(tempWorldName);
+        PLOG.info("Creating temporary world \"" + tempWorldName + "\"...");
+
+        var allowedRegionFiles = getClosestRegionFiles(aroundBlockPos.x, aroundBlockPos.z);
+
+        // Copy world files
+        {
+            Files.createDirectories(tempWorldPath);
+            Files.walkFileTree(mainWorldPath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    Path targetDir = tempWorldPath.resolve(mainWorldPath.relativize(dir));
+                    Files.createDirectories(targetDir);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    var dirName = file.getParent().getFileName().toString();
+                    if (!dirName.equalsIgnoreCase(WorldUtil.getMainWorld().getName()) &&
+                            !dirName.equalsIgnoreCase("region") &&
+                            !dirName.equalsIgnoreCase("data")
+                    ) {
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    var fileName = file.getFileName().toString().toLowerCase();
+                    if (fileName.equals("session.lock") || fileName.equals("uid.dat")) {
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    if (fileName.endsWith(".mca")) {
+                        boolean isAllowed = allowedRegionFiles.stream()
+                                .anyMatch(s -> s.equalsIgnoreCase(fileName));
+                        if (!isAllowed)
+                            return FileVisitResult.CONTINUE;
+                    }
+
+                    PLOG.info(
+                            " > Copying \"" + file.getFileName() +
+                                    "\" to \"" + mainWorldPath.relativize(file) + "\""
+                    );
+                    Files.copy(
+                            file,
+                            tempWorldPath.resolve(mainWorldPath.relativize(file)),
+                            StandardCopyOption.REPLACE_EXISTING
+                    );
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        }
+
+        WorldCreator creator = new WorldCreator(tempWorldName);
+        var world = Bukkit.createWorld(creator);
         world.setAutoSave(false);
-        fixWorld(world);
+        world.setDifficulty(Difficulty.NORMAL);
 
         return world;
     }
 
-    public World getUnusedWorld() {
-        for (World world : this.tempWorlds) {
-            boolean hasPlayers = false;
-            for (var player : world.getPlayers()) {
-                if (PLAYER_MGR.isFakeSpectator(player))
-                    continue;
-
-                hasPlayers = true;
-                break;
-            }
-            if (!hasPlayers)
-                return world;
-        }
-
-        if (this.tempWorlds.size() < MAX_RUNTIME_WORLDS) {
-            PLOG.info("Creating new blank runtime world...");
-            int slotId = tempWorlds.size() + 1;
-            World newWorld = createBlankWorldSlot("temp_world_slot" + slotId);
+    public World createTempWorldAround(Vec3i aroundBlockPos) {
+        PLOG.info("Creating new blank runtime world...");
+        try {
+            World newWorld = createTempWorldAroundInner(aroundBlockPos);
             this.tempWorlds.add(newWorld);
             return newWorld;
-        } else {
-            throw new RuntimeException("Ran out of world slots (max=" + MAX_RUNTIME_WORLDS + ")");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private void removeOldTempWorlds() {
+        tempWorlds.removeIf(
+                world -> {
+                    boolean shouldRemove = world.getPlayers().isEmpty();
+
+                    if (shouldRemove) {
+                        var worldDir = WorldUtil.getWorldDir(world.getName());
+                        Bukkit.unloadWorld(world, false);
+
+                        try {
+                            try (var stream = Files.walk(worldDir.toPath())) {
+                                stream.sorted(Comparator.reverseOrder())
+                                        .map(Path::toFile)
+                                        .forEach(java.io.File::delete);
+                            }
+                        } catch (IOException e) {
+                            PLOG.severe("Removing temp world failed: " + e.getMessage());
+                        }
+                    }
+
+                    return shouldRemove;
+                }
+        );
     }
 
     private void fixWorld(World world) {
@@ -93,6 +171,11 @@ public class WorldMgr extends AutoListener {
         }
     }
 
+    @Override
+    public void onTick() {
+        removeOldTempWorlds();
+    }
+
     @EventHandler
     void handle(ChunkLoadEvent event) {
         World world = event.getWorld();
@@ -102,7 +185,7 @@ public class WorldMgr extends AutoListener {
     @EventHandler
     void handle(ChunkUnloadEvent event) {
         if (event.getWorld() != WorldUtil.getMainWorld()) {
-            event.getChunk().unload(false, true);
+            event.getChunk().unload(false, false);
             event.setCancelled(true); // Prevent main event
         }
     }

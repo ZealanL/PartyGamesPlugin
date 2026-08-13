@@ -2,6 +2,7 @@ package zealan.pgp;
 
 import org.bukkit.Server;
 import zealan.pgp.api.command.CommandSys;
+import zealan.pgp.bossbar.BossBarMgr;
 import zealan.pgp.essentials.Essentials;
 import zealan.pgp.game.GameMgr;
 import zealan.pgp.party.PartyMgr;
@@ -23,6 +24,7 @@ public class Globals {
     public static PlayerMgr PLAYER_MGR;
     public static GameMgr GAME_MGR;
     public static PlayerStatsMgr PLAYER_STATS_MGR;
+    public static BossBarMgr BOSS_BAR_MGR;
 
     private static boolean initialized = false;
     public static void initialize(PartyGamesPlugin plugin) {
@@ -42,6 +44,7 @@ public class Globals {
             PLAYER_MGR = new PlayerMgr();
             GAME_MGR = new GameMgr();
             PLAYER_STATS_MGR = new PlayerStatsMgr();
+            BOSS_BAR_MGR = new BossBarMgr();
         } else {
             throw new RuntimeException("Cannot initialize globals twice");
         }

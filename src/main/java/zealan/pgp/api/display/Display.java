@@ -64,7 +64,10 @@ public class Display {
                 return MessageFormat.format("&b{0,number,00}:{1,number,00}", mins, secs);
             }
         } else if (arg instanceof String str) {
-            return str;
+            return str.replace('&', '§');
+        } else if (arg instanceof Double || arg instanceof Float) {
+            var asDouble = (double)arg;
+            return String.format("&b%.2f", asDouble);
         } else {
             return "&b" + arg;
         }
@@ -97,7 +100,7 @@ public class Display {
         return resultStr.replace('&', '§');
     }
 
-    public static String concatLines(Object...lines) {
+    public static String concatLines(String...lines) {
         return String.join(
                 "\n",
                 Arrays.stream(lines)
@@ -130,7 +133,11 @@ public class Display {
     }
 
     public static void sendTitle(Player player, String title, String subtitle) {
-        player.sendTitle(title, subtitle);
+        player.sendTitle(Display.format(title), Display.format(subtitle));
+    }
+
+    public static void clearTitle(Player player) {
+        player.sendTitle("", "");
     }
 
     public static void sendPopupText(Player player, String message, Object ... args) {
