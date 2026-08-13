@@ -1,5 +1,10 @@
 package zealan.pgp.util;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.util.Vector3d;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityTeleport;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -51,5 +56,28 @@ public class EntityUtil {
         return Vec3i.from(
                 entity.getLocation().toVector().add(new Vector(0.0, -0.01, 0.0))
         );
+    }
+
+    public static void spoofEntityMove(Entity ent, Vector pos, boolean relative) {
+        PacketWrapper<?> packet;
+        if (!relative) {
+            packet = new WrapperPlayServerEntityTeleport(
+                    ent.getEntityId(),
+                    new Vector3d(pos.getX(), pos.getY(), pos.getZ()),
+                    0, 0, false
+            );
+        } else {
+            packet = new WrapperPlayServerEntityRelativeMove(
+                    ent.getEntityId(),
+                    pos.getX(), pos.getY(), pos.getZ(),
+                    false
+            );
+        }
+
+        for (var player : ent.getWorld().getPlayers()) {
+            var user = PacketEvents.getAPI().getPlayerManager().getUser(player);
+            if (user != null)
+                user.sendPacket(packet);
+        }
     }
 }

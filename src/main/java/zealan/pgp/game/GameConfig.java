@@ -3,7 +3,9 @@ package zealan.pgp.game;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import zealan.pgp.game.games.GameAnvilSpleef;
+import zealan.pgp.game.games.GameBombardment;
 import zealan.pgp.game.games.GameHoeHoeHoe;
+import zealan.pgp.math.Vec3i;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -35,14 +37,15 @@ public enum GameConfig {
                     new GameSpawn[]{new GameSpawn(-2393, 46, -1878)}
             )
     ),
+   */
     Bombardment(
-            GameBombardment.class, "Bombardment", Items.COAL_BLOCK,
-            GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
+            GameBombardment.class, "Bombardment", Material.COAL_BLOCK,
+            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    new BlockPos(-392, 20, 726),
-                    new GameSpawn[]{new GameSpawn(-392, 20, 726)}
+                    new GameSpawn(-392, 20, 726)
             )
     ),
+    /*
     CannonPainting(
             GameCannonPainting.class, "Cannon Painting", Items.EGG,
             GameStyle.POINTS, 30,
