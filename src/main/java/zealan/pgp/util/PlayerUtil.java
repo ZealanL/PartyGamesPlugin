@@ -1,5 +1,7 @@
 package zealan.pgp.util;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
@@ -40,5 +42,14 @@ public class PlayerUtil {
 
         if (player.getVehicle() != null)
             player.getVehicle().remove();
+    }
+
+    public static void makeSwingHand(Player player) {
+        var packet = new WrapperPlayServerEntityAnimation(
+                player.getEntityId(), WrapperPlayServerEntityAnimation.EntityAnimationType.SWING_MAIN_ARM
+        );
+
+        for (var p : player.getWorld().getPlayers())
+            PacketEvents.getAPI().getPlayerManager().sendPacket(p, packet);
     }
 }

@@ -137,18 +137,13 @@ public class WorldEventsMgr extends AutoListener {
             if (!worldEvents.canUseItem(event.getPlayer(), event.getItem())) {
                 event.setCancelled(true);
                 needsInvUpdateSet.add(event.getPlayer());
-            } else {
-                return; // Don't reach block event detection
             }
         }
 
         if (event.hasBlock() && event.getClickedBlock() != null && event.useInteractedBlock() != Event.Result.DENY) {
-            if (!worldEvents.canInteractBlock(event.getPlayer(), event.getClickedBlock())) {
-                if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (!worldEvents.canInteractBlock(event.getPlayer(), event.getClickedBlock()))
                     event.setCancelled(true);
-                } else {
-                    // If it's block breaking, it will be handled in the block break event
-                }
             }
         }
     }

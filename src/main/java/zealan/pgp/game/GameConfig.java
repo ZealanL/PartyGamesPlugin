@@ -4,6 +4,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import zealan.pgp.game.games.GameAnvilSpleef;
+import zealan.pgp.game.games.GameHoeHoeHoe;
 import zealan.pgp.math.Vec3i;
 
 import java.lang.reflect.Modifier;
@@ -28,7 +29,7 @@ public enum GameConfig {
             new GameLoadInfo(
                     new GameSpawn(-243, 1, -3608)
             )
-    )
+    ),
     /*
     Avalanche(
             GameAvalanche.class, "Avalanche", Items.ICE,
@@ -69,17 +70,15 @@ public enum GameConfig {
                     new BlockPos(936, 77, -3613),
                     GameDive.TEAM_SPAWNS
             )
-    ),
+    ),*/
     HoeHoeHoe(
-            GameHoeHoeHoe.class, "Hoe Hoe Hoe", Items.DIAMOND_HOE,
-            GameStyle.POINTS, 60,
+            GameHoeHoeHoe.class, "Hoe Hoe Hoe", Material.DIAMOND_HOE,
+            GameStyle.POINTS, GameMode.SURVIVAL, 60,
             new GameLoadInfo(
-                    new BlockPos(1171, 122, -1867),
-                    new GameSpawn[]{
-                            new GameSpawn(1171, 122, -1867)
-                    }
+                    new GameSpawn(1171, 112, -1867)
             )
-    ),
+    )
+    /*
     JigsawRush(
             GameJigsawRush.class, "Jigsaw Rush", Items.DAYLIGHT_DETECTOR,
             GameStyle.RACE, 60,
