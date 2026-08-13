@@ -4,7 +4,6 @@ logs/
 .DS_Store
 *.dat
 *.dat_old
-stats/
 session.lock
 *.jar
 .gradle/
