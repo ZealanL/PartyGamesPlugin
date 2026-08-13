@@ -30,7 +30,7 @@ public class BossBarMgr extends AutoListener {
 
         String title = "";
         float frac = 0;
-        int ticksSinceUpdate = 0;
+        int age = 0;
 
         FakeWither(Player player) {
             this.entityId = Math.abs(RAND.nextInt());
@@ -40,13 +40,14 @@ public class BossBarMgr extends AutoListener {
         }
 
         static float calcHealth(float frac) {
-            return Math.max(0.5f, 200 * frac);
+            return Math.max(0.5f, 300 * frac);
         }
 
         private Vector calcIdealPos() {
-            final float TELEPORT_DIST = 700;
-            return player.getLocation().toVector().add(
-                    new Vector(0, TELEPORT_DIST, 0)
+            final float TELEPORT_DIST = 50;
+            var playerLoc = player.getLocation();
+            return playerLoc.toVector().add(
+                    playerLoc.getDirection().multiply(-TELEPORT_DIST)
             );
         }
 
@@ -55,7 +56,7 @@ public class BossBarMgr extends AutoListener {
             user.sendPacket(new WrapperPlayServerSpawnLivingEntity(
                     entityId,
                     uuid,
-                    EntityTypes.ENDER_DRAGON, // Ok it's TECHNICALLY not a wither but ehhh close enough
+                    EntityTypes.WITHER,
                     new Vector3d(pos.getX(), pos.getY(), pos.getZ()),
                     0f, 0f, 0f, // Rotation
                     new Vector3d(0, 0, 0),
@@ -105,7 +106,7 @@ public class BossBarMgr extends AutoListener {
     }
 
     private final HashMap<Player, FakeWither> fakeWithers = new HashMap<>();
-    private static final int MAX_STICK_DURATION = 4;
+    private static final int MAX_AGE = 10;
 
     public void setForPlayer(Player player, BossBarContent content) {
         if (!player.isOnline())
@@ -115,7 +116,6 @@ public class BossBarMgr extends AutoListener {
         if (existing != null) {
             existing.title = Display.format(content.title);
             existing.frac = (float) content.frac;
-            existing.ticksSinceUpdate = 0;
         } else {
             var newWither = new FakeWither(player);
             if (newWither.user == null)
@@ -132,7 +132,7 @@ public class BossBarMgr extends AutoListener {
         fakeWithers.entrySet().removeIf(entry -> entry.getValue().user == null);
 
         var toRemove = fakeWithers.entrySet().stream().filter(
-                entry -> entry.getValue().ticksSinceUpdate >= MAX_STICK_DURATION
+                entry -> entry.getValue().age >= MAX_AGE
         ).toList();
         for (var entry : toRemove) {
             entry.getValue().sendRemovePacket();
@@ -143,7 +143,7 @@ public class BossBarMgr extends AutoListener {
             FakeWither fakeWither = entry.getValue();
             fakeWither.sendUpdateDataPacket();
             fakeWither.sendTeleportPacket();
-            fakeWither.ticksSinceUpdate++;
+            fakeWither.age++;
         }
     }
 
