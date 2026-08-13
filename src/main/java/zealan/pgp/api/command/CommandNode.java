@@ -2,7 +2,10 @@ package zealan.pgp.api.command;
 
 import zealan.pgp.api.display.Display;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
 public class CommandNode {
     public final String name;

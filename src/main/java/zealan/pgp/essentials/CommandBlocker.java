@@ -1,7 +1,5 @@
 package zealan.pgp.essentials;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;

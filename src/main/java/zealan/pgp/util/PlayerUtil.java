@@ -3,14 +3,9 @@ package zealan.pgp.util;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
 import org.bukkit.GameMode;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-import zealan.pgp.api.display.Display;
-import zealan.pgp.math.BoundingBox;
 
 
 public class PlayerUtil {

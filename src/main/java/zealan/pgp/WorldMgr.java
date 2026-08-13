@@ -1,6 +1,9 @@
 package zealan.pgp;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -13,7 +16,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-import static zealan.pgp.Globals.*;
+import static zealan.pgp.Globals.PLOG;
 
 public class WorldMgr extends AutoListener {
     private final HashSet<World> fixedWorlds = new HashSet<>();

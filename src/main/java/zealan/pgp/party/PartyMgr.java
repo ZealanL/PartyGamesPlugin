@@ -1,9 +1,5 @@
 package zealan.pgp.party;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.*;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -12,6 +8,12 @@ import zealan.pgp.api.command.CommandArg;
 import zealan.pgp.api.command.CommandNode;
 import zealan.pgp.api.command.CommandResult;
 import zealan.pgp.api.display.Display;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static zealan.pgp.Globals.COMMAND_SYS;
 

@@ -1,10 +1,8 @@
 package zealan.pgp.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import zealan.pgp.AutoListener;
@@ -13,7 +11,6 @@ import zealan.pgp.api.command.CommandNode;
 import zealan.pgp.api.command.CommandResult;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.menu.MenuInv;
-import zealan.pgp.util.WorldUtil;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

@@ -2,15 +2,11 @@ package zealan.pgp.game;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import zealan.pgp.game.games.GameAnvilSpleef;
 import zealan.pgp.game.games.GameHoeHoeHoe;
-import zealan.pgp.math.Vec3i;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 
 public enum GameConfig {
     /*

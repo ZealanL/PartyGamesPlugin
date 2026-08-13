@@ -17,7 +17,10 @@ import org.bukkit.util.Vector;
 import zealan.pgp.AutoListener;
 import zealan.pgp.api.display.Display;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class BossBarMgr extends AutoListener {
     private static final Random RAND = new Random();
