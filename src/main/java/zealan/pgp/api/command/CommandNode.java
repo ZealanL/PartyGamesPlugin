@@ -1,5 +1,7 @@
 package zealan.pgp.api.command;
 
+import zealan.pgp.api.display.Display;
+
 import java.util.*;
 
 public class CommandNode {
@@ -64,25 +66,48 @@ public class CommandNode {
     }
 
     String getUsageSyntax() {
-        StringBuilder result = new StringBuilder(this.name);
-        for (CommandNode parent = this.parent; parent != null; parent = parent.parent)
-            result.insert(0, parent.name + " ");
-        result.insert(0, "&7/&f");
-
-        for (CommandArg<?> arg : this.arguments.values()) {
-            if (arg.isOptional) {
-                result.append(" &7[&7");
-                result.append(arg.name);
-                result.append("&7]");
-            } else {
-                result.append(" &7<&6");
-                result.append(arg.name);
-                result.append("&7>");
-            }
-
+        String prefix;
+        {
+            var sb = new StringBuilder(this.name);
+            for (CommandNode parent = this.parent; parent != null; parent = parent.parent)
+                sb.insert(0, parent.name + " ");
+            sb.insert(0, "&7/&f");
+            prefix = sb.toString();
         }
 
-        return result.toString();
+        var lines = new ArrayList<String>();
+
+        if (this.func.isPresent()) {
+            var sb = new StringBuilder(prefix);
+            for (CommandArg<?> arg : this.arguments.values()) {
+                if (arg.isOptional) {
+                    sb.append(" &7[&7");
+                    sb.append(arg.name);
+                    sb.append("&7]");
+                } else {
+                    sb.append(" &7<&6");
+                    sb.append(arg.name);
+                    sb.append("&7>");
+                }
+            }
+            lines.add(sb.toString());
+        }
+
+        if (!this.children.isEmpty()) {
+            var sb = new StringBuilder(prefix);
+            sb.append(" &9[");
+            sb.append(
+                    String.join(" / ",
+                        this.children.stream().map(
+                                ch -> "&7" + ch.name
+                        ).toList()
+                    )
+            );
+            sb.append("&9]");
+            lines.add(sb.toString());
+        }
+
+        return Display.concatLines(lines.toArray(String[]::new));
     }
 }
 
