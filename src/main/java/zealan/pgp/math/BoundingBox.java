@@ -28,4 +28,10 @@ public class BoundingBox {
     public BoundingBox offset(Vector v) {
         return new BoundingBox(min.add(v), max.add(v));
     }
+
+    public boolean intersects(BoundingBox other) {
+        return this.min.getX() <= other.max.getX() && this.max.getX() >= other.min.getX() &&
+                this.min.getY() <= other.max.getY() && this.max.getY() >= other.min.getY() &&
+                this.min.getZ() <= other.max.getZ() && this.max.getZ() >= other.min.getZ();
+    }
 }
