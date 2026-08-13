@@ -27,6 +27,7 @@ public class Globals {
     public static PlayerStatsMgr PLAYER_STATS_MGR;
     public static BossBarMgr BOSS_BAR_MGR;
     public static MenuMgr MENU_MGR;
+    public static SidebarMgr SIDEBAR_MGR;
 
     private static boolean initialized = false;
     public static void initialize(PartyGamesPlugin plugin) {
@@ -48,6 +49,7 @@ public class Globals {
             PLAYER_STATS_MGR = new PlayerStatsMgr();
             BOSS_BAR_MGR = new BossBarMgr();
             MENU_MGR = new MenuMgr();
+            SIDEBAR_MGR = new SidebarMgr();
         } else {
             throw new RuntimeException("Cannot initialize globals twice");
         }

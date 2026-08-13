@@ -59,8 +59,8 @@ public abstract class Game implements WorldEvents {
         return gamers.stream().filter(Gamer::isPlaying).toList();
     }
 
-    public final Gamer getPlayingGamer(Player player) {
-        return gamers.stream().filter(g -> g.player == player && g.isPlaying()).findFirst().orElse(null);
+    public final Gamer getGamer(Player player) {
+        return gamers.stream().filter(g -> g.player == player).findFirst().orElse(null);
     }
 
     public final State getState() { return state; }
@@ -170,7 +170,7 @@ public abstract class Game implements WorldEvents {
 
     @Override
     public void onPlayerDeath(Player player) {
-        var gamer = getPlayingGamer(player);
+        var gamer = getGamer(player);
         if (gamer != null) {
             spawnGamer(gamer);
             gamer.stopPlaying(config.style != GameStyle.RACE);
