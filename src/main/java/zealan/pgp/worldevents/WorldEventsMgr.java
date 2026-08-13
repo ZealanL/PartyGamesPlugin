@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -171,7 +172,7 @@ public class WorldEventsMgr extends AutoListener {
     }
 
     @EventHandler
-    void handle(InventoryInteractEvent event) {
+    void handle(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         WorldEvents worldEvents = getWorldEventsFromEvent(event);

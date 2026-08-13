@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 import zealan.pgp.AutoListener;
+import zealan.pgp.api.display.Display;
 
 import java.util.*;
 
@@ -112,14 +113,14 @@ public class BossBarMgr extends AutoListener {
 
         var existing = fakeWithers.get(player);
         if (existing != null) {
-            existing.title = content.title;
+            existing.title = Display.format(content.title);
             existing.frac = (float) content.frac;
             existing.ticksSinceUpdate = 0;
         } else {
             var newWither = new FakeWither(player);
             if (newWither.user == null)
                 return;
-            newWither.title = content.title;
+            newWither.title = Display.format(content.title);
             newWither.frac = (float) content.frac;
             newWither.sendSpawnPacket();
             fakeWithers.put(player, newWither);

@@ -1,15 +1,18 @@
 package zealan.pgp.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import zealan.pgp.AutoListener;
 import zealan.pgp.api.command.CommandArg;
 import zealan.pgp.api.command.CommandNode;
 import zealan.pgp.api.command.CommandResult;
 import zealan.pgp.api.display.Display;
+import zealan.pgp.menu.MenuInv;
 import zealan.pgp.util.WorldUtil;
 
 import java.util.*;
@@ -28,7 +31,21 @@ public class GameMgr extends AutoListener {
     public GameMgr() {
         var playVariantRoot = CommandNode.make(
                 "play",
-                "Play a party game"
+                "Play a party game",
+                ctx -> {
+                    var menuItems = new ArrayList<MenuInv.ItemEntry>();
+                    for (var gameType : GameConfig.values()) {
+                        menuItems.add(new MenuInv.ItemEntry(
+                                new ItemStack(gameType.iconItem),
+                                "&b&l" + gameType.properName,
+                                null,
+                                "play " + gameType.snakeCaseName
+                        ));
+                    }
+
+                    MENU_MGR.showMenuInv(ctx.sender, "Games", menuItems, MenuInv.Size.LARGE);
+                    return CommandResult.ok();
+                }
         );
 
         for (var gameConfig : GameConfig.values()) {
@@ -46,8 +63,31 @@ public class GameMgr extends AutoListener {
                         Integer variantIdx = ctx.getArg("variant");
 
                         if (variantIdx == null) {
-                            // If they didn't specify a variant, have them pick one
-                            // TODO: Implement
+                            var items = new ArrayList<MenuInv.ItemEntry>();
+                            for (var variant : variants) {
+                                var itemStack = new ItemStack(variant.iconItem());
+                                var itemName = (variant != GameVariant.NONE) ?
+                                        "&6" + variant.name() :
+                                        "&7" + variant.name();
+                                items.add(
+                                        new MenuInv.ItemEntry(
+                                                itemStack,
+                                                itemName,
+                                                variant.desc(),
+                                                "play " + gameCommandName + " " + variant.id()
+                                        )
+                                );
+                                if (variant == GameVariant.NONE) {
+                                    items.add(null);
+                                }
+                            }
+
+                            MENU_MGR.showMenuInv(
+                                    ctx.sender,
+                                    "Select Variant",
+                                    items,
+                                    MenuInv.Size.ROW
+                            );
                             return CommandResult.ok();
                         }
 
@@ -73,7 +113,7 @@ public class GameMgr extends AutoListener {
                     if (lastGame == null)
                         return CommandResult.failure("You haven't played a game since you joined!");
 
-                    ctx.sender.performCommand("play " + lastGame.snakeCaseName);
+                    COMMAND_SYS.playerExecute(ctx.sender, "play " + lastGame.snakeCaseName);
                     return CommandResult.ok();
                 }
         );

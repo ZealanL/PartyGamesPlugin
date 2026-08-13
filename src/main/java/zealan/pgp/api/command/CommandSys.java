@@ -1,5 +1,6 @@
 package zealan.pgp.api.command;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import zealan.pgp.AutoListener;
@@ -136,7 +137,11 @@ public class CommandSys extends AutoListener {
         }
     }
 
-    public CommandResult onPlayerExecute(CommandCtx ctx, String commandString) {
+    private CommandResult onPlayerExecute(Player player, String commandString) {
+        while (commandString.startsWith("/"))
+            commandString = commandString.substring(1);
+
+        CommandCtx ctx = new CommandCtx(player);
         String[] parts = commandString.trim().split("\\s+");
         if (parts.length < 1 || parts[0].isEmpty())
             return CommandResult.failure("Where's the command? Did you drop it?");
@@ -216,14 +221,20 @@ public class CommandSys extends AutoListener {
         }
     }
 
-    @EventHandler
-    public void handle(PlayerCommandPreprocessEvent event) {
-        CommandCtx ctx = new CommandCtx(event.getPlayer());
-        CommandResult result = onPlayerExecute(ctx, event.getMessage());
+    public boolean playerExecute(Player player, String commandString) {
+        CommandResult result = onPlayerExecute(player, commandString);
         if (result != null) {
             if (result.msg != null)
-                Display.sendMsg(event.getPlayer(), result.msg);
-            event.setCancelled(true);
+                Display.sendMsg(player, result.msg);
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    @EventHandler
+    public void handle(PlayerCommandPreprocessEvent event) {
+        if (playerExecute(event.getPlayer(), event.getMessage()))
+            event.setCancelled(true);
     }
 }

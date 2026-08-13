@@ -192,7 +192,7 @@ public class PlayerStatsRecord {
                     gameStats.variantPBs.put(variant.name(), candidatePB);
 
                     Display.sendMsg(gamer.player,
-                            "&aYou set a &LNEW PB& &ain {}&7: {}",
+                            "&aYou set a &LNEW PB &ain {}&7: {}",
                             "&6&l" + game.config.properName,
                             "&b" + candidatePB.toMsgPart()
                     );

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 import static zealan.pgp.Globals.BOSS_BAR_MGR;
+import static zealan.pgp.Globals.PLAYER_MGR;
 
 public abstract class Game implements WorldEvents {
     public final GameConfig config;
@@ -70,6 +71,7 @@ public abstract class Game implements WorldEvents {
         for (var gamer : gamers)
             spawnGamer(gamer);
 
+        world.setTime(3000);
         start();
     }
 
@@ -139,6 +141,7 @@ public abstract class Game implements WorldEvents {
     public void spawnGamer(Gamer gamer) {
         PlayerUtil.cleanPlayer(gamer.player);
 
+        PLAYER_MGR.setFakeSpectator(gamer.player, false);
         var spawn = getGamerSpawn(gamer);
         gamer.player.teleport(spawn.toLocation(world));
         gamer.player.setGameMode(config.gameMode);
