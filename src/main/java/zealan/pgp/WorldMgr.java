@@ -23,6 +23,8 @@ public class WorldMgr extends AutoListener {
     private final ArrayList<World> tempWorlds = new ArrayList<>();
     private final static Random RAND = new Random();
 
+    private final static String TEMP_WORLD_PREFIX = "temp-world";
+    
     private static List<String> getClosestRegionFiles(int blockX, int blockY) {
         int relX = Math.floorMod(blockX, 512);
         int relY = Math.floorMod(blockY, 512);
@@ -43,9 +45,26 @@ public class WorldMgr extends AutoListener {
         );
     }
 
+    public WorldMgr() {
+        var worldsDir = Bukkit.getWorldContainer().toPath();
+        try (var stream = Files.walk(worldsDir, 1)) {
+            stream.sorted(Comparator.reverseOrder())
+                    .map(Path::toFile).forEach(
+                            (file) -> {
+                                if (file.isDirectory() && file.getName().startsWith(TEMP_WORLD_PREFIX)) {
+                                    PLOG.info("Deleting temporary world: \"" + file.getName() + "\"");
+                                    deleteDir(file.toPath());
+                                }
+                            }
+                    );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private World createTempWorldAroundInner(Vec3i aroundBlockPos) throws IOException {
         Path mainWorldPath = WorldUtil.getWorldDir(WorldUtil.getMainWorld().getName()).toPath();
-        String tempWorldName = "temp-world-" + RAND.nextInt();
+        String tempWorldName = TEMP_WORLD_PREFIX + RAND.nextInt();
         Path tempWorldPath = Bukkit.getWorldContainer().toPath().resolve(tempWorldName);
         PLOG.info("Creating temporary world \"" + tempWorldName + "\"...");
 
@@ -114,6 +133,18 @@ public class WorldMgr extends AutoListener {
             return newWorld;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteDir(Path dir) {
+        try {
+            try (var stream = Files.walk(dir)) {
+                stream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(java.io.File::delete);
+            }
+        } catch (IOException e) {
+            PLOG.severe("Removing directoy failed: " + e.getMessage());
         }
     }
 
