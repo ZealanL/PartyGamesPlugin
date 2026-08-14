@@ -119,10 +119,10 @@ public class GameChickenRings extends Game {
 
     private static final int RINGS_RADIUS_BLOCKS = 3;
     private static final Vec3i[] RINGS_BORDER_BLOCK_OFFSETS_REL = {
-            new Vec3i(-1, 3, 0), new Vec3i(0, 3, 0), new Vec3i(1, 3, 0), new Vec3i(-2, 2, 0),
-            new Vec3i(-3, -1, 0), new Vec3i(-3, 0, 0), new Vec3i(-3, 1, 0), new Vec3i(-2, -2, 0),
-            new Vec3i(1, -3, 0), new Vec3i(0, -3, 0), new Vec3i(-1, -3, 0), new Vec3i(2, -2, 0),
-            new Vec3i(3, 1, 0), new Vec3i(3, 0, 0), new Vec3i(3, -1, 0), new Vec3i(2, 2, 0)
+            new Vec3i(-1,  3, 0), new Vec3i( 0,  3, 0), new Vec3i( 1,  3, 0), new Vec3i(-2,  2, 0),
+            new Vec3i(-3, -1, 0), new Vec3i(-3,  0, 0), new Vec3i(-3,  1, 0), new Vec3i(-2, -2, 0),
+            new Vec3i( 1, -3, 0), new Vec3i( 0, -3, 0), new Vec3i(-1, -3, 0), new Vec3i( 2, -2, 0),
+            new Vec3i( 3,  1, 0), new Vec3i( 3,  0, 0), new Vec3i( 3, -1, 0), new Vec3i( 2,  2, 0)
     };
 
     private static final int NUM_RINGS = 32;

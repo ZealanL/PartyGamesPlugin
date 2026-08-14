@@ -5,10 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-import zealan.pgp.game.games.GameAnvilSpleef;
-import zealan.pgp.game.games.GameBombardment;
-import zealan.pgp.game.games.GameChickenRings;
-import zealan.pgp.game.games.GameHoeHoeHoe;
+import zealan.pgp.game.games.*;
 import zealan.pgp.math.Vec3i;
 import zealan.pgp.util.ItemUtil;
 
@@ -16,16 +13,14 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 public enum GameConfig {
-    /*
     AnimalSlaughter(
-            GameAnimalSlaughter.class, "Animal Slaughter", Items.WOODEN_SWORD,
-            GameStyle.POINTS, 60,
+            GameAnimalSlaughter.class, "Animal Slaughter", Material.WOOD_SWORD,
+            GameStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     GameAnimalSlaughter.CENTER_BLOCK_POS,
-                    new GameSpawn[]{new GameSpawn(GameAnimalSlaughter.CENTER_BLOCK_POS)}
+                    new GameSpawn(GameAnimalSlaughter.CENTER_BLOCK_POS)
             )
     ),
-    */
     AnvilSpleef(
             GameAnvilSpleef.class, "Anvil Spleef", Material.ANVIL,
             GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,

@@ -18,10 +18,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import zealan.pgp.AutoListener;
@@ -238,6 +235,13 @@ public class WorldEventsMgr extends AutoListener {
         if (event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION)
             event.setCancelled(true);
     }
+
+    // Never allow items to be damaged
+    @EventHandler
+    public void handle(PlayerItemDamageEvent event) {
+        event.setCancelled(true);
+    }
+
 
     // //////////
 
