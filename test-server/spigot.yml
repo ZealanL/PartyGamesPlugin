@@ -14,17 +14,18 @@ config-version: 8
 settings:
   debug: false
   save-user-cache-on-stop-only: false
-  late-bind: false
-  sample-count: 12
   player-shuffle: 0
   filter-creative-items: true
   user-cache-size: 1000
   int-cache-limit: 1024
-  moved-wrongly-threshold: 0.0625
-  moved-too-quickly-threshold: 999.9
+  moved-wrongly-threshold: 9999999.0
+  moved-too-quickly-threshold: 9999999.0
   timeout-time: 60
   restart-on-crash: false
   restart-script: ./start.sh
+  bungeecord: false
+  late-bind: false
+  sample-count: 12
   netty-threads: 4
   attribute:
     maxHealth:
@@ -33,7 +34,6 @@ settings:
       max: 2048.0
     attackDamage:
       max: 2048.0
-  bungeecord: false
 timings:
   enabled: true
   verbose: true
@@ -67,6 +67,7 @@ stats:
 world-settings:
   default:
     verbose: true
+    mob-spawn-range: 4
     anti-xray:
       enabled: false
       engine-mode: 1
@@ -97,18 +98,6 @@ world-settings:
       sapling-modifier: 100
       wheat-modifier: 100
       netherwart-modifier: 100
-    max-bulk-chunks: 10
-    max-entity-collisions: 8
-    dragon-death-sound-radius: 0
-    hunger:
-      walk-exhaustion: 0.2
-      sprint-exhaustion: 0.8
-      combat-exhaustion: 0.3
-      regen-exhaustion: 3.0
-    max-tnt-per-tick: 100
-    max-tick-time:
-      tile: 50
-      entity: 50
     entity-activation-range:
       animals: 64
       monsters: 64
@@ -125,9 +114,20 @@ world-settings:
     hopper-amount: 1
     random-light-updates: false
     save-structure-info: true
+    max-bulk-chunks: 10
+    max-entity-collisions: 8
+    dragon-death-sound-radius: 0
     seed-village: 10387312
     seed-feature: 14357617
-    mob-spawn-range: 4
+    hunger:
+      walk-exhaustion: 0.2
+      sprint-exhaustion: 0.8
+      combat-exhaustion: 0.3
+      regen-exhaustion: 3.0
+    max-tnt-per-tick: 100
+    max-tick-time:
+      tile: 50
+      entity: 50
     merge-radius:
       item: 2.5
       exp: 3.0

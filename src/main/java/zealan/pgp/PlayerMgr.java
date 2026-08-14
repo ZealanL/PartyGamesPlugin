@@ -80,7 +80,7 @@ public class PlayerMgr extends AutoListener {
         COMMAND_SYS.register(CommandNode.make("lobby", "Return to the main lobby", ctx -> {
             PLAYER_MGR.sendToLobby(ctx.sender, true);
             return CommandResult.ok();
-        }).withAlias("spawn"));
+        }).withAlias("spawn").withAlias("l"));
 
         COMMAND_SYS.register(CommandNode.make("spec", "Spectate, optionally spectate a specific player", ctx -> {
             Player target = ctx.getArg("target_player");
@@ -136,6 +136,7 @@ public class PlayerMgr extends AutoListener {
 
             player.setSaturation(5);
             player.setFoodLevel(20);
+            player.setFireTicks(0);
 
             if (player.getWorld() == WorldUtil.getMainWorld()) {
                 Location spawnPos = player.getWorld().getSpawnLocation();

@@ -4,11 +4,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.game.Game;
 import zealan.pgp.game.GameVariant;
 import zealan.pgp.game.Gamer;
 import zealan.pgp.math.Vec3i;
+import zealan.pgp.util.EntityUtil;
 
 import java.util.HashSet;
 
@@ -47,13 +49,15 @@ public abstract class GameParkourBase extends Game {
         for (Gamer gamer : getPlayingGamers()) {
             if (gamer.player.getLocation().getX() <= GATE_X - 0.2)
                 spawnGamer(gamer);
+            gamer.player.setWalkSpeed(0.35f);
         }
     }
 
     @Override
     public void spawnGamer(Gamer gamer) {
         super.spawnGamer(gamer);
-        gamer.player.setWalkSpeed(0.35f);
+        if (hasStarted())
+            gamer.player.setWalkSpeed(0.35f);
     }
 
     @Override
@@ -65,7 +69,10 @@ public abstract class GameParkourBase extends Game {
 
             if (blockY <= FAIL_FALL_Y) {
                 if (checkpointedPlayers.contains(gamer)) {
-                    gamer.player.teleport(new Location(world, getCheckpointX() + 0.5, CHECKPOINT_Y, getCenterZ() + 0.5, loc.getYaw(), loc.getPitch()));
+                    EntityUtil.setPosOnly(
+                            gamer.player,
+                            new Vector(getCheckpointX() + 0.5, CHECKPOINT_Y, getCenterZ() + 0.5)
+                    );
                 } else {
                     spawnGamer(gamer);
                 }
@@ -77,7 +84,9 @@ public abstract class GameParkourBase extends Game {
                     gamer.player.playSound(loc, Sound.NOTE_PLING, 0.8f, 1.75f);
                     checkpointedPlayers.add(gamer);
                 }
-            } else if (blockX == FINISH_X && blockY >= FINISH_MIN_Y && gamer.player.isOnGround()) {
+            }
+
+            if (blockX == FINISH_X && blockY >= FINISH_MIN_Y && gamer.player.isOnGround()) {
                 gamer.player.playSound(loc, Sound.LEVEL_UP, 0.8f, 1.0f);
                 double finishTime = getTicksElapsed() / 20.0;
                 Display.sendMsg(gamer.player, "&aYou finished the parkour in " + finishTime + "s!");

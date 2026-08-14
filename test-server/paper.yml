@@ -9,20 +9,21 @@
 
 config-version: 9
 data-value-allowed-items: []
-stackable-buckets:
-  lava: false
-  water: false
-  milk: false
-warnWhenSettingExcessiveVelocity: true
 settings:
   baby-zombie-movement-speed: 0.5
   limit-player-interactions: true
 effect-modifiers:
   strength: 1.3
   weakness: -0.5
+stackable-buckets:
+  lava: false
+  water: false
+  milk: false
+warnWhenSettingExcessiveVelocity: true
 world-settings:
   default:
     verbose: true
+    allow-block-location-tab-completion: true
     generator-settings:
       canyon: true
       caves: true
@@ -34,23 +35,25 @@ world-settings:
       temple: true
       village: true
       flat-bedrock: false
-    allow-block-location-tab-completion: true
+    disable-teleportation-suffocation-check: false
+    cache-chunk-maps: false
+    remove-invalid-mob-spawner-tile-entities: true
+    tnt-explosion-volume: 4.0
+    optimize-explosions: false
+    mob-spawner-tick-rate: 1
+    squid-spawn-height:
+      minimum: 45.0
+      maximum: 63.0
+    player-blocking-damage-multiplier: 0.5
+    max-growth-height:
+      cactus: 3
+      reeds: 3
     fishing-time-range:
       MinimumTicks: 100
       MaximumTicks: 900
     player-exhaustion:
       block-break: 0.02500000037252903
       swimming: 0.014999999664723873
-    player-blocking-damage-multiplier: 0.5
-    disable-teleportation-suffocation-check: false
-    cache-chunk-maps: false
-    mob-spawner-tick-rate: 1
-    squid-spawn-height:
-      minimum: 45.0
-      maximum: 63.0
-    max-growth-height:
-      cactus: 3
-      reeds: 3
     despawn-ranges:
       soft: 32
       hard: 128
@@ -75,10 +78,6 @@ world-settings:
     lava-flow-speed:
       normal: 30
       nether: 10
-    remove-invalid-mob-spawner-tile-entities: true
-    tnt-explosion-volume: 4.0
-    optimize-explosions: false
-    portal-search-radius: 128
     disable-explosion-knockback: false
     water-over-lava-flow-speed: 5
     fix-cannons: false
@@ -86,11 +85,12 @@ world-settings:
     use-hopper-check: false
     all-chunks-are-slime-chunks: false
     allow-undead-horse-leashing: false
-    keep-spawn-loaded: true
     container-update-tick-rate: 1
+    keep-spawn-loaded: true
     falling-blocks-collide-with-signs: false
     disable-mood-sounds: false
     use-async-lighting: false
+    portal-search-radius: 128
     disable-thunder: false
     disable-ice-and-snow: false
     tick-next-tick-list-cap: 10000

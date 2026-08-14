@@ -241,10 +241,20 @@ public class WorldEventsMgr extends AutoListener {
             event.setCancelled(true);
     }
 
-    // Disable suffocation damage permanently
     @EventHandler
     void handle(EntityDamageEvent event) {
+        // Disable suffocation damage
         if (event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION)
+            event.setCancelled(true);
+
+        // Disable fall damage
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
+            event.setCancelled(true);
+
+        // Disable fire damage
+        if (event.getCause() == EntityDamageEvent.DamageCause.FIRE)
+            event.setCancelled(true);
+        if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
             event.setCancelled(true);
     }
 

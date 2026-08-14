@@ -123,6 +123,10 @@ public class EntityUtil {
     }
 
     public static void setPosOnly(LivingEntity entity, Vector pos) {
-        ((CraftLivingEntity)entity).getHandle().setPosition(pos.getX(), pos.getY(), pos.getZ());
+        var loc = entity.getLocation();
+        loc.setX(pos.getX());
+        loc.setY(pos.getY());
+        loc.setZ(pos.getZ());
+        entity.teleport(loc);
     }
 }

@@ -2,7 +2,7 @@
   "34d80c38-eafc-4ee1-995c-0d713c0f93a5": {
     "playerUUID": "34d80c38-eafc-4ee1-995c-0d713c0f93a5",
     "playerName": "Zras",
-    "numJoins": 109,
+    "numJoins": 111,
     "numLeaves": 18,
     "allGameStats": {
       "AnvilSpleef": {
@@ -113,8 +113,8 @@
       },
       "Volcano": {
         "gameConfig": "Volcano",
-        "totalTicksPlayed": 826,
-        "timesPlayed": 1,
+        "totalTicksPlayed": 1475,
+        "timesPlayed": 2,
         "variantPBs": {
           "Normal": {
             "type": "LONGEST_TIME",
@@ -137,13 +137,13 @@
       },
       "JungleJump": {
         "gameConfig": "JungleJump",
-        "totalTicksPlayed": 725,
-        "timesPlayed": 3,
+        "totalTicksPlayed": 1335,
+        "timesPlayed": 5,
         "variantPBs": {
           "Normal": {
             "type": "FASTEST_TIME",
-            "val": 641,
-            "time": 1786742469
+            "val": 295,
+            "time": 1786749496
           }
         }
       },
@@ -161,13 +161,25 @@
       },
       "Dive": {
         "gameConfig": "Dive",
-        "totalTicksPlayed": 2402,
-        "timesPlayed": 2,
+        "totalTicksPlayed": 3676,
+        "timesPlayed": 4,
         "variantPBs": {
           "Normal": {
             "type": "POINTS",
-            "val": 15,
-            "time": 1786747976
+            "val": 16,
+            "time": 1786748709
+          }
+        }
+      },
+      "TheFloorIsLava": {
+        "gameConfig": "TheFloorIsLava",
+        "totalTicksPlayed": 2236,
+        "timesPlayed": 2,
+        "variantPBs": {
+          "Normal": {
+            "type": "FASTEST_TIME",
+            "val": 435,
+            "time": 1786748796
           }
         }
       }
