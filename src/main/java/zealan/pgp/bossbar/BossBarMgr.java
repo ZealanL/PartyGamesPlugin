@@ -121,6 +121,7 @@ public class BossBarMgr extends AutoListener {
         if (existing != null) {
             existing.title = Display.format(content.title);
             existing.frac = (float) content.frac;
+            existing.age = 0;
         } else {
             var newWither = new FakeWither(player);
             if (newWither.user == null)
