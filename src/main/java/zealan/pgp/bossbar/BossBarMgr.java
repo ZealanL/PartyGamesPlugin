@@ -50,7 +50,7 @@ public class BossBarMgr extends AutoListener {
             final float TELEPORT_DIST = 50;
             var playerLoc = player.getLocation();
             return playerLoc.toVector().add(
-                    playerLoc.getDirection().multiply(TELEPORT_DIST)
+                    playerLoc.getDirection().multiply(TELEPORT_DIST).add(new Vector(0, 10, 0))
             );
         }
 
@@ -69,7 +69,8 @@ public class BossBarMgr extends AutoListener {
                             new EntityData(8, EntityDataTypes.BYTE, (byte) 1),
                             new EntityData(9, EntityDataTypes.BYTE, (byte) 0),
 
-                            new EntityData(20, EntityDataTypes.INT, 0),
+                            // Set correct invulnerability time to glitch rendering and make it virtually invisible
+                            new EntityData(20, EntityDataTypes.INT, 890),
 
                             // Custom name + custom name visible
                             new EntityData(2, EntityDataTypes.STRING, title),
@@ -97,6 +98,7 @@ public class BossBarMgr extends AutoListener {
                             // Custom name + custom name visible
                             new EntityData(2, EntityDataTypes.STRING, title),
                             new EntityData(3, EntityDataTypes.BYTE, (byte) 1),
+
                             // Heath
                             new EntityData(6, EntityDataTypes.FLOAT, calcHealth(frac))
                     )
