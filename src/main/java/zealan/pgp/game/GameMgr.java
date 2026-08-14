@@ -217,14 +217,6 @@ public class GameMgr extends AutoListener {
     @Override
     public void onTick() {
         for (var game : activeGames) {
-            game.onTick();
-
-            if (game.hasEnded()) {
-                WORLD_EVENTS_MGR.unregister(game.world, game);
-                for (var gamer : game.getGamers())
-                    gamerMap.remove(gamer.player);
-            }
-
             // Auto-stop-playing anyone who left the world or is a spectator
             for (var gamer : game.getGamers()) {
                 if (gamer.isPlaying()) {
@@ -232,6 +224,14 @@ public class GameMgr extends AutoListener {
                         gamer.stopPlaying(false);
                     }
                 }
+            }
+
+            game.onTick();
+
+            if (game.hasEnded()) {
+                WORLD_EVENTS_MGR.unregister(game.world, game);
+                for (var gamer : game.getGamers())
+                    gamerMap.remove(gamer.player);
             }
         }
         activeGames.removeIf(game -> game.hasEnded());

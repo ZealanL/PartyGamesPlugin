@@ -100,15 +100,14 @@ public enum GameConfig {
                     }
             )
     ),
+        */
     JungleJump(
-            GameJungleJump.class, "Jungle Jump", Items.JUNGLE_STAIRS,
-            GameStyle.RACE, 90,
+            GameJungleJump.class, "Jungle Jump", Material.JUNGLE_WOOD_STAIRS,
+            GameStyle.RACE, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
-                    new BlockPos(-181, 7, 2310),
-                    new GameSpawn[]{new GameSpawn(-181, 7, 2310, Direction.WEST)}
+                    new GameSpawn(-181, 7, 2310, BlockFace.WEST)
             )
     ),
-    */
     LabEscape(
             GameLabEscape.class, "Lab Escape", Material.IRON_AXE,
             GameStyle.RACE, GameMode.SURVIVAL, 180,
@@ -229,14 +228,15 @@ public enum GameConfig {
                     }
             )
     ),
+    */
     TheFloorIsLava(
-            GameTheFloorIsLava.class, "The Floor Is Lava", Items.STONE_BRICK_STAIRS,
-            GameStyle.RACE, 90,
+            GameTheFloorIsLava.class, "The Floor Is Lava", Material.COBBLESTONE_STAIRS,
+            GameStyle.RACE, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
-                    new BlockPos(-181, 7, 2293),
-                    new GameSpawn[]{new GameSpawn(-181, 7, 2293, Direction.WEST)}
+                    new GameSpawn(-181, 7, 2293, BlockFace.WEST)
             )
     ),
+    /*
     Trampolinio(
             GameTrampolinio.class, "Trampolinio", Items.SLIME_BALL,
             GameStyle.POINTS, 60,
