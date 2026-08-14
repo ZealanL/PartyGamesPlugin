@@ -131,7 +131,7 @@ public enum GameConfig {
             )
     ),
     LawnMoower(
-            GameLawnMoower.class, "Lawn Moower", Material.DOUBLE_PLANT,
+            GameLawnMoower.class, "Lawn Moower", new ItemStack(Material.LONG_GRASS, 1, (short)0, (byte)1),
             GameStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     new GameSpawn(-1087, 47, 715),
