@@ -1,6 +1,8 @@
 package zealan.pgp.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import zealan.pgp.math.Vec3i;
@@ -18,5 +20,10 @@ public class WorldUtil {
 
     public static Block getBlock(World world, Vec3i pos) {
         return world.getBlockAt(pos.x, pos.y, pos.z);
+    }
+
+    public static void breakBlock(World world, Block block) {
+        world.playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
+        block.setType(Material.AIR);
     }
 }

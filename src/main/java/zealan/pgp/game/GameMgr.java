@@ -185,11 +185,11 @@ public class GameMgr extends AutoListener {
             activeGames.add(game);
             WORLD_EVENTS_MGR.register(world, game);
 
-            game.onLoaded();
-            numLoadingGames.getAndDecrement();
-
             var elapsedMs = System.currentTimeMillis() - startMs;
             PLOG.info("Created new game world in " + elapsedMs + " ms!");
+
+            game.onLoaded();
+            numLoadingGames.getAndDecrement();
         });
 
         return true;

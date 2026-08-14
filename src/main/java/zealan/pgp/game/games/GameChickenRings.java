@@ -112,8 +112,8 @@ public class GameChickenRings extends Game {
                 curMoveDelta = this.curPos.clone().subtract(fromLoc.toVector());
             }
 
-            // Lock chicken head yaw to player yaw
-            nmsChicken.aK = nmsChicken.yaw;
+            nmsChicken.yaw = player.getLocation().getYaw();
+            nmsChicken.aK = nmsChicken.yaw /* Set head yaw */;
         }
     }
 
@@ -166,8 +166,9 @@ public class GameChickenRings extends Game {
             ringCenters.add(pos);
             for (var blockOffset : RINGS_BORDER_BLOCK_OFFSETS_REL) {
                 Vec3i blockPos = pos.add(blockOffset);
-                world.getBlockAt(blockPos.x, blockPos.y, blockPos.z).setType(Material.WOOL);
-                world.getBlockAt(blockPos.x, blockPos.y, blockPos.z).setData((byte) 7); // GRAY_WOOL
+                var block = world.getBlockAt(blockPos.x, blockPos.y, blockPos.z);
+                block.setType(Material.WOOL);
+                block.setData((byte) 7); // GRAY_WOOL
             }
         }
     }
@@ -274,17 +275,16 @@ public class GameChickenRings extends Game {
                     // Update ring blocks
                     byte prevWoolData;
                     if (!missedRing) {
-                        prevWoolData = 13; // GREEN_WOOL
                         controller.speedLevelIdx++;
+                        prevWoolData = 13; // GREEN_WOOL
                     } else {
                         controller.speedLevelIdx = 0;
                         prevWoolData = 14; // RED_WOOL
                     }
 
                     setRingBlocksForPlayer(ringCenters.get(controller.ringsPassed - 1), controller.player, Material.WOOL, prevWoolData);
-                    if (controller.ringsPassed < NUM_RINGS) {
+                    if (controller.ringsPassed < NUM_RINGS)
                         setRingBlocksForPlayer(ringCenters.get(controller.ringsPassed), controller.player, Material.WOOL, (byte) 5); // LIME_WOOL
-                    }
 
                     int ringNumber = controller.ringsPassed;
                     if (!missedRing) {
@@ -380,6 +380,6 @@ public class GameChickenRings extends Game {
 
     @Override
     public boolean canDismount(Player player, Entity entity) {
-        return false;
+        return player.getGameMode() == GameMode.CREATIVE;
     }
 }

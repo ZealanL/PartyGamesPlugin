@@ -76,7 +76,7 @@ public enum GameConfig {
             new GameLoadInfo(
                     new GameSpawn(1171, 112, -1867)
             )
-    )
+    ),
     /*
     JigsawRush(
             GameJigsawRush.class, "Jigsaw Rush", Items.DAYLIGHT_DETECTOR,
@@ -133,25 +133,22 @@ public enum GameConfig {
                     }
             )
     ),
-    LawnMooer(
-            GameLawnMooer.class, "Lawn Mooer", Items.SHORT_GRASS,
-            GameStyle.POINTS, 60,
+    */
+    LawnMoower(
+            GameLawnMoower.class, "Lawn Moower", Material.DOUBLE_PLANT,
+            GameStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    GameLawnMooer.CENTER_BLOCK_POS,
-
-                    // TODO: Guesses generated from a circle
-                    new GameSpawn[]{
-                            new GameSpawn(-1087, 47, 715),
-                            new GameSpawn(-1083, 47, 703),
-                            new GameSpawn(-1071, 47, 699),
-                            new GameSpawn(-1060, 47, 703),
-                            new GameSpawn(-1055, 47, 715),
-                            new GameSpawn(-1060, 47, 726),
-                            new GameSpawn(-1071, 47, 731),
-                            new GameSpawn(-1083, 47, 726),
-                    }
+                    new GameSpawn(-1087, 47, 715),
+                    new GameSpawn(-1083, 47, 703),
+                    new GameSpawn(-1071, 47, 699),
+                    new GameSpawn(-1060, 47, 703),
+                    new GameSpawn(-1055, 47, 715),
+                    new GameSpawn(-1060, 47, 726),
+                    new GameSpawn(-1071, 47, 731),
+                    new GameSpawn(-1083, 47, 726)
             )
-    ),
+    )
+    /*
     MinecartRacing(
             GameMinecartRacing.class, "Minecart Racing", Items.MINECART,
             GameStyle.RACE, 120,
