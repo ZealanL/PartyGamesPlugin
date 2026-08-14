@@ -7,6 +7,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -63,7 +64,7 @@ public class Display {
                 return MessageFormat.format("&b{0,number,00}:{1,number,00}", mins, secs);
             }
         } else if (arg instanceof String str) {
-            return str.replace('&', '§');
+            return str.replace('&', ChatColor.COLOR_CHAR);
         } else if (arg instanceof Double || arg instanceof Float) {
             var asDouble = (double)arg;
             return String.format("&b%.2f", asDouble);
@@ -96,7 +97,7 @@ public class Display {
             }
         }
         String resultStr = result.toString();
-        return resultStr.replace('&', '§');
+        return resultStr.replace('&', ChatColor.COLOR_CHAR);
     }
 
     public static String concatLines(String...lines) {

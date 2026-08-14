@@ -162,7 +162,7 @@ public enum GameConfig {
                 new GameSpawn(-1711, 50, -2073),
                 new GameSpawn(-1709, 50, -2073)
             )
-    )
+    ),
     /*
     PigFishing(
             GamePigFishing.class, "Pig Fishing", Items.FISHING_ROD,
@@ -247,15 +247,14 @@ public enum GameConfig {
                     GameTrampolinio.CENTER_BLOCK_POS,
                     new GameSpawn[]{new GameSpawn(GameTrampolinio.CENTER_BLOCK_POS)}
             )
-    ),
+    ),*/
     Volcano(
-            GameVolcano.class, "Volcano", Items.LAVA_BUCKET,
-            GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
+            GameVolcano.class, "Volcano", Material.LAVA_BUCKET,
+            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    GameVolcano.CENTER_BLOCK_POS,
-                    new GameSpawn[]{new GameSpawn(GameVolcano.CENTER_BLOCK_POS)}
+                    new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
-    )*/
+    )
     ;
 
     public static final int MAX_GAME_DURATION = 60 * 60 * 100; // 100 hours

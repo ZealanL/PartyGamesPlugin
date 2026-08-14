@@ -1,5 +1,7 @@
 package zealan.pgp.api.display;
 
+import org.bukkit.ChatColor;
+
 import java.util.HashSet;
 
 public class FormatState {
@@ -14,7 +16,7 @@ public class FormatState {
         char[] charArray = withFormat.toCharArray();
 
         for (int i = 1; i < charArray.length; i++) {
-            if (charArray[i-1] != '&' && charArray[i-1] != '§')
+            if (charArray[i-1] != '&' && charArray[i-1] != ChatColor.COLOR_CHAR)
                 continue;
 
             char c = charArray[i];
@@ -43,6 +45,6 @@ public class FormatState {
             sb.append("&" + c);
         }
 
-        return sb.toString().replace('&', '§');
+        return sb.toString().replace('&', ChatColor.COLOR_CHAR);
     }
 }
