@@ -121,4 +121,8 @@ public class EntityUtil {
     public static void setHeadYaw(LivingEntity entity, float yaw) {
         ((CraftLivingEntity)entity).getHandle().aK = yaw;
     }
+
+    public static void setPosOnly(LivingEntity entity, Vector pos) {
+        ((CraftLivingEntity)entity).getHandle().setPosition(pos.getX(), pos.getY(), pos.getZ());
+    }
 }

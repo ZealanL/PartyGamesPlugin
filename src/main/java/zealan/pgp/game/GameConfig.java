@@ -61,15 +61,20 @@ public enum GameConfig {
                     new GameSpawn(2492, 72, 220, BlockFace.NORTH)
             )
     ),
-    /*
     Dive(
-            GameDive.class, "Dive", Items.WATER_BUCKET,
-            GameStyle.POINTS, 60,
+            GameDive.class, "Dive", Material.WATER_BUCKET,
+            GameStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    new BlockPos(936, 77, -3613),
-                    GameDive.TEAM_SPAWNS
+                    new GameSpawn(936, 78, -3613),
+                    new GameSpawn(939, 78, -3065),
+                    new GameSpawn(947, 78, -3602),
+                    new GameSpawn(955, 78, -3065),
+                    new GameSpawn(958, 78, -3613),
+                    new GameSpawn(955, 78, -3621),
+                    new GameSpawn(947, 78, -3624),
+                    new GameSpawn(939, 78, -3621)
             )
-    ),*/
+    ),
     HoeHoeHoe(
             GameHoeHoeHoe.class, "Hoe Hoe Hoe", Material.DIAMOND_HOE,
             GameStyle.POINTS, GameMode.SURVIVAL, 60,
@@ -144,7 +149,6 @@ public enum GameConfig {
                     new GameSpawn(-1083, 47, 726)
             )
     ),
-
     MinecartRacing(
             GameMinecartRacing.class, "Minecart Racing", Material.MINECART,
             GameStyle.RACE, GameMode.ADVENTURE, 120,
