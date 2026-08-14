@@ -221,7 +221,6 @@ public class GameMgr extends AutoListener {
 
             if (game.hasEnded()) {
                 WORLD_EVENTS_MGR.unregister(game.world, game);
-                activeGames.remove(game);
                 for (var gamer : game.getGamers())
                     gamerMap.remove(gamer.player);
             }
@@ -235,5 +234,6 @@ public class GameMgr extends AutoListener {
                 }
             }
         }
+        activeGames.removeIf(game -> game.hasEnded());
     }
 }
