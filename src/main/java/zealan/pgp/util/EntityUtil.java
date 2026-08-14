@@ -5,12 +5,18 @@ import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityTeleport;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFallingSand;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import zealan.pgp.math.BoundingBox;
 import zealan.pgp.math.Vec3i;
@@ -79,5 +85,40 @@ public class EntityUtil {
             if (user != null)
                 user.sendPacket(packet);
         }
+    }
+
+    public static void setSilent(Entity entity, boolean silent) {
+        ((CraftEntity)entity).getHandle().b(silent);
+    }
+
+    public static void setNoAI(LivingEntity entity, boolean noAI) {
+        var nms = ((CraftLivingEntity)entity).getHandle();
+        if (nms instanceof EntityInsentient entityInsentient) {
+            entityInsentient.k(noAI);
+        } else {
+            throw new IllegalArgumentException("Entity does not inherit from insentient class");
+        }
+    }
+
+    public static void makeInvisible(LivingEntity entity) {
+        entity.addPotionEffect(new PotionEffect(
+                PotionEffectType.INVISIBILITY,
+                Integer.MAX_VALUE,
+                1,
+                false,
+                false
+        ));
+    }
+
+    public static void keepFallingBlockAlive(FallingBlock fbe) {
+        ((CraftFallingSand)fbe).getHandle().ticksLived = 1;
+    }
+
+    public static void setYaw(Entity entity, float yaw) {
+        ((CraftEntity)entity).getHandle().yaw = yaw;
+    }
+
+    public static void setHeadYaw(LivingEntity entity, float yaw) {
+        ((CraftLivingEntity)entity).getHandle().aK = yaw;
     }
 }

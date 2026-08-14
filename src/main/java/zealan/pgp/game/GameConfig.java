@@ -236,15 +236,13 @@ public enum GameConfig {
                     new GameSpawn(-181, 7, 2293, BlockFace.WEST)
             )
     ),
-    /*
     Trampolinio(
-            GameTrampolinio.class, "Trampolinio", Items.SLIME_BALL,
-            GameStyle.POINTS, 60,
+            GameTrampolinio.class, "Trampolinio", Material.SLIME_BLOCK,
+            GameStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    GameTrampolinio.CENTER_BLOCK_POS,
-                    new GameSpawn[]{new GameSpawn(GameTrampolinio.CENTER_BLOCK_POS)}
+                    new GameSpawn(GameTrampolinio.CENTER_BLOCK_POS)
             )
-    ),*/
+    ),
     Volcano(
             GameVolcano.class, "Volcano", Material.LAVA_BUCKET,
             GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,

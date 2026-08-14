@@ -17,6 +17,7 @@ import zealan.pgp.game.Gamer;
 import zealan.pgp.math.BlockRange;
 import zealan.pgp.math.MoveInput3;
 import zealan.pgp.math.Vec3i;
+import zealan.pgp.util.EntityUtil;
 import zealan.pgp.util.PlayerUtil;
 
 import java.util.ArrayList;
@@ -99,7 +100,8 @@ public class GameChickenRings extends Game {
             }
 
             Location loc = chicken.getLocation();
-            loc.setYaw(player.getLocation().getYaw());
+            float yaw = player.getLocation().getYaw();
+            loc.setYaw(yaw);
             loc.setPitch(0);
 
             Location fromLoc = loc.clone();
@@ -112,8 +114,8 @@ public class GameChickenRings extends Game {
                 curMoveDelta = this.curPos.clone().subtract(fromLoc.toVector());
             }
 
-            nmsChicken.yaw = player.getLocation().getYaw();
-            nmsChicken.aK = nmsChicken.yaw /* Set head yaw */;
+            EntityUtil.setYaw(chicken, yaw);
+            EntityUtil.setHeadYaw(chicken, yaw);
         }
     }
 
