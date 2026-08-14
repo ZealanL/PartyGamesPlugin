@@ -3,10 +3,7 @@ package zealan.pgp.stats;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import zealan.pgp.api.display.Display;
-import zealan.pgp.game.Game;
-import zealan.pgp.game.GameConfig;
-import zealan.pgp.game.GameVariant;
-import zealan.pgp.game.Gamer;
+import zealan.pgp.game.*;
 
 import java.time.Instant;
 import java.util.*;
@@ -21,25 +18,15 @@ public class PlayerStatsRecord {
     public int numLeaves = 0;
 
     public static class GamePB {
-        public enum Type {
-            POINTS,
-            FASTEST_TIME,
-            LONGEST_TIME,
-        }
-
-        public final Type type;
+        public final GameRecordStyle type;
         public final int val; // Number of points OR ticks played for
         public final long time;
 
         GamePB(GameConfig gameCfg, Gamer player) {
-            this.type = switch (gameCfg.style) {
-                case POINTS -> Type.POINTS;
-                case SURVIVAL -> Type.LONGEST_TIME;
-                case RACE -> Type.FASTEST_TIME;
-            };
-            this.val = switch (gameCfg.style) {
+            this.type = gameCfg.recordStyle;
+            this.val = switch (gameCfg.recordStyle) {
                 case POINTS -> player.getScore();
-                case SURVIVAL, RACE -> player.getTicksPlayedFor();
+                case LONGEST_TIME, FASTEST_TIME -> player.getTicksPlayedFor();
             };
 
             this.time = Instant.now().getEpochSecond();
@@ -252,5 +239,30 @@ public class PlayerStatsRecord {
                 sb.toString(),
                 Display.Special.BAR
         );
+    }
+
+    // ///////
+
+    public void fixInvalid() {
+        for (var gameConfig : GameConfig.values()) {
+            var pb = allGameStats.get(gameConfig);
+            if (pb == null)
+                continue;
+            pb.variantPBs.entrySet().removeIf(
+                    (entry) -> {
+                        String variantName = entry.getKey();
+                        GamePB gamePB = entry.getValue();
+                        if (gamePB.type != gameConfig.recordStyle) {
+                            PLOG.warning(
+                                    "Removing invalid \"" + gameConfig.properName + "\" PB record" +
+                                            " for \"" + playerName + "\" due to wrong style type "
+                            );
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+            );
+        }
     }
 }

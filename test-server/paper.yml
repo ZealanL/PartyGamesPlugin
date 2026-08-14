@@ -82,10 +82,10 @@ world-settings:
     water-over-lava-flow-speed: 5
     fix-cannons: false
     tnt-entity-height-nerf: 0
+    container-update-tick-rate: 1
     use-hopper-check: false
     all-chunks-are-slime-chunks: false
     allow-undead-horse-leashing: false
-    container-update-tick-rate: 1
     keep-spawn-loaded: true
     falling-blocks-collide-with-signs: false
     disable-mood-sounds: false

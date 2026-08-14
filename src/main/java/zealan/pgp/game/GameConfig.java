@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public enum GameConfig {
     AnimalSlaughter(
             GameAnimalSlaughter.class, "Animal Slaughter", Material.WOOD_SWORD,
-            GameStyle.POINTS, GameMode.ADVENTURE, 60,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     GameAnimalSlaughter.CENTER_BLOCK_POS,
                     new GameSpawn(GameAnimalSlaughter.CENTER_BLOCK_POS)
@@ -23,7 +23,7 @@ public enum GameConfig {
     ),
     AnvilSpleef(
             GameAnvilSpleef.class, "Anvil Spleef", Material.ANVIL,
-            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
                     new GameSpawn(-243, 1, -3608)
             )
@@ -40,14 +40,14 @@ public enum GameConfig {
    */
     Bombardment(
             GameBombardment.class, "Bombardment", Material.COAL_BLOCK,
-            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
                     new GameSpawn(-392, 20, 726, BlockFace.EAST)
             )
     ),
     CannonPainting(
             GameCannonPainting.class, "Cannon Painting", Material.EGG,
-            GameStyle.POINTS, GameMode.ADVENTURE, 30,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 30,
             new GameLoadInfo(
                     new GameSpawn(217, 19, 1443)
             )
@@ -55,7 +55,7 @@ public enum GameConfig {
 
     ChickenRings(
             GameChickenRings.class, "Chicken Rings", ItemUtil.getSpawnEgg(EntityType.CHICKEN),
-            GameStyle.RACE, GameMode.ADVENTURE, 120,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
                     new Vec3i(2493, 66, -591), // Finish line
                     new GameSpawn(2492, 72, 220, BlockFace.NORTH)
@@ -63,7 +63,7 @@ public enum GameConfig {
     ),
     Dive(
             GameDive.class, "Dive", Material.WATER_BUCKET,
-            GameStyle.POINTS, GameMode.ADVENTURE, 60,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     new GameSpawn(936, 78, -3613),
                     new GameSpawn(939, 78, -3065),
@@ -77,7 +77,7 @@ public enum GameConfig {
     ),
     HoeHoeHoe(
             GameHoeHoeHoe.class, "Hoe Hoe Hoe", Material.DIAMOND_HOE,
-            GameStyle.POINTS, GameMode.SURVIVAL, 60,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.SURVIVAL, 60,
             new GameLoadInfo(
                     new GameSpawn(1171, 112, -1867)
             )
@@ -108,14 +108,14 @@ public enum GameConfig {
         */
     JungleJump(
             GameJungleJump.class, "Jungle Jump", Material.JUNGLE_WOOD_STAIRS,
-            GameStyle.RACE, GameMode.ADVENTURE, 90,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
                     new GameSpawn(-181, 7, 2310, BlockFace.WEST)
             )
     ),
     LabEscape(
             GameLabEscape.class, "Lab Escape", Material.IRON_AXE,
-            GameStyle.RACE, GameMode.SURVIVAL, 180,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.SURVIVAL, 180,
             new GameLoadInfo(
                     new GameSpawn(1429, 161, -117),
                     new GameSpawn(1437, 161, -101),
@@ -137,7 +137,7 @@ public enum GameConfig {
     ),
     LawnMoower(
             GameLawnMoower.class, "Lawn Moower", new ItemStack(Material.LONG_GRASS, 1, (short)0, (byte)1),
-            GameStyle.POINTS, GameMode.ADVENTURE, 60,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     new GameSpawn(-1087, 47, 715),
                     new GameSpawn(-1083, 47, 703),
@@ -151,7 +151,7 @@ public enum GameConfig {
     ),
     MinecartRacing(
             GameMinecartRacing.class, "Minecart Racing", Material.MINECART,
-            GameStyle.RACE, GameMode.ADVENTURE, 120,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
                     new GameSpawn(-1723, 50, -2073),
                     new GameSpawn(-1721, 50, -2073),
@@ -235,21 +235,21 @@ public enum GameConfig {
     */
     TheFloorIsLava(
             GameTheFloorIsLava.class, "The Floor Is Lava", Material.COBBLESTONE_STAIRS,
-            GameStyle.RACE, GameMode.ADVENTURE, 90,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
                     new GameSpawn(-181, 7, 2293, BlockFace.WEST)
             )
     ),
     Trampolinio(
             GameTrampolinio.class, "Trampolinio", Material.SLIME_BLOCK,
-            GameStyle.POINTS, GameMode.ADVENTURE, 60,
+            GameStyle.POINTS, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     new GameSpawn(GameTrampolinio.CENTER_BLOCK_POS)
             )
     ),
     Volcano(
             GameVolcano.class, "Volcano", Material.LAVA_BUCKET,
-            GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
                     new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
@@ -262,6 +262,7 @@ public enum GameConfig {
     public final String snakeCaseName;
     public final ItemStack iconItem;
     public final GameStyle style;
+    public final GameRecordStyle recordStyle;
     public final GameMode gameMode;
     public final int maxDurationSecs;
     public final GameLoadInfo loadInfo;
@@ -273,17 +274,19 @@ public enum GameConfig {
             String properName,
             Material iconItem,
             GameStyle gameStyle,
+            GameRecordStyle recordStyle,
             GameMode gameMode,
             int maxDurationSecs,
             GameLoadInfo loadInfo
     ) {
-        this(cls, properName, new ItemStack(iconItem), gameStyle, gameMode, maxDurationSecs, loadInfo);
+        this(cls, properName, new ItemStack(iconItem), gameStyle, recordStyle, gameMode, maxDurationSecs, loadInfo);
     }
 
     GameConfig(
             Class<? extends Game> cls,
             String properName, ItemStack iconItem,
             GameStyle gameStyle,
+            GameRecordStyle recordStyle,
             GameMode gameMode,
             int maxDurationSecs,
             GameLoadInfo loadInfo
@@ -293,6 +296,7 @@ public enum GameConfig {
         this.snakeCaseName = properName.toLowerCase().replace(" ", "_");
         this.iconItem = iconItem;
         this.style = gameStyle;
+        this.recordStyle = recordStyle;
         this.gameMode = gameMode;
         this.maxDurationSecs = maxDurationSecs;
         this.loadInfo = loadInfo;

@@ -90,6 +90,10 @@ public class PlayerStatsMgr extends AutoListener {
         } catch (IOException e) {
             PLOG.severe("PlayerStatsManager(): FAILED to load player stats: " + e);
         }
+
+        for (var playerStats : records.values()) {
+            playerStats.fixInvalid();
+        }
     }
 
     private void save() {
@@ -126,7 +130,9 @@ public class PlayerStatsMgr extends AutoListener {
     }
 
     public void onPlayerStoppedPlaying(Gamer gp, Game game, boolean finished) {
-        if (gp.isPlaying()) throw new RuntimeException("Player has not finished");
+        if (gp.isPlaying()) {
+            throw new RuntimeException("Player is still playing");
+        }
 
         var record = getPlayerStats(gp.player);
         record.updateAfterPlaying(gp, game, finished);

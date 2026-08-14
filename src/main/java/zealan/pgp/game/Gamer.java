@@ -34,7 +34,7 @@ public class Gamer {
         return game;
     }
 
-    public void stopPlaying(boolean endedNaturally) {
+    public void stopPlaying(boolean finishedPlaying) {
         if (!isPlaying) {
             PLOG.severe(
                     "GamePlayer.stopPlaying() called when already done (game: \"" + game.config.properName + "\")"
@@ -44,9 +44,9 @@ public class Gamer {
 
         isPlaying = false;
         ticksPlayedFor = game.getTicksElapsed();
-        hasFinished = endedNaturally;
+        hasFinished = finishedPlaying;
 
-        if (endedNaturally) {
+        if (finishedPlaying) {
             score = switch (game.config.style) {
                 case POINTS -> points;
                 case SURVIVAL -> game.getTicksElapsed();
@@ -57,6 +57,6 @@ public class Gamer {
             score = 0;
         }
 
-        PLAYER_STATS_MGR.onPlayerStoppedPlaying(this, game, endedNaturally);
+        PLAYER_STATS_MGR.onPlayerStoppedPlaying(this, game, finishedPlaying);
     }
 }
