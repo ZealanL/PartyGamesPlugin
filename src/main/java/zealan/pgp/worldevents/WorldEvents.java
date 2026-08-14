@@ -3,6 +3,7 @@ package zealan.pgp.worldevents;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -42,5 +43,8 @@ public interface WorldEvents {
 
     default void onPlayerDeath(Player player) {
 
+    }
+
+    default void onProjectileHit(Projectile projectile) {
     }
 }

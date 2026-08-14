@@ -45,15 +45,13 @@ public enum GameConfig {
                     new GameSpawn(-392, 20, 726, BlockFace.EAST)
             )
     ),
-    /*
     CannonPainting(
-            GameCannonPainting.class, "Cannon Painting", Items.EGG,
-            GameStyle.POINTS, 30,
+            GameCannonPainting.class, "Cannon Painting", Material.EGG,
+            GameStyle.POINTS, GameMode.ADVENTURE, 30,
             new GameLoadInfo(
-                    new BlockPos(217, 19, 1443),
-                    new GameSpawn[]{new GameSpawn(217, 19, 1443)}
+                    new GameSpawn(217, 19, 1443)
             )
-    ),*/
+    ),
 
     ChickenRings(
             GameChickenRings.class, "Chicken Rings", ItemUtil.getSpawnEgg(EntityType.CHICKEN),

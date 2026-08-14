@@ -242,6 +242,12 @@ public class WorldEventsMgr extends AutoListener {
         event.setCancelled(true);
     }
 
+    @EventHandler
+    public void handle(ProjectileHitEvent event) {
+        WorldEvents worldEvents = getWorldPerms(event.getEntity().getWorld());
+        if (worldEvents == null) return;
+        worldEvents.onProjectileHit(event.getEntity());
+    }
 
     // //////////
 
