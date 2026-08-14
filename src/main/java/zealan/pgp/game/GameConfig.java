@@ -147,25 +147,23 @@ public enum GameConfig {
                     new GameSpawn(-1071, 47, 731),
                     new GameSpawn(-1083, 47, 726)
             )
+    ),
+
+    MinecartRacing(
+            GameMinecartRacing.class, "Minecart Racing", Material.MINECART,
+            GameStyle.RACE, GameMode.ADVENTURE, 120,
+            new GameLoadInfo(
+                new GameSpawn(-1723, 50, -2073),
+                new GameSpawn(-1721, 50, -2073),
+                new GameSpawn(-1719, 50, -2073),
+                new GameSpawn(-1717, 50, -2073),
+                new GameSpawn(-1715, 50, -2073),
+                new GameSpawn(-1713, 50, -2073),
+                new GameSpawn(-1711, 50, -2073),
+                new GameSpawn(-1709, 50, -2073)
+            )
     )
     /*
-    MinecartRacing(
-            GameMinecartRacing.class, "Minecart Racing", Items.MINECART,
-            GameStyle.RACE, 120,
-            new GameLoadInfo(
-                    new BlockPos(-1716, 58, -2074),
-                    new GameSpawn[]{
-                            new GameSpawn(-1723, 50, -2073),
-                            new GameSpawn(-1721, 50, -2073),
-                            new GameSpawn(-1719, 50, -2073),
-                            new GameSpawn(-1717, 50, -2073),
-                            new GameSpawn(-1715, 50, -2073),
-                            new GameSpawn(-1713, 50, -2073),
-                            new GameSpawn(-1711, 50, -2073),
-                            new GameSpawn(-1709, 50, -2073)
-                    }
-            )
-    ),
     PigFishing(
             GamePigFishing.class, "Pig Fishing", Items.FISHING_ROD,
             GameStyle.POINTS, 75,

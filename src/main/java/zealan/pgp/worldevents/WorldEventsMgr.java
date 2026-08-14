@@ -20,8 +20,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.spigotmc.event.entity.EntityDismountEvent;
 import zealan.pgp.AutoListener;
 
 import java.util.HashMap;
@@ -236,29 +236,35 @@ public class WorldEventsMgr extends AutoListener {
 
     // Prevent eggs from spawning chickens
     @EventHandler
-    public void handle(CreatureSpawnEvent event) {
+    void handle(CreatureSpawnEvent event) {
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.EGG)
             event.setCancelled(true);
     }
 
     // Disable suffocation damage permanently
     @EventHandler
-    public void handle(EntityDamageEvent event) {
+    void handle(EntityDamageEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION)
             event.setCancelled(true);
     }
 
     // Never allow items to be damaged
     @EventHandler
-    public void handle(PlayerItemDamageEvent event) {
+    void handle(PlayerItemDamageEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void handle(ProjectileHitEvent event) {
+    void handle(ProjectileHitEvent event) {
         WorldEvents worldEvents = getWorldPerms(event.getEntity().getWorld());
         if (worldEvents == null) return;
         worldEvents.onProjectileHit(event.getEntity());
+    }
+
+    // Never allow a vehicle to be damaged
+    @EventHandler
+    void handle(VehicleDamageEvent event) {
+        event.setCancelled(true);
     }
 
     // //////////

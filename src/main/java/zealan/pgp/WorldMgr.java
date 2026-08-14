@@ -123,6 +123,11 @@ public class WorldMgr extends AutoListener {
         world.setAutoSave(false);
         world.setDifficulty(Difficulty.NORMAL);
 
+        // Remove existing entities
+        var entities = world.getEntities();
+        for (var entity : entities)
+            entity.remove();
+
         return world;
     }
 
