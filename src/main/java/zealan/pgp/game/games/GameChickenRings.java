@@ -63,39 +63,40 @@ public class GameChickenRings extends Game {
             return SPEED_LEVELS[Math.min(speedLevelIdx, SPEED_LEVELS.length - 1)];
         }
 
-        private ChickenController(Player player, Chicken chicken) {
+        private ChickenController(Player player, Chicken chicken, Vector spawnPos) {
             this.player = player;
             this.chicken = chicken;
-            this.curPos = chicken.getLocation().toVector();
+            this.curPos = spawnPos;
         }
 
-        void updateMovement(Vector movementInput) {
-            // Normalize X and Z
-            Vector horizontal = new Vector(movementInput.getX(), 0, movementInput.getZ());
-            if (horizontal.lengthSquared() > 0) {
-                horizontal.normalize();
+        void updateMovement(Vector movementInput, boolean allowedMove) {
+            if (allowedMove) {
+                Vector horizontal = new Vector(movementInput.getX(), 0, movementInput.getZ());
+                if (horizontal.lengthSquared() > 0) {
+                    horizontal.normalize();
+                }
+                movementInput = horizontal.setY(movementInput.getY());
+
+                double curSpeedH = getCurSpeedH();
+                if (movementInput.getY() < 0) {
+                    curSpeedH *= SPEED_H_DOWN_MUL;
+                } else if (movementInput.getY() > 0) {
+                    curSpeedH *= SPEED_H_UP_MUL;
+                }
+
+                Vector targetMoveDelta = new Vector(
+                        movementInput.getX() * curSpeedH,
+                        movementInput.getY() * SPEED_VERTICAL,
+                        movementInput.getZ() * curSpeedH
+                ).multiply(1.0 / 20.0);
+
+                double lerp = MOVEMENT_LERP_H * (2.0 / 3.0) * (2.0 / 3.0);
+                curMoveDelta = new Vector(
+                        (curMoveDelta.getX() * (1 - lerp)) + (targetMoveDelta.getX() * lerp),
+                        targetMoveDelta.getY(), // Up/down movement has no lerp
+                        (curMoveDelta.getZ() * (1 - lerp)) + (targetMoveDelta.getZ() * lerp)
+                );
             }
-            movementInput = horizontal.setY(movementInput.getY());
-
-            double curSpeedH = getCurSpeedH();
-            if (movementInput.getY() < 0) {
-                curSpeedH *= SPEED_H_DOWN_MUL;
-            } else if (movementInput.getY() > 0) {
-                curSpeedH *= SPEED_H_UP_MUL;
-            }
-
-            Vector targetMoveDelta = new Vector(
-                    movementInput.getX() * curSpeedH,
-                    movementInput.getY() * SPEED_VERTICAL,
-                    movementInput.getZ() * curSpeedH
-            ).multiply(1.0 / 20.0);
-
-            double lerp = MOVEMENT_LERP_H * (2.0 / 3.0) * (2.0 / 3.0);
-            curMoveDelta = new Vector(
-                    (curMoveDelta.getX() * (1 - lerp)) + (targetMoveDelta.getX() * lerp),
-                    targetMoveDelta.getY(), // Up/down movement has no lerp
-                    (curMoveDelta.getZ() * (1 - lerp)) + (targetMoveDelta.getZ() * lerp)
-            );
 
             Location loc = chicken.getLocation();
             loc.setYaw(player.getLocation().getYaw());
@@ -105,22 +106,23 @@ public class GameChickenRings extends Game {
 
             EntityChicken nmsChicken = ((CraftChicken) chicken).getHandle();
             nmsChicken.setPosition(this.curPos.getX(), this.curPos.getY(), this.curPos.getZ());
-            nmsChicken.move(curMoveDelta.getX(), curMoveDelta.getY(), curMoveDelta.getZ());
-            this.curPos = new Vector(nmsChicken.locX, nmsChicken.locY, nmsChicken.locZ);
-            //nmsChicken.yaw = player.getLocation().getYaw();
-            //nmsChicken.pitch = 0;
-            nmsChicken.aK = nmsChicken.yaw;
+            if (allowedMove) {
+                nmsChicken.move(curMoveDelta.getX(), curMoveDelta.getY(), curMoveDelta.getZ());
+                this.curPos = new Vector(nmsChicken.locX, nmsChicken.locY, nmsChicken.locZ);
+                curMoveDelta = this.curPos.clone().subtract(fromLoc.toVector());
+            }
 
-            curMoveDelta = this.curPos.clone().subtract(fromLoc.toVector());
+            // Lock chicken head yaw to player yaw
+            nmsChicken.aK = nmsChicken.yaw;
         }
     }
 
     private static final int RINGS_RADIUS_BLOCKS = 3;
     private static final Vec3i[] RINGS_BORDER_BLOCK_OFFSETS_REL = {
-            new Vec3i(-1,  3, 0), new Vec3i( 0,  3, 0), new Vec3i( 1,  3, 0), new Vec3i(-2,  2, 0),
-            new Vec3i(-3, -1, 0), new Vec3i(-3,  0, 0), new Vec3i(-3,  1, 0), new Vec3i(-2, -2, 0),
-            new Vec3i( 1, -3, 0), new Vec3i( 0, -3, 0), new Vec3i(-1, -3, 0), new Vec3i( 2, -2, 0),
-            new Vec3i( 3,  1, 0), new Vec3i( 3,  0, 0), new Vec3i( 3, -1, 0), new Vec3i( 2,  2, 0)
+            new Vec3i(-1, 3, 0), new Vec3i(0, 3, 0), new Vec3i(1, 3, 0), new Vec3i(-2, 2, 0),
+            new Vec3i(-3, -1, 0), new Vec3i(-3, 0, 0), new Vec3i(-3, 1, 0), new Vec3i(-2, -2, 0),
+            new Vec3i(1, -3, 0), new Vec3i(0, -3, 0), new Vec3i(-1, -3, 0), new Vec3i(2, -2, 0),
+            new Vec3i(3, 1, 0), new Vec3i(3, 0, 0), new Vec3i(3, -1, 0), new Vec3i(2, 2, 0)
     };
 
     private static final int NUM_RINGS = 32;
@@ -203,7 +205,7 @@ public class GameChickenRings extends Game {
             Location spawnLoc = new Location(world, ridePos.getX(), ridePos.getY(), ridePos.getZ(), -180, 0);
 
             Chicken chicken = (Chicken) world.spawnEntity(spawnLoc, EntityType.CHICKEN);
-            var controller = new ChickenController(gamer.player, chicken);
+            var controller = new ChickenController(gamer.player, chicken, spawnLoc.toVector());
             chickenControllers.put(gamer, controller);
 
             Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
@@ -249,9 +251,9 @@ public class GameChickenRings extends Game {
             if (controller == null) continue;
 
             MoveInput3 movementInput = PLAYER_MGR.getMoveInput(gamer.player);
-            if (!hasStarted())
-                movementInput = new MoveInput3(); // Prevent moving before the game starts
-            controller.updateMovement(movementInput.toWorldVector(gamer.player.getLocation().getYaw()));
+            controller.updateMovement(
+                    movementInput.toWorldVector(gamer.player.getLocation().getYaw()), hasStarted()
+            );
 
             Vec3i nextRingPos = ringCenters.get(Math.min(controller.ringsPassed, NUM_RINGS - 1));
             Location chickenLoc = controller.chicken.getLocation();
