@@ -57,7 +57,7 @@ public class PlayerStatsRecord {
 
         public String toMsgPart() {
             Object valDisplay = switch (this.type) {
-                case POINTS -> String.valueOf(this.val);
+                case POINTS -> Display.format(this.val);
                 case FASTEST_TIME, LONGEST_TIME -> new Display.TicksTime(this.val, true);
             };
 
