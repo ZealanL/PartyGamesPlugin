@@ -18,3 +18,5 @@ ___build_tools
 /stats/*.json
 world/
 temp-world*/
+plugins/PartyGamesPlugin
+/test-server/plugins/PartyGamesPlugin/
