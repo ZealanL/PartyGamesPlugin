@@ -15,4 +15,6 @@ gradlew
 gradlew.bat
 ___build_tools
 /___build_tools
-/test-server
+/stats/*.json
+world/
+temp-world*/

@@ -1,0 +1,176 @@
+{
+  "34d80c38-eafc-4ee1-995c-0d713c0f93a5": {
+    "playerUUID": "34d80c38-eafc-4ee1-995c-0d713c0f93a5",
+    "playerName": "Zras",
+    "numJoins": 109,
+    "numLeaves": 18,
+    "allGameStats": {
+      "AnvilSpleef": {
+        "gameConfig": "AnvilSpleef",
+        "totalTicksPlayed": 17681,
+        "timesPlayed": 51,
+        "variantPBs": {
+          "Normal": {
+            "type": "LONGEST_TIME",
+            "val": 300,
+            "time": 1786627040
+          }
+        }
+      },
+      "HoeHoeHoe": {
+        "gameConfig": "HoeHoeHoe",
+        "totalTicksPlayed": 21601,
+        "timesPlayed": 21,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 181,
+            "time": 1786638020
+          }
+        }
+      },
+      "Bombardment": {
+        "gameConfig": "Bombardment",
+        "totalTicksPlayed": 19692,
+        "timesPlayed": 21,
+        "variantPBs": {
+          "Normal": {
+            "type": "LONGEST_TIME",
+            "val": 3556,
+            "time": 1786647996
+          },
+          "Impatient": {
+            "type": "LONGEST_TIME",
+            "val": 62,
+            "time": 1786647411
+          }
+        }
+      },
+      "ChickenRings": {
+        "gameConfig": "ChickenRings",
+        "totalTicksPlayed": 31755,
+        "timesPlayed": 32,
+        "variantPBs": {
+          "Normal": {
+            "type": "FASTEST_TIME",
+            "val": 816,
+            "time": 1786687440
+          }
+        }
+      },
+      "AnimalSlaughter": {
+        "gameConfig": "AnimalSlaughter",
+        "totalTicksPlayed": 4804,
+        "timesPlayed": 4,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 47,
+            "time": 1786711721
+          },
+          "Sword-Swapping": {
+            "type": "POINTS",
+            "val": 6,
+            "time": 1786712068
+          }
+        }
+      },
+      "CannonPainting": {
+        "gameConfig": "CannonPainting",
+        "totalTicksPlayed": 9811,
+        "timesPlayed": 17,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 171,
+            "time": 1786713915
+          }
+        }
+      },
+      "LawnMoower": {
+        "gameConfig": "LawnMoower",
+        "totalTicksPlayed": 9860,
+        "timesPlayed": 15,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 436,
+            "time": 1786731016
+          }
+        }
+      },
+      "MinecartRacing": {
+        "gameConfig": "MinecartRacing",
+        "totalTicksPlayed": 17539,
+        "timesPlayed": 11,
+        "variantPBs": {
+          "Normal": {
+            "type": "FASTEST_TIME",
+            "val": 592,
+            "time": 1786736710
+          }
+        }
+      },
+      "Volcano": {
+        "gameConfig": "Volcano",
+        "totalTicksPlayed": 826,
+        "timesPlayed": 1,
+        "variantPBs": {
+          "Normal": {
+            "type": "LONGEST_TIME",
+            "val": 826,
+            "time": 1786740430
+          }
+        }
+      },
+      "LabEscape": {
+        "gameConfig": "LabEscape",
+        "totalTicksPlayed": 1499,
+        "timesPlayed": 8,
+        "variantPBs": {
+          "Normal": {
+            "type": "FASTEST_TIME",
+            "val": 220,
+            "time": 1786742167
+          }
+        }
+      },
+      "JungleJump": {
+        "gameConfig": "JungleJump",
+        "totalTicksPlayed": 725,
+        "timesPlayed": 3,
+        "variantPBs": {
+          "Normal": {
+            "type": "FASTEST_TIME",
+            "val": 641,
+            "time": 1786742469
+          }
+        }
+      },
+      "Trampolinio": {
+        "gameConfig": "Trampolinio",
+        "totalTicksPlayed": 10391,
+        "timesPlayed": 9,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 19,
+            "time": 1786746314
+          }
+        }
+      },
+      "Dive": {
+        "gameConfig": "Dive",
+        "totalTicksPlayed": 2402,
+        "timesPlayed": 2,
+        "variantPBs": {
+          "Normal": {
+            "type": "POINTS",
+            "val": 15,
+            "time": 1786747976
+          }
+        }
+      }
+    }
+  }
+}
