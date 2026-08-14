@@ -72,12 +72,16 @@ public abstract class Game implements WorldEvents {
             spawnGamer(gamer);
 
         world.setTime(3000);
-        start();
     }
 
-    private void start() {
+    private boolean hasStartedStarting = false;
+    public void start() {
+        if (hasStartedStarting)
+            throw new IllegalStateException("Cannot start game twice!");
+        hasStartedStarting = true;
         innerOnStart();
     }
+
     public final void end() {
         end(false);
     }
