@@ -108,32 +108,29 @@ public enum GameConfig {
                     new GameSpawn[]{new GameSpawn(-181, 7, 2310, Direction.WEST)}
             )
     ),
+    */
     LabEscape(
-            GameLabEscape.class, "Lab Escape", Items.IRON_AXE,
-            GameStyle.RACE, 180,
+            GameLabEscape.class, "Lab Escape", Material.IRON_AXE,
+            GameStyle.RACE, GameMode.SURVIVAL, 180,
             new GameLoadInfo(
-                    new BlockPos(1440, 168, -113),
-                    new GameSpawn[]{
-                            new GameSpawn(1429, 161, -116),
-                            new GameSpawn(1437, 161, -100),
-                            new GameSpawn(1437, 161, -124),
-                            new GameSpawn(1437, 161, -116),
-                            new GameSpawn(1445, 161, -100),
-                            new GameSpawn(1453, 161, -108),
-                            new GameSpawn(1453, 161, -124),
-                            new GameSpawn(1445, 161, -108),
-                            new GameSpawn(1453, 161, -100),
-                            new GameSpawn(1429, 161, -100),
-                            new GameSpawn(1453, 161, -116),
-                            new GameSpawn(1445, 161, -116),
-                            new GameSpawn(1429, 161, -108),
-                            new GameSpawn(1445, 161, -124),
-                            new GameSpawn(1437, 161, -108),
-                            new GameSpawn(1429, 161, -124),
-                    }
+                    new GameSpawn(1429, 161, -117),
+                    new GameSpawn(1437, 161, -101),
+                    new GameSpawn(1437, 161, -125),
+                    new GameSpawn(1437, 161, -117),
+                    new GameSpawn(1445, 161, -101),
+                    new GameSpawn(1453, 161, -109),
+                    new GameSpawn(1453, 161, -125),
+                    new GameSpawn(1445, 161, -109),
+                    new GameSpawn(1453, 161, -101),
+                    new GameSpawn(1429, 161, -101),
+                    new GameSpawn(1453, 161, -117),
+                    new GameSpawn(1445, 161, -117),
+                    new GameSpawn(1429, 161, -109),
+                    new GameSpawn(1445, 161, -125),
+                    new GameSpawn(1437, 161, -109),
+                    new GameSpawn(1429, 161, -125)
             )
     ),
-    */
     LawnMoower(
             GameLawnMoower.class, "Lawn Moower", Material.DOUBLE_PLANT,
             GameStyle.POINTS, GameMode.ADVENTURE, 60,
@@ -153,14 +150,14 @@ public enum GameConfig {
             GameMinecartRacing.class, "Minecart Racing", Material.MINECART,
             GameStyle.RACE, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
-                new GameSpawn(-1723, 50, -2073),
-                new GameSpawn(-1721, 50, -2073),
-                new GameSpawn(-1719, 50, -2073),
-                new GameSpawn(-1717, 50, -2073),
-                new GameSpawn(-1715, 50, -2073),
-                new GameSpawn(-1713, 50, -2073),
-                new GameSpawn(-1711, 50, -2073),
-                new GameSpawn(-1709, 50, -2073)
+                    new GameSpawn(-1723, 50, -2073),
+                    new GameSpawn(-1721, 50, -2073),
+                    new GameSpawn(-1719, 50, -2073),
+                    new GameSpawn(-1717, 50, -2073),
+                    new GameSpawn(-1715, 50, -2073),
+                    new GameSpawn(-1713, 50, -2073),
+                    new GameSpawn(-1711, 50, -2073),
+                    new GameSpawn(-1709, 50, -2073)
             )
     ),
     /*
@@ -254,8 +251,7 @@ public enum GameConfig {
             new GameLoadInfo(
                     new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
-    )
-    ;
+    );
 
     public static final int MAX_GAME_DURATION = 60 * 60 * 100; // 100 hours
 
