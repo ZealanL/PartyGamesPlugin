@@ -3,6 +3,7 @@ package zealan.pgp.stats;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -64,8 +65,7 @@ public class PlayerStatsMgr extends AutoListener {
         }, new CommandArg.AnyString("player_name").makeOptional()));
         COMMAND_SYS.register(CommandNode.make("reloadstats", "Reload all player stats", ctx -> {
             this.load();
-            // TODO: ADD
-            //LEADERBOARD_MGR.fullUpdate();
+            LEADERBOARD_MGR.fullUpdate();
             return CommandResult.ok("Reloaded!");
         }).withOpOnly());
 
@@ -137,10 +137,9 @@ public class PlayerStatsMgr extends AutoListener {
         var record = getPlayerStats(gp.player);
         record.updateAfterPlaying(gp, game, finished);
 
-        // TODO: ADD
-        //Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
-        //    LEADERBOARD_MGR.updateForPlayer(gp.ent, game.getConfig(), true);
-        //}, 2 * 20);
+        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
+            LEADERBOARD_MGR.updateForPlayer(gp.player, game.config, true);
+        }, 2 * 20);
     }
 
     // ///////////

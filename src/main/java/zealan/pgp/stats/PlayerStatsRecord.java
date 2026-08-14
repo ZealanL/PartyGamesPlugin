@@ -8,6 +8,7 @@ import zealan.pgp.game.*;
 import java.time.Instant;
 import java.util.*;
 
+import static zealan.pgp.Globals.LEADERBOARD_MGR;
 import static zealan.pgp.Globals.PLOG;
 
 public class PlayerStatsRecord {
@@ -91,8 +92,6 @@ public class PlayerStatsRecord {
 
                 boolean isNormalVariant = pbEntry.getKey().equals(GameVariant.NONE.name());
                 if (isNormalVariant) {
-                    // TODO: Implement leaderboard
-                    /*
                     var lb = LEADERBOARD_MGR.getLeaderboard(gameConfig);
                     if (lb != null) {
                         int lbNumber = 0;
@@ -103,13 +102,10 @@ public class PlayerStatsRecord {
                             }
                         }
 
-                        if (lbNumber > 0) {
-                            valueText = valueText.append(
-                                    TextPart.format(" &8[&f#&e" + lbNumber + "&8]")
-                            );
-                        }
+                        if (lbNumber > 0)
+                            valueText += Display.format(" &8[&f#&e" + lbNumber + "&8]");
                     }
-                    */
+
                 }
 
                 dataMap.put("PB (" + pbEntry.getKey() + ")", valueText);

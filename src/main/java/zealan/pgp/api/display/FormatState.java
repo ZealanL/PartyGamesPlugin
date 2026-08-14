@@ -37,8 +37,11 @@ public class FormatState {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         if (this.colorChar != null) {
             sb.append("&" + this.colorChar);
+        } else {
+            sb.append("&f");
         }
 
         for (Character c : this.styleChars) {

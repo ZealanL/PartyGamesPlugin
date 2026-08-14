@@ -5,6 +5,7 @@ import zealan.pgp.api.command.CommandSys;
 import zealan.pgp.bossbar.BossBarMgr;
 import zealan.pgp.essentials.Essentials;
 import zealan.pgp.game.GameMgr;
+import zealan.pgp.leaderboard.LeaderboardMgr;
 import zealan.pgp.menu.MenuMgr;
 import zealan.pgp.party.PartyMgr;
 import zealan.pgp.stats.PlayerStatsMgr;
@@ -28,6 +29,7 @@ public class Globals {
     public static BossBarMgr BOSS_BAR_MGR;
     public static MenuMgr MENU_MGR;
     public static SidebarMgr SIDEBAR_MGR;
+    public static LeaderboardMgr LEADERBOARD_MGR;
 
     private static boolean initialized = false;
     public static void initialize(PartyGamesPlugin plugin) {
@@ -50,6 +52,7 @@ public class Globals {
             BOSS_BAR_MGR = new BossBarMgr();
             MENU_MGR = new MenuMgr();
             SIDEBAR_MGR = new SidebarMgr();
+            LEADERBOARD_MGR = new LeaderboardMgr();
         } else {
             throw new RuntimeException("Cannot initialize globals twice");
         }
