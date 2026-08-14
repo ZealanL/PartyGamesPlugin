@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -60,13 +61,24 @@ public class WorldEventsMgr extends AutoListener {
     private class EventsPacketListener extends PacketListenerAbstract {
         @Override
         public void onPacketReceive(PacketReceiveEvent event) {
+            Player player = (Player) event.getPlayer();
+            if (player == null) return;
+
+            var vehicle = player.getVehicle();
+            if (vehicle == null) return;
+
             if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
                 var packet = new WrapperPlayClientSteerVehicle(event);
-                Player player = (Player) event.getPlayer();
-                var vehicle = player.getVehicle();
-                if (packet.isUnmount() && vehicle != null) {
+                if (packet.isUnmount()) {
                     if (!canDismount(player, vehicle))
                         event.setCancelled(true);
+                }
+            } else if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
+                var packet = new WrapperPlayClientEntityAction(event);
+                if (packet.getAction() == WrapperPlayClientEntityAction.Action.START_SNEAKING) {
+                    if (!canDismount(player, vehicle)) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
