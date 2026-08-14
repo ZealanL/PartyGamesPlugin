@@ -89,7 +89,7 @@ public abstract class Game implements WorldEvents {
     }
 
     public final void onTick() {
-        innerOnTick(state != State.STARTING);
+        innerOnTick();
 
         switch (state) {
             case STARTING -> {
@@ -165,7 +165,7 @@ public abstract class Game implements WorldEvents {
     // ////////
 
     protected abstract void innerOnStart();
-    protected abstract void innerOnTick(boolean hasStarted);
+    protected abstract void innerOnTick();
     protected abstract void innerOnEnd();
 
     @Override

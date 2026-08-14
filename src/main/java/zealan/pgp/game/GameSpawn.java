@@ -47,6 +47,8 @@ public class GameSpawn {
     }
 
     public Location toLocation(World world) {
-        return new Location(world, this.pos.getX(), this.pos.getY(), this.pos.getZ());
+        var blockDir = getDir();
+        var modDir = new Vector(blockDir.getModX(), blockDir.getModY(), blockDir.getModZ());
+        return new Location(world, this.pos.getX(), this.pos.getY(), this.pos.getZ()).setDirection(modDir);
     }
 }

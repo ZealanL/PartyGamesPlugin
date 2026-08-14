@@ -224,8 +224,8 @@ public class GameBombardment extends Game {
     }
 
     @Override
-    protected void innerOnTick(boolean hasStarted) {
-        if (!hasStarted)
+    protected void innerOnTick() {
+        if (!hasStarted())
             return;
 
         for (var gamer : getPlayingGamers()) {

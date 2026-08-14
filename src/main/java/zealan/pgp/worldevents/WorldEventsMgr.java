@@ -1,5 +1,10 @@
 package zealan.pgp.worldevents;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerAbstract;
+import com.github.retrooper.packetevents.event.PacketReceiveEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -30,6 +35,10 @@ public class WorldEventsMgr extends AutoListener {
     private final WorldEvents defaultPerms = new WorldEvents() {};
     private final HashSet<Player> needsInvUpdateSet = new HashSet<>();
 
+    public WorldEventsMgr() {
+        PacketEvents.getAPI().getEventManager().registerListener(new EventsPacketListener());
+    }
+
     public void register(World world, WorldEvents worldEvents) {
         synchronized (map) {
             this.map.put(world, worldEvents);
@@ -51,6 +60,21 @@ public class WorldEventsMgr extends AutoListener {
     }
 
     // /////////////////
+
+    private class EventsPacketListener extends PacketListenerAbstract {
+        @Override
+        public void onPacketReceive(PacketReceiveEvent event) {
+            if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
+                var packet = new WrapperPlayClientSteerVehicle(event);
+                Player player = (Player) event.getPlayer();
+                var vehicle = player.getVehicle();
+                if (packet.isUnmount() && vehicle != null) {
+                    if (!canDismount(player, vehicle))
+                        event.setCancelled(true);
+                }
+            }
+        }
+    }
 
     private Player getEventPlayer(Event event) {
         if (event instanceof PlayerEvent)
@@ -174,15 +198,10 @@ public class WorldEventsMgr extends AutoListener {
             event.setCancelled(true);
     }
 
-    @EventHandler
-    void handle(EntityDismountEvent event) {
-        WorldEvents worldEvents = getWorldEventsFromEvent(event);
-        if (worldEvents == null) return;
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            if (!worldEvents.canDismount(player, event.getDismounted()))
-                event.getDismounted().setPassenger(player);
-        }
+    boolean canDismount(Player player, Entity vehicle) {
+        WorldEvents worldEvents = getWorldPerms(player.getWorld());
+        if (worldEvents == null) return true;
+        return worldEvents.canDismount(player, vehicle);
     }
 
     @EventHandler

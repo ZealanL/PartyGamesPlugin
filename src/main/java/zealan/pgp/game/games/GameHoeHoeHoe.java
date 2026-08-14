@@ -123,7 +123,7 @@ public class GameHoeHoeHoe extends Game {
     }
 
     @Override
-    protected void innerOnTick(boolean hasStarted) {
+    protected void innerOnTick() {
 
     }
 

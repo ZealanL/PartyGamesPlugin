@@ -159,7 +159,7 @@ public class GameMgr extends AutoListener {
         for (int i = 0; i < playersForGame.size(); i++)
             gamers.add(new Gamer(i, playersForGame.get(i)));
 
-        var aroundPos = gameConfig.loadInfo.spawns[0].getBlockPos();
+        var aroundPos = gameConfig.loadInfo.regionAroundLoc;
 
         Bukkit.getScheduler().runTask(PLUGIN, () -> {
             var startMs = System.currentTimeMillis();

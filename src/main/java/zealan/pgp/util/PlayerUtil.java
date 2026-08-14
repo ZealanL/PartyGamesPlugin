@@ -2,7 +2,11 @@ package zealan.pgp.util;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
+import net.minecraft.server.v1_8_R3.PacketPlayOutAttachEntity;
 import org.bukkit.GameMode;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
@@ -46,5 +50,17 @@ public class PlayerUtil {
 
         for (var p : player.getWorld().getPlayers())
             PacketEvents.getAPI().getPlayerManager().sendPacket(p, packet);
+    }
+
+    public static void syncMount(Player player, Entity vehicle) {
+        vehicle.setPassenger(player);
+
+        PacketPlayOutAttachEntity attachPacket = new PacketPlayOutAttachEntity(
+                0,
+                ((CraftPlayer) player).getHandle(),
+                ((CraftEntity) vehicle).getHandle()
+        );
+
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(attachPacket);
     }
 }

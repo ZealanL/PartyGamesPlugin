@@ -2,10 +2,15 @@ package zealan.pgp.game;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 import zealan.pgp.game.games.GameAnvilSpleef;
 import zealan.pgp.game.games.GameBombardment;
+import zealan.pgp.game.games.GameChickenRings;
 import zealan.pgp.game.games.GameHoeHoeHoe;
 import zealan.pgp.math.Vec3i;
+import zealan.pgp.util.ItemUtil;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -42,7 +47,7 @@ public enum GameConfig {
             GameBombardment.class, "Bombardment", Material.COAL_BLOCK,
             GameStyle.SURVIVAL, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    new GameSpawn(-392, 20, 726)
+                    new GameSpawn(-392, 20, 726, BlockFace.EAST)
             )
     ),
     /*
@@ -53,15 +58,17 @@ public enum GameConfig {
                     new BlockPos(217, 19, 1443),
                     new GameSpawn[]{new GameSpawn(217, 19, 1443)}
             )
-    ),
+    ),*/
+
     ChickenRings(
-            GameChickenRings.class, "Chicken Rings", Items.CHICKEN_SPAWN_EGG,
-            GameStyle.RACE, 120,
+            GameChickenRings.class, "Chicken Rings", ItemUtil.getSpawnEgg(EntityType.CHICKEN),
+            GameStyle.RACE, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
-                    new BlockPos(2493, 66, -591), // Finish line schematic
-                    new GameSpawn[]{new GameSpawn(2492, 72, 220, Direction.NORTH)}
+                    new Vec3i(2493, 66, -591), // Finish line
+                    new GameSpawn(2492, 72, 220, BlockFace.NORTH)
             )
     ),
+    /*
     Dive(
             GameDive.class, "Dive", Items.WATER_BUCKET,
             GameStyle.POINTS, 60,
@@ -268,7 +275,7 @@ public enum GameConfig {
     public final Class<? extends Game> cls;
     public final String properName;
     public final String snakeCaseName;
-    public final Material iconItem;
+    public final ItemStack iconItem;
     public final GameStyle style;
     public final GameMode gameMode;
     public final int maxDurationSecs;
@@ -280,6 +287,17 @@ public enum GameConfig {
             Class<? extends Game> cls,
             String properName,
             Material iconItem,
+            GameStyle gameStyle,
+            GameMode gameMode,
+            int maxDurationSecs,
+            GameLoadInfo loadInfo
+    ) {
+        this(cls, properName, new ItemStack(iconItem), gameStyle, gameMode, maxDurationSecs, loadInfo);
+    }
+
+    GameConfig(
+            Class<? extends Game> cls,
+            String properName, ItemStack iconItem,
             GameStyle gameStyle,
             GameMode gameMode,
             int maxDurationSecs,
