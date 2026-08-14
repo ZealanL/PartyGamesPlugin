@@ -65,4 +65,21 @@ public class Vec3i {
     public Vec3i down() {
         return this.withY(y - 1);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + this.x;
+        hash = 31 * hash + this.y;
+        hash = 31 * hash + this.z;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Vec3i other = (Vec3i) obj;
+        return this.x == other.x && this.y == other.y && this.z == other.z;
+    }
 }
