@@ -17,6 +17,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 import static zealan.pgp.Globals.PLOG;
+import static zealan.pgp.Globals.PLUGIN;
 
 public class WorldMgr extends AutoListener {
     private final HashSet<World> fixedWorlds = new HashSet<>();
@@ -208,6 +209,12 @@ public class WorldMgr extends AutoListener {
     @Override
     public void onTick() {
         removeOldTempWorlds();
+        // Clear weather
+        for (var world : Bukkit.getWorlds()) {
+            world.setStorm(false);
+            world.setThundering(false);
+            world.setWeatherDuration(0);
+        }
     }
 
     @EventHandler
