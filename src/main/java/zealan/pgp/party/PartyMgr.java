@@ -258,9 +258,9 @@ public class PartyMgr extends AutoListener {
 
     public PartyMgr() {
         COMMAND_SYS.register(
-                CommandNode.make("p", "Create or join parties with others to play together",
+                CommandNode.make("party", "Create or join parties with others to play together",
                         ctx -> cmdQuery(ctx.sender)
-                ).withAlias("party").withChild(
+                ).withAlias("p").withChild(
                         CommandNode.make("invite", "Invite a player to your party",
                                 ctx -> cmdInvite(ctx.sender, ctx.getArg("player")),
                                 new CommandArg.PlayerArg("player")

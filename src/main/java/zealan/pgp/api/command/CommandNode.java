@@ -74,41 +74,33 @@ public class CommandNode {
             var sb = new StringBuilder(this.name);
             for (CommandNode parent = this.parent; parent != null; parent = parent.parent)
                 sb.insert(0, parent.name + " ");
-            sb.insert(0, "&7/&f");
+            sb.insert(0, "&7/&6");
+
+            for (var alias : this.aliases) {
+                sb.append(" &7/&6" + alias);
+            }
+
             prefix = sb.toString();
         }
 
         var lines = new ArrayList<String>();
+        var sb = new StringBuilder(prefix);
 
-        if (this.func.isPresent()) {
-            var sb = new StringBuilder(prefix);
-            for (CommandArg<?> arg : this.arguments.values()) {
-                if (arg.isOptional) {
-                    sb.append(" &7[&7");
-                    sb.append(arg.name);
-                    sb.append("&7]");
-                } else {
-                    sb.append(" &7<&6");
-                    sb.append(arg.name);
-                    sb.append("&7>");
-                }
+        if (!this.children.isEmpty())
+            sb.append(" &9[&8...&9]");
+
+        for (CommandArg<?> arg : this.arguments.values()) {
+            if (arg.isOptional) {
+                sb.append(" &7[&7");
+                sb.append(arg.name);
+                sb.append("&7]");
+            } else {
+                sb.append(" &7<&f");
+                sb.append(arg.name);
+                sb.append("&7>");
             }
-            lines.add(sb.toString());
         }
-
-        if (!this.children.isEmpty()) {
-            var sb = new StringBuilder(prefix);
-            sb.append(" &9[");
-            sb.append(
-                    String.join(" / ",
-                        this.children.stream().map(
-                                ch -> "&7" + ch.name
-                        ).toList()
-                    )
-            );
-            sb.append("&9]");
-            lines.add(sb.toString());
-        }
+        lines.add(sb.toString());
 
         return Display.concatLines(lines.toArray(String[]::new));
     }

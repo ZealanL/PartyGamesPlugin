@@ -14,7 +14,6 @@ config-version: 8
 settings:
   debug: false
   save-user-cache-on-stop-only: false
-  sample-count: 12
   player-shuffle: 0
   filter-creative-items: true
   user-cache-size: 1000
@@ -24,6 +23,9 @@ settings:
   timeout-time: 60
   restart-on-crash: false
   restart-script: ./start.sh
+  bungeecord: false
+  late-bind: false
+  sample-count: 12
   netty-threads: 4
   attribute:
     maxHealth:
@@ -32,8 +34,6 @@ settings:
       max: 2048.0
     attackDamage:
       max: 2048.0
-  bungeecord: false
-  late-bind: false
 timings:
   enabled: true
   verbose: true
@@ -67,22 +67,7 @@ stats:
 world-settings:
   default:
     verbose: true
-    entity-activation-range:
-      animals: 64
-      monsters: 64
-      misc: 64
-    entity-tracking-range:
-      players: 64
-      animals: 64
-      monsters: 64
-      misc: 64
-      other: 64
-    ticks-per:
-      hopper-transfer: 8
-      hopper-check: 8
-    hopper-amount: 1
-    random-light-updates: false
-    save-structure-info: true
+    mob-spawn-range: 4
     anti-xray:
       enabled: false
       engine-mode: 1
@@ -113,6 +98,22 @@ world-settings:
       sapling-modifier: 100
       wheat-modifier: 100
       netherwart-modifier: 100
+    entity-activation-range:
+      animals: 64
+      monsters: 64
+      misc: 64
+    entity-tracking-range:
+      players: 64
+      animals: 64
+      monsters: 64
+      misc: 64
+      other: 64
+    ticks-per:
+      hopper-transfer: 8
+      hopper-check: 8
+    hopper-amount: 1
+    random-light-updates: false
+    save-structure-info: true
     max-bulk-chunks: 10
     max-entity-collisions: 8
     dragon-death-sound-radius: 0
@@ -127,7 +128,6 @@ world-settings:
     max-tick-time:
       tile: 50
       entity: 50
-    mob-spawn-range: 4
     merge-radius:
       item: 2.5
       exp: 3.0

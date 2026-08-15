@@ -23,38 +23,51 @@ public class CommandSys extends AutoListener {
                         "Shows a list of commands available to you",
                         ctx -> {
 
+                            String commandArg = ctx.getArg("command_name");
+
                             StringBuilder msg = new StringBuilder();
-                            msg.append("&7 == &a&lAvailable Commands &7==\n");
-                            for (Map.Entry<String, CommandNode> entry : rootNodes.entrySet()) {
-                                String cmd = entry.getKey();
-                                CommandNode node = entry.getValue();
-                                if (!cmd.equals(node.name)) {
-                                    // Skip aliases
-                                    continue;
-                                }
+                            if (commandArg != null) {
 
-                                if (node.opOnly && !ctx.sender.isOp())
-                                    continue;
-
-                                String syntax = node.getUsageSyntax();
-                                if (!node.children.isEmpty()) {
-                                    List<String> childNames = node.children.stream()
-                                            .map(c -> c.name).collect(Collectors.toList());
-                                    syntax += " &f&o[" + String.join("/", childNames) + "]";
-                                }
-                                msg.append(" &f" + syntax);
-                                if (syntax.length() + node.description.length() > 50) {
-                                    msg.append("\n");
-                                    msg.append("&7  - &7&o" + node.description);
+                                var chosenCommand = rootNodes.get(commandArg.toLowerCase());
+                                if (chosenCommand != null) {
+                                    msg.append("&7 == /&a&l" + chosenCommand.name + " &7==");
+                                    msg.append("\n&7Description: &b" + chosenCommand.description);
+                                    msg.append("\n&7Usage: " + chosenCommand.getUsageSyntax());
+                                    if (!chosenCommand.children.isEmpty()) {
+                                        msg.append("\n&7Subcommands:");
+                                        for (var child : chosenCommand.children) {
+                                            String syntax = child.getUsageSyntax();
+                                            msg.append("\n &f" + syntax);
+                                            msg.append("&7 - &b&o" + child.description);
+                                        }
+                                    }
                                 } else {
-                                    // Inline it
-                                    msg.append("&7 - &7&o" + node.description);
+                                    return CommandResult.failure("\"" + commandArg + "\" is not a valid command.");
                                 }
 
-                                msg.append("\n");
+                            } else {
+                                msg.append("&7 == &a&lAvailable Commands &7==\n");
+                                for (Map.Entry<String, CommandNode> entry : rootNodes.entrySet()) {
+                                    String cmd = entry.getKey();
+                                    CommandNode node = entry.getValue();
+                                    if (!cmd.equals(node.name)) {
+                                        // Skip aliases
+                                        continue;
+                                    }
+
+                                    if (node.opOnly && !ctx.sender.isOp())
+                                        continue;
+
+                                    String syntax = node.getUsageSyntax();
+                                    msg.append(" &f" + syntax);
+                                    msg.append("&7 - &b&o" + node.description);
+
+                                    msg.append("\n");
+                                }
                             }
                             return CommandResult.ok(msg.toString());
-                        }
+                        },
+                        new CommandArg.AnyString("command_name").makeOptional()
                 )
         );
     }
