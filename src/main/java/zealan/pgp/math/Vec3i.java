@@ -67,6 +67,12 @@ public class Vec3i {
         return this.withY(y - 1);
     }
 
+    public Vec3i alongBlockFace(BlockFace blockFace, int amount) {
+        return this.add(
+                blockFace.getModX() * amount, blockFace.getModY() * amount, blockFace.getModZ() * amount
+        );
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -84,9 +90,8 @@ public class Vec3i {
         return this.x == other.x && this.y == other.y && this.z == other.z;
     }
 
-    public Vec3i alongBlockFace(BlockFace blockFace, int amount) {
-        return this.add(
-                blockFace.getModX() * amount, blockFace.getModY() * amount, blockFace.getModZ() * amount
-        );
+    @Override
+    public String toString() {
+        return String.format("(%d, %d, %d)", x, y, z);
     }
 }
