@@ -82,30 +82,28 @@ public enum GameConfig {
                     new GameSpawn(1171, 112, -1867)
             )
     ),
-    /*
     JigsawRush(
-            GameJigsawRush.class, "Jigsaw Rush", Items.DAYLIGHT_DETECTOR,
-            GameStyle.RACE, 60,
+            GameJigsawRush.class, "Jigsaw Rush", Material.DAYLIGHT_DETECTOR,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    new BlockPos(247, 2, 1816),
-                    new GameSpawn[]{
-                            new GameSpawn(262, 2, 1822, Direction.SOUTH),
-                            new GameSpawn(256, 2, 1822, Direction.SOUTH),
-                            new GameSpawn(250, 2, 1822, Direction.SOUTH),
-                            new GameSpawn(244, 2, 1822, Direction.SOUTH),
-                            new GameSpawn(238, 2, 1822, Direction.SOUTH),
-                            new GameSpawn(232, 2, 1822, Direction.SOUTH),
+                    new Vec3i(247, 2, 1816),
+                    new GameSpawn[] {
+                            new GameSpawn(262, 2, 1822, BlockFace.SOUTH),
+                            new GameSpawn(256, 2, 1822, BlockFace.SOUTH),
+                            new GameSpawn(250, 2, 1822, BlockFace.SOUTH),
+                            new GameSpawn(244, 2, 1822, BlockFace.SOUTH),
+                            new GameSpawn(238, 2, 1822, BlockFace.SOUTH),
+                            new GameSpawn(232, 2, 1822, BlockFace.SOUTH),
 
-                            new GameSpawn(262, 2, 1810, Direction.NORTH),
-                            new GameSpawn(256, 2, 1810, Direction.NORTH),
-                            new GameSpawn(250, 2, 1810, Direction.NORTH),
-                            new GameSpawn(244, 2, 1810, Direction.NORTH),
-                            new GameSpawn(238, 2, 1810, Direction.NORTH),
-                            new GameSpawn(232, 2, 1810, Direction.NORTH)
+                            new GameSpawn(262, 2, 1810, BlockFace.NORTH),
+                            new GameSpawn(256, 2, 1810, BlockFace.NORTH),
+                            new GameSpawn(250, 2, 1810, BlockFace.NORTH),
+                            new GameSpawn(244, 2, 1810, BlockFace.NORTH),
+                            new GameSpawn(238, 2, 1810, BlockFace.NORTH),
+                            new GameSpawn(232, 2, 1810, BlockFace.NORTH)
                     }
             )
     ),
-        */
     JungleJump(
             GameJungleJump.class, "Jungle Jump", Material.JUNGLE_WOOD_STAIRS,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,

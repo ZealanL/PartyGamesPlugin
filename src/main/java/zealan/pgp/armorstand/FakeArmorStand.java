@@ -63,9 +63,9 @@ public class FakeArmorStand {
                         new Vector3d(0, 0, 0), // Velocity
                         List.of(
                                 // Invisible with no particles
-                                //new EntityData(0, EntityDataTypes.BYTE, (byte) 0x20),
-                                //new EntityData(8, EntityDataTypes.BYTE, (byte) 1),
-                                //new EntityData(9, EntityDataTypes.BYTE, (byte) 0)
+                                new EntityData(0, EntityDataTypes.BYTE, (byte) 0x20),
+                                new EntityData(8, EntityDataTypes.BYTE, (byte) 1),
+                                new EntityData(9, EntityDataTypes.BYTE, (byte) 0)
                         )
                 )
         );

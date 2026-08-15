@@ -1,5 +1,6 @@
 package zealan.pgp.math;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
 
 public class Vec3i {
@@ -81,5 +82,11 @@ public class Vec3i {
         if (obj == null || getClass() != obj.getClass()) return false;
         Vec3i other = (Vec3i) obj;
         return this.x == other.x && this.y == other.y && this.z == other.z;
+    }
+
+    public Vec3i alongBlockFace(BlockFace blockFace, int amount) {
+        return this.add(
+                blockFace.getModX() * amount, blockFace.getModY() * amount, blockFace.getModZ() * amount
+        );
     }
 }
