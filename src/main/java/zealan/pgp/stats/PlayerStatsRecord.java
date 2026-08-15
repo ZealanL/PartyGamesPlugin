@@ -240,6 +240,18 @@ public class PlayerStatsRecord {
     // ///////
 
     public void fixInvalid() {
+
+        allGameStats.entrySet().removeIf((entry) -> {
+            var gameConfig =  entry.getKey();
+            var gameStats = entry.getValue();
+            if (gameConfig == null || gameStats.gameConfig == null) {
+                PLOG.warning("Removed invalid game stats entry (null config)");
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         for (var gameConfig : GameConfig.values()) {
             var pb = allGameStats.get(gameConfig);
             if (pb == null)

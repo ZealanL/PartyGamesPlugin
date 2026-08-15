@@ -2,7 +2,9 @@ package zealan.pgp.stats;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +20,7 @@ import zealan.pgp.game.Gamer;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +31,10 @@ import java.util.UUID;
 import static zealan.pgp.Globals.*;
 
 public class PlayerStatsMgr extends AutoListener {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .enableComplexMapKeySerialization()
+            .create();
 
     private static final int STATS_FILE_VERSION = 2;
     private static final Path JSON_PATH = PLUGIN.getDataFolder().toPath().resolve("stats_v" + STATS_FILE_VERSION + ".json");
@@ -81,6 +87,15 @@ public class PlayerStatsMgr extends AutoListener {
         try (FileReader reader = new FileReader(JSON_PATH.toFile())) {
             Type type = new TypeToken<HashMap<UUID, PlayerStatsRecord>>() {
             }.getType();
+
+            JsonReader jsonReader = new JsonReader(reader);
+            try {
+                TypeAdapter<?> adapter = GSON.getAdapter(TypeToken.get(type));
+                adapter.read(jsonReader);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load stats JSON at " + jsonReader + ": " + e);
+            }
+
             HashMap<UUID, PlayerStatsRecord> loadedRecords = GSON.fromJson(reader, type);
 
             records.clear();
