@@ -231,9 +231,9 @@ public class PlayerStatsRecord {
 
         return Display.format(
                 "{}\n{}\n{}",
-                Display.Special.BAR,
+                Display.BAR,
                 sb.toString(),
-                Display.Special.BAR
+                Display.BAR
         );
     }
 

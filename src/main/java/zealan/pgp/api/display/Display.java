@@ -21,25 +21,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import static zealan.pgp.Globals.PLOG;
 
 public class Display {
-    public enum Special {
-        BAR
-    }
-
+    public static String BAR = "&7" + ("=".repeat(40));
     public record TicksTime(int numTicks, boolean showDecimals) {}
     public record UnixTime(long secs) {}
 
     public static String format(Object arg) {
         if (arg instanceof Entity e) {
             return ("&e" + e.getName());
-        } else if (arg instanceof Special special) {
-            return switch (special) {
-                case BAR -> "&7" + ("-".repeat(50));
-            };
         } else if (arg instanceof UnixTime unixTime) {
             var instant = Instant.ofEpochSecond(unixTime.secs);
             var zdt = instant.atZone(ZoneId.systemDefault());
@@ -106,6 +100,10 @@ public class Display {
                 Arrays.stream(lines)
                         .map(Display::format).toArray(String[]::new)
         );
+    }
+
+    public static String concatLines(List<String> lines) {
+        return concatLines(lines.toArray(String[]::new));
     }
 
     public static void sendMsg(Player player, String message, Object ... args) {

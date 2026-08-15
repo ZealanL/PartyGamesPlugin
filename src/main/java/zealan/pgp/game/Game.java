@@ -8,6 +8,8 @@ import zealan.pgp.bossbar.BossBarContent;
 import zealan.pgp.util.PlayerUtil;
 import zealan.pgp.worldevents.WorldEvents;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -82,6 +84,37 @@ public abstract class Game implements WorldEvents {
         innerOnStart();
     }
 
+    // TODO: Messy and duplicates logic elsewhere (like player stats manager)
+    private String generateEndPrintout() {
+        var lines = new ArrayList<String>();
+        lines.add("&7Game ended: &6" + config.properName);
+        List<Gamer> gamersByScore = new ArrayList<>(getGamers());
+        gamersByScore.sort(Comparator.comparingInt(Gamer::getScore).reversed());
+
+        for (int i = 0; i < gamersByScore.size(); i++) {
+            Gamer gamer = gamersByScore.get(i);
+
+            var scoreLine = switch (config.style) {
+                case POINTS -> Display.format(gamer.getPoints());
+                default -> {
+                    if (gamer.getScore() > 0) {
+                        yield Display.format(new Display.TicksTime(gamer.getTicksPlayedFor(), true));
+                    } else {
+                        yield "&7" + 0;
+                    }
+                }
+            };
+
+            lines.add(Display.format("&7 #&f" + (i + 1) + "&7: {} {}", gamer.player, scoreLine));
+        }
+
+        return Display.concatLines(
+                Display.BAR,
+                Display.concatLines(lines),
+                Display.BAR
+        );
+    }
+
     public final void end() {
         end(false);
     }
@@ -89,6 +122,10 @@ public abstract class Game implements WorldEvents {
         state = State.ENDED;
         for (var gamer : getPlayingGamers())
             gamer.stopPlaying(endedNaturally);
+
+        String printout = generateEndPrintout();
+        Display.sendMsg(world, printout);
+
         innerOnEnd();
     }
 
