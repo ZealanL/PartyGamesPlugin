@@ -49,7 +49,7 @@ tasks.register<JavaExec>("runServer") {
         languageVersion.set(JavaLanguageVersion.of(25))
     })
 
-    classpath = files(layout.projectDirectory.file("test-server/paper-1.8.8-445.jar"))
+    classpath = files(layout.projectDirectory.file("test-server/spigot-1.8.8.jar"))
     workingDir = layout.projectDirectory.dir("test-server").asFile
 
     jvmArgs("-Xms2G", "-Xmx4G")
