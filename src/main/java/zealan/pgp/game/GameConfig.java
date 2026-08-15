@@ -251,7 +251,16 @@ public enum GameConfig {
             new GameLoadInfo(
                     new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
-    );
+    ),
+    PunchTheBats(
+            GamePunchTheBats.class, "Punch The Bats", ItemUtil.getSpawnEgg(EntityType.BAT),
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
+            new GameLoadInfo(
+                    new GameSpawn(GamePunchTheBats.CENTER_SPAWN_POS)
+            )
+    )
+
+    ;
 
     public static final int MAX_GAME_DURATION = 60 * 60 * 100; // 100 hours
 

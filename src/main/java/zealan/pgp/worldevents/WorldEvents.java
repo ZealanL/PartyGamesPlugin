@@ -21,7 +21,7 @@ public interface WorldEvents {
         return false;
     }
 
-    default boolean canAttackEntity(Player player, Entity to, EntityDamageEvent event) {
+    default boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
         return false;
     }
 
@@ -39,6 +39,10 @@ public interface WorldEvents {
 
     default boolean canDropItem(Player player, ItemStack item) {
         return false;
+    }
+
+    default boolean canStartFlying(Player player) {
+        return true;
     }
 
     default void onPlayerDeath(Player player) {

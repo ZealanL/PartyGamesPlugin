@@ -4,8 +4,8 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerAbstract;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
+import com.github.retrooper.packetevents.wrapper.play.client.*;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -23,9 +23,14 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.InventoryHolder;
 import zealan.pgp.AutoListener;
+import zealan.pgp.util.EntityUtil;
+import zealan.pgp.util.PlayerUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static zealan.pgp.Globals.PLOG;
+import static zealan.pgp.Globals.PLUGIN;
 
 public class WorldEventsMgr extends AutoListener {
     private final HashMap<World, WorldEvents> map = new HashMap<>();
@@ -65,19 +70,32 @@ public class WorldEventsMgr extends AutoListener {
             if (player == null) return;
 
             var vehicle = player.getVehicle();
-            if (vehicle == null) return;
-
-            if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
-                var packet = new WrapperPlayClientSteerVehicle(event);
-                if (packet.isUnmount()) {
-                    if (!canDismount(player, vehicle))
-                        event.setCancelled(true);
+            if (vehicle != null) {
+                if (event.getPacketType() == PacketType.Play.Client.STEER_VEHICLE) {
+                    var packet = new WrapperPlayClientSteerVehicle(event);
+                    if (packet.isUnmount()) {
+                        if (!canDismount(player, vehicle))
+                            event.setCancelled(true);
+                    }
+                } else if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
+                    var packet = new WrapperPlayClientEntityAction(event);
+                    if (packet.getAction() == WrapperPlayClientEntityAction.Action.START_SNEAKING) {
+                        if (!canDismount(player, vehicle)) {
+                            event.setCancelled(true);
+                        }
+                    }
                 }
-            } else if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
-                var packet = new WrapperPlayClientEntityAction(event);
-                if (packet.getAction() == WrapperPlayClientEntityAction.Action.START_SNEAKING) {
-                    if (!canDismount(player, vehicle)) {
+            }
+
+            if (event.getPacketType() == PacketType.Play.Client.PLAYER_ABILITIES) {
+                var packet = new WrapperPlayClientPlayerAbilities(event);
+                if (packet.isFlying()) {
+                    if (!canStartFlying(player)) {
                         event.setCancelled(true);
+                        Bukkit.getScheduler().runTask(PLUGIN, () -> {
+                            player.setFlying(false);
+                            PlayerUtil.sendAbilities(player);
+                        });
                     }
                 }
             }
@@ -275,6 +293,12 @@ public class WorldEventsMgr extends AutoListener {
     @EventHandler
     void handle(VehicleDamageEvent event) {
         event.setCancelled(true);
+    }
+
+    boolean canStartFlying(Player player) {
+        WorldEvents worldEvents = getWorldPerms(player.getWorld());
+        if (worldEvents == null) return true;
+        return worldEvents.canStartFlying(player);
     }
 
     // //////////
