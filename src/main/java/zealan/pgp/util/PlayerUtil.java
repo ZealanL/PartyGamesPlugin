@@ -25,8 +25,9 @@ public class PlayerUtil {
         for (PotionEffect effect : player.getActivePotionEffects())
             player.removePotionEffect(effect.getType());
 
-        // Clear inv
+        // Clear inv and reset hotbar slot
         player.getInventory().clear();
+        player.getInventory().setHeldItemSlot(0);
 
         // Reset attributes
         player.setWalkSpeed(0.2f);
