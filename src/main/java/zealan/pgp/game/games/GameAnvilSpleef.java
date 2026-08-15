@@ -1,5 +1,6 @@
 package zealan.pgp.game.games;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,6 +17,8 @@ import zealan.pgp.math.Vec3i;
 import zealan.pgp.util.EntityUtil;
 import zealan.pgp.util.WorldUtil;
 
+import static zealan.pgp.Globals.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,8 +27,8 @@ public class GameAnvilSpleef extends Game {
             new GameVariant("fast_anvils", "Fast Anvils", "Anvils fall much faster!", Material.PISTON_BASE);
 
     public static final BlockRange FLOOR_AREA = BlockRange.fromCorners(
-            -263, 0, -3628,
-            -223, 0, -3588
+            -264, 0, -3628,
+            -223, 0, -3589
     );
     public static final int ANVIL_SPAWN_HEIGHT = 25;
     public static final BlockRange SPAWN_AREA = FLOOR_AREA
@@ -36,6 +39,7 @@ public class GameAnvilSpleef extends Game {
     public static final int ANVIL_TARGET_SPAWN_MIN_TICKS = 40;
     public static final int ANVIL_TARGET_SPAWN_INTERVAL = 40;
     public static final double ANVIL_TARGET_MAX_MOVE_DIST = 1.0;
+    public static final int ANVIL_FLOOR_BREAK_DELAY = 3;
     private final HashMap<Gamer, Vec3i> lastPlayerTargetPos = new HashMap<>();
 
     private final ArrayList<Vec3i> remainingSpawns;
@@ -61,7 +65,6 @@ public class GameAnvilSpleef extends Game {
         var loc = new Location(world, pos.x, pos.y, pos.z);
         Material material = Material.ANVIL;
         FallingBlock fallingBlock = world.spawnFallingBlock(loc, material, (byte)0);
-        //fallingBlock.setDropItem(false);
         fallingBlock.setHurtEntities(true);
 
         if (variant == VARIANT_FAST_ANVILS)
@@ -69,9 +72,7 @@ public class GameAnvilSpleef extends Game {
     }
 
     @Override
-    protected void innerOnStart() {
-
-    }
+    protected void innerOnStart() {}
 
     @Override
     protected void innerOnTick() {
@@ -143,7 +144,10 @@ public class GameAnvilSpleef extends Game {
                 continue;
 
             if (WorldUtil.getBlock(world, floorPos.up()).getType() == Material.ANVIL) {
-                floorBlock.setType(Material.AIR);
+                Bukkit.getScheduler().runTaskLater(
+                        PLUGIN, () -> floorBlock.setType(Material.AIR), ANVIL_FLOOR_BREAK_DELAY
+                );
+                floorBlock.setType(Material.AIR);   
                 remainingFloorBlocks--;
             }
         }
