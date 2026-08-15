@@ -14,6 +14,8 @@ import zealan.pgp.menu.MenuInv;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static zealan.pgp.Globals.*;
 
@@ -155,9 +157,14 @@ public class GameMgr extends AutoListener {
             playersForGame.add(starter);
         }
 
+        int numSpawns = gameConfig.loadInfo.spawns.length;
+        ArrayList<Integer> spawnShuffle = IntStream.range(0, numSpawns)
+                .boxed().collect(Collectors.toCollection(ArrayList::new));
+        Collections.shuffle(spawnShuffle);
+
         var gamers = new ArrayList<Gamer>();
         for (int i = 0; i < playersForGame.size(); i++)
-            gamers.add(new Gamer(i, playersForGame.get(i)));
+            gamers.add(new Gamer(spawnShuffle.get(i % spawnShuffle.size()), playersForGame.get(i)));
 
         var aroundPos = gameConfig.loadInfo.regionAroundLoc;
 
