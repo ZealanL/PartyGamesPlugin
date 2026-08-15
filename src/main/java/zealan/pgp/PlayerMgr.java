@@ -78,7 +78,7 @@ public class PlayerMgr extends AutoListener {
 
     public PlayerMgr() {
         COMMAND_SYS.register(CommandNode.make("lobby", "Return to the main lobby", ctx -> {
-            PLAYER_MGR.sendToLobby(ctx.sender, true);
+            LOBBY_MGR.sendToLobby(ctx.sender, true);
             return CommandResult.ok();
         }).withAlias("spawn").withAlias("l"));
 
@@ -93,40 +93,13 @@ public class PlayerMgr extends AutoListener {
                     return CommandResult.ok("&9You are now spectating.");
                 }
             } else {
-                PLAYER_MGR.sendToLobby(ctx.sender, true);
+                LOBBY_MGR.sendToLobby(ctx.sender, true);
                 Display.sendPopupText(ctx.sender, "");
                 return CommandResult.ok("&9You are no longer spectating.");
             }
         }, new CommandArg.PlayerArg("target_player").makeOptional()).withAlias("spectate"));
 
         PacketEvents.getAPI().getEventManager().registerListener(new PlayerPacketListener());
-    }
-
-    public void givePlayerLobbyInv(Player player) {
-        player.getInventory().clear();
-
-        var specialCompass = MENU_MGR.makeCommandItem(Material.COMPASS, "&dGames", "play");
-        player.getInventory().setItem(0, specialCompass);
-
-        var specialBook = MENU_MGR.makeCommandItem(Material.BOOK, "&6View stats", "stats {name}");
-        player.getInventory().setItem(1, specialBook);
-
-        var specialPaper = MENU_MGR.makeCommandItem(Material.PAPER, "&bReplay last game", "playagain");
-        player.getInventory().setItem(2, specialPaper);
-    }
-
-    public void sendToLobby(Player player, boolean sendMessage) {
-        player.teleport(WorldUtil.getMainWorld().getSpawnLocation());
-        player.setGameMode(GameMode.ADVENTURE);
-        PlayerUtil.cleanPlayer(player);
-        setFakeSpectator(player, false);
-
-        givePlayerLobbyInv(player);
-
-        if (sendMessage) {
-            Display.sendMsg(player, "&7&o(You were sent to the lobby)");
-            WorldUtil.getMainWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 0.4f, 1.2f);
-        }
     }
 
     @Override
@@ -165,7 +138,7 @@ public class PlayerMgr extends AutoListener {
     void handle(PlayerJoinEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE && event.getPlayer().isOp()) return;
 
-        sendToLobby(event.getPlayer(), false);
+        LOBBY_MGR.sendToLobby(event.getPlayer(), false);
     }
 
     @EventHandler
@@ -211,7 +184,7 @@ public class PlayerMgr extends AutoListener {
         reloadPlayerForOthers(player);
 
         // NOTE: For some reason this must be delayed?
-        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> givePlayerLobbyInv(player), 1);
+        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> LOBBY_MGR.givePlayerLobbyInv(player), 1);
     }
 
     private void endFakeSpectator(Player player) {

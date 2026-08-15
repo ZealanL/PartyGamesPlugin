@@ -13,6 +13,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSp
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import zealan.pgp.api.display.Display;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public class FakeArmorStand {
     }
 
     public void setName(String name) {
+        name = Display.format(name);
         if (customName.equals(name))
             return;
 

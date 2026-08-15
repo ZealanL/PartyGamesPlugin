@@ -24,10 +24,6 @@ public class Leaderboard {
         this.gameConfig = gameConfig;
     }
 
-    void clear() {
-        entries.clear();
-    }
-
     Optional<Integer> add(Entry entry) {
         for (var existing : entries) {
             if (existing.playerUUID().equals(entry.playerUUID()) && !entry.gamePB().isBetterThan(existing.gamePB())) {

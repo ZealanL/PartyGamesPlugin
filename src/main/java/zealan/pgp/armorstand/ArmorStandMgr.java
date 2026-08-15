@@ -54,8 +54,10 @@ public class ArmorStandMgr extends AutoListener {
     }
 
     public void setAtPos(Vec3i pos, List<String> lines) {
-        if (!stacks.containsKey(pos))
-            stacks.put(pos, new ArmorStandStack(new Location(WorldUtil.getMainWorld(), pos.x, pos.y, pos.z)));
+        if (!stacks.containsKey(pos)) {
+            var loc = new Location(WorldUtil.getMainWorld(), pos.x + 0.5, pos.y, pos.z + 0.5);
+            stacks.put(pos, new ArmorStandStack(loc));
+        }
 
         var stack = stacks.get(pos);
         stack.setLines(lines);
