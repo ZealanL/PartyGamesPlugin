@@ -2,6 +2,7 @@ package zealan.pgp.util;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerAbilities;
 import net.minecraft.server.v1_8_R3.PacketPlayOutAttachEntity;
 import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
@@ -62,5 +63,23 @@ public class PlayerUtil {
         );
 
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(attachPacket);
+    }
+
+    public static void sendAbilities(Player player) {
+        boolean invulnerable = false; // TODO: Implement
+        boolean isFlying = player.isFlying();
+        boolean allowFlight = player.getAllowFlight();
+        boolean isCreative = player.getGameMode() == GameMode.CREATIVE;
+        float flySpeed = player.getFlySpeed();
+        float walkSpeed = player.getWalkSpeed();
+
+        PacketEvents.getAPI().getPlayerManager().sendPacket(player, new WrapperPlayServerPlayerAbilities(
+                invulnerable,
+                isFlying,
+                allowFlight,
+                isCreative,
+                flySpeed,
+                walkSpeed
+        ));
     }
 }

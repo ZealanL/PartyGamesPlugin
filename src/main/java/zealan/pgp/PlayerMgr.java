@@ -119,6 +119,8 @@ public class PlayerMgr extends AutoListener {
             if (isFakeSpectator(player)) {
                 Display.sendPopupText(player, "&e&l( SPECTATING )");
                 player.setFlying(true);
+                player.setAllowFlight(true);
+                PlayerUtil.sendAbilities(player);
             }
         }
     }
@@ -179,7 +181,6 @@ public class PlayerMgr extends AutoListener {
         player.setGameMode(GameMode.ADVENTURE);
         player.spigot().setCollidesWithEntities(false);
         player.setAllowFlight(true);
-        player.setFlying(true);
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
         reloadPlayerForOthers(player);
 

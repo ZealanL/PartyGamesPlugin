@@ -63,7 +63,7 @@ public class LobbyMgr extends AutoListener {
                 var showcaseBoard = leaderboards.get(showcaseIdx);
 
                 var lines = showcaseBoard.toMsgLines();
-                lines.add(0, Display.format("&7Use &f/lb &7to view the leaderboard:"));
+                lines.add(Display.format("&7Use &f/lb <&6game&f> &7to view the leaderboard:"));
                 ARMOR_STAND_MGR.setAtPos(LB_SHOWCASE_POS, lines);
             }
         }
