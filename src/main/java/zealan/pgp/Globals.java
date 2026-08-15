@@ -2,6 +2,7 @@ package zealan.pgp;
 
 import org.bukkit.Server;
 import zealan.pgp.api.command.CommandSys;
+import zealan.pgp.armorstand.ArmorStandMgr;
 import zealan.pgp.bossbar.BossBarMgr;
 import zealan.pgp.essentials.Essentials;
 import zealan.pgp.game.GameMgr;
@@ -30,6 +31,7 @@ public class Globals {
     public static MenuMgr MENU_MGR;
     public static SidebarMgr SIDEBAR_MGR;
     public static LeaderboardMgr LEADERBOARD_MGR;
+    public static ArmorStandMgr ARMOR_STAND_MGR;
 
     private static boolean initialized = false;
     public static void initialize(PartyGamesPlugin plugin) {
@@ -53,6 +55,7 @@ public class Globals {
             MENU_MGR = new MenuMgr();
             SIDEBAR_MGR = new SidebarMgr();
             LEADERBOARD_MGR = new LeaderboardMgr();
+            ARMOR_STAND_MGR = new ArmorStandMgr();
         } else {
             throw new RuntimeException("Cannot initialize globals twice");
         }

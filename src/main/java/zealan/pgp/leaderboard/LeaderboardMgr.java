@@ -2,11 +2,13 @@ package zealan.pgp.leaderboard;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import zealan.pgp.AutoListener;
 import zealan.pgp.api.command.CommandNode;
 import zealan.pgp.api.command.CommandResult;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.game.GameCommandArg;
 import zealan.pgp.game.GameConfig;
+import zealan.pgp.math.Vec3i;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -14,14 +16,16 @@ import java.util.UUID;
 
 import static zealan.pgp.Globals.*;
 
-public class LeaderboardMgr {
+public class LeaderboardMgr extends AutoListener {
     private final HashMap<GameConfig, Leaderboard> leaderboards = new HashMap<>();
+    private final static int SHOWCASE_CYCLE_TICKS = 20 * 5;
+    private final static Vec3i SHOWCASE_POS = new Vec3i(23, 116, 199);
 
     public LeaderboardMgr() {
         COMMAND_SYS.register(
                 CommandNode.make(
                         "leaderboard",
-                        "Get leaderboard information for a game",
+                        "Get leaderboard for a game",
                         ctx -> {
                             GameConfig gameConfig = ctx.getArg("game");
                             var lb = leaderboards.get(gameConfig);
@@ -37,6 +41,19 @@ public class LeaderboardMgr {
         );
 
         fullUpdate();
+    }
+
+    @Override
+    public void onTick() {
+        if (!leaderboards.isEmpty() && getListenerTickCount() % SHOWCASE_CYCLE_TICKS == 0) {
+            int showcaseIdx = (getListenerTickCount() / SHOWCASE_CYCLE_TICKS) % leaderboards.size();
+            var showcaseBoard = leaderboards.values().stream().toList().get(showcaseIdx);
+
+
+            var lines = showcaseBoard.toMsgLines();
+            lines.add(0, Display.format("&7Use &f/lb &7to view the leaderboard:"));
+            ARMOR_STAND_MGR.setAtPos(SHOWCASE_POS, lines);
+        }
     }
 
     public void fullUpdate() {
