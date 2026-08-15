@@ -118,9 +118,11 @@ public class PlayerMgr extends AutoListener {
 
             if (isFakeSpectator(player)) {
                 Display.sendPopupText(player, "&e&l( SPECTATING )");
-                player.setFlying(true);
-                player.setAllowFlight(true);
-                PlayerUtil.sendAbilities(player);
+                if (!player.isOnGround()) {
+                    player.setFlying(true);
+                    player.setAllowFlight(true);
+                    PlayerUtil.sendAbilities(player);
+                }
             }
         }
     }
