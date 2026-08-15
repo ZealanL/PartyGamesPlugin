@@ -22,6 +22,10 @@ public class GameJigsawRush extends Game {
             "multi", "Multi-Play", "Play 10 boards instead of just 1",
             Material.DIODE
     );
+    public static final GameVariant VARIANT_BLIND = new GameVariant(
+            "blind", "Blind", "The reference board disappears after your first place",
+            Material.EYE_OF_ENDER
+    );
 
     public GameJigsawRush(InitParams params) {
         super(params);
@@ -76,6 +80,17 @@ public class GameJigsawRush extends Game {
         }
         assert i == 9;
         return results;
+    }
+
+    private void hideTargetBoardForPlayer(Player player) {
+        for (var displayBoardRange : DISPLAY_BOARD_RANGES) {
+            for (var blockPos : displayBoardRange) {
+                player.sendBlockChange(
+                        new Location(world, blockPos.x, blockPos.y, blockPos.z),
+                        Material.SNOW_BLOCK, (byte) 0
+                );
+            }
+        }
     }
 
     private void generateTargetBoard() {
@@ -192,6 +207,9 @@ public class GameJigsawRush extends Game {
                                 int note = SCALE_NOTES[numPlacementsCorrect - 1];
                                 double pitch = BASE_PITCH * calcNotePitch(note);
                                 gamer.player.playSound(gamer.player.getLocation(), Sound.ORB_PICKUP, 0.7f, (float) pitch);
+
+                                if (numPlacementsCorrect == 1 && variant == VARIANT_BLIND)
+                                    hideTargetBoardForPlayer(gamer.player);
 
                                 if (numPlacementsCorrect >= 9) {
                                     gamer.player.playSound(gamer.player.getLocation(), Sound.LEVEL_UP, 0.7f, (float) (BASE_PITCH * 2.0));
