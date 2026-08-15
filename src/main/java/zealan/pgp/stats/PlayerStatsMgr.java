@@ -85,25 +85,19 @@ public class PlayerStatsMgr extends AutoListener {
         }
 
         try (FileReader reader = new FileReader(JSON_PATH.toFile())) {
-            Type type = new TypeToken<HashMap<UUID, PlayerStatsRecord>>() {
-            }.getType();
-
             JsonReader jsonReader = new JsonReader(reader);
-            try {
-                TypeAdapter<?> adapter = GSON.getAdapter(TypeToken.get(type));
-                adapter.read(jsonReader);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to load stats JSON at " + jsonReader + ": " + e);
-            }
+            Type type = new TypeToken<HashMap<UUID, PlayerStatsRecord>>(){}.getType();
 
-            HashMap<UUID, PlayerStatsRecord> loadedRecords = GSON.fromJson(reader, type);
+            HashMap<UUID, PlayerStatsRecord> loadedRecords = GSON.fromJson(jsonReader, type);
 
             records.clear();
-            if (loadedRecords != null) records.putAll(loadedRecords);
+            if (loadedRecords != null) {
+                records.putAll(loadedRecords);
+            }
 
             PLOG.info("PlayerStatsManager(): Loaded stats for " + records.size() + " players");
-        } catch (IOException e) {
-            PLOG.severe("PlayerStatsManager(): FAILED to load player stats: " + e);
+        } catch (Exception e) {
+            PLOG.severe("PlayerStatsManager(): FAILED to load player stats at " + JSON_PATH + ": " + e.getMessage());
         }
 
         for (var playerStats : records.values()) {
