@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import zealan.pgp.math.Vec3i;
+import zealan.pgp.math.BlockRange2d;
 import zealan.pgp.util.WorldUtil;
 
 import java.io.IOException;
@@ -17,7 +17,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
 import static zealan.pgp.Globals.PLOG;
-import static zealan.pgp.Globals.PLUGIN;
 
 public class WorldMgr extends AutoListener {
     private final HashSet<World> fixedWorlds = new HashSet<>();
@@ -25,26 +24,6 @@ public class WorldMgr extends AutoListener {
     private final static Random RAND = new Random();
 
     private final static String TEMP_WORLD_PREFIX = "temp-world";
-    
-    private static List<String> getClosestRegionFiles(int blockX, int blockY) {
-        int relX = Math.floorMod(blockX, 512);
-        int relY = Math.floorMod(blockY, 512);
-        int offsetX = relX >= 256 ? 1 : -1;
-        int offsetZ = relY >= 256 ? 1 : -1;
-
-        int px = Math.floorDiv(blockX, 512);
-        int pz = Math.floorDiv(blockY, 512);
-
-        int nx = px + offsetX;
-        int nz = pz + offsetZ;
-
-        return List.of(
-                String.format("r.%d.%d.mca", px, pz),
-                String.format("r.%d.%d.mca", nx, pz),
-                String.format("r.%d.%d.mca", px, nz),
-                String.format("r.%d.%d.mca", nx, nz)
-        );
-    }
 
     public WorldMgr() {
         var worldsDir = Bukkit.getWorldContainer().toPath();
@@ -63,13 +42,13 @@ public class WorldMgr extends AutoListener {
         }
     }
 
-    private World createTempWorldAroundInner(Vec3i aroundBlockPos) throws IOException {
+    private World createTempWorldOfInner(BlockRange2d loadRange) throws IOException {
         Path mainWorldPath = WorldUtil.getWorldDir(WorldUtil.getMainWorld().getName()).toPath();
         String tempWorldName = TEMP_WORLD_PREFIX + RAND.nextInt();
         Path tempWorldPath = Bukkit.getWorldContainer().toPath().resolve(tempWorldName);
         PLOG.info("Creating temporary world \"" + tempWorldName + "\"...");
 
-        var allowedRegionFiles = getClosestRegionFiles(aroundBlockPos.x, aroundBlockPos.z);
+        List<String> allowedRegionFiles = loadRange.getRegionFilenames();
 
         // Copy world files
         {
@@ -131,10 +110,10 @@ public class WorldMgr extends AutoListener {
         return world;
     }
 
-    public World createTempWorldAround(Vec3i aroundBlockPos) {
+    public World createTempWorldOf(BlockRange2d loadRange) {
         PLOG.info("Creating new blank runtime world...");
         try {
-            World newWorld = createTempWorldAroundInner(aroundBlockPos);
+            World newWorld = createTempWorldOfInner(loadRange);
             this.tempWorlds.add(newWorld);
             return newWorld;
         } catch (Exception e) {

@@ -166,13 +166,12 @@ public class GameMgr extends AutoListener {
         for (int i = 0; i < playersForGame.size(); i++)
             gamers.add(new Gamer(spawnShuffle.get(i % spawnShuffle.size()), playersForGame.get(i)));
 
-        var aroundPos = gameConfig.loadInfo.regionAroundLoc;
-
+        var loadRange = gameConfig.loadInfo.loadRange;
         Bukkit.getScheduler().runTask(PLUGIN, () -> {
             var startMs = System.currentTimeMillis();
             numLoadingGames.getAndIncrement();
 
-            var world = WORLD_MGR.createTempWorldAround(aroundPos);
+            var world = WORLD_MGR.createTempWorldOf(loadRange);
 
             Game game;
             try {

@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import zealan.pgp.game.games.*;
-import zealan.pgp.math.Vec3i;
+import zealan.pgp.math.BlockRange2d;
 import zealan.pgp.util.ItemUtil;
 
 import java.lang.reflect.Modifier;
@@ -17,7 +17,7 @@ public enum GameConfig {
             GameAnimalSlaughter.class, "Animal Slaughter", Material.WOOD_SWORD,
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    GameAnimalSlaughter.CENTER_BLOCK_POS,
+                    new BlockRange2d(-1090, -1819, -958, -1952),
                     new GameSpawn(GameAnimalSlaughter.CENTER_BLOCK_POS)
             )
     ),
@@ -25,6 +25,7 @@ public enum GameConfig {
             GameAnvilSpleef.class, "Anvil Spleef", Material.ANVIL,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
+                    new BlockRange2d(-266, -3589, -222, -3631),
                     new GameSpawn(-243, 1, -3608)
             )
     ),
@@ -42,6 +43,7 @@ public enum GameConfig {
             GameBombardment.class, "Bombardment", Material.COAL_BLOCK,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
+                    new BlockRange2d(-453, 800, -300, 650),
                     new GameSpawn(-392, 20, 726, BlockFace.EAST)
             )
     ),
@@ -49,6 +51,7 @@ public enum GameConfig {
             GameCannonPainting.class, "Cannon Painting", Material.EGG,
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 30,
             new GameLoadInfo(
+                    new BlockRange2d(-191, 1466, 230, 1420),
                     new GameSpawn(217, 19, 1443)
             )
     ),
@@ -57,7 +60,7 @@ public enum GameConfig {
             GameChickenRings.class, "Chicken Rings", ItemUtil.getSpawnEgg(EntityType.CHICKEN),
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
-                    new Vec3i(2493, 66, -591), // Finish line
+                    new BlockRange2d(2392, 574, 2700, -633),
                     new GameSpawn(2492, 72, 220, BlockFace.NORTH)
             )
     ),
@@ -65,6 +68,7 @@ public enum GameConfig {
             GameDive.class, "Dive", Material.WATER_BUCKET,
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
+                    new BlockRange2d(900, -3560, 991, -3650),
                     new GameSpawn(936, 78, -3613),
                     new GameSpawn(939, 78, -3065),
                     new GameSpawn(947, 78, -3602),
@@ -79,6 +83,7 @@ public enum GameConfig {
             GameHoeHoeHoe.class, "Hoe Hoe Hoe", Material.DIAMOND_HOE,
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.SURVIVAL, 60,
             new GameLoadInfo(
+                    new BlockRange2d(1151, -1850, 1190, -1888),
                     new GameSpawn(1171, 112, -1867)
             )
     ),
@@ -86,7 +91,7 @@ public enum GameConfig {
             GameJigsawRush.class, "Jigsaw Rush", Material.DAYLIGHT_DETECTOR,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
-                    new Vec3i(247, 2, 1816),
+                    new BlockRange2d(222, 1830, 270, 1800),
                     new GameSpawn[] {
                             new GameSpawn(262, 2, 1822, BlockFace.SOUTH),
                             new GameSpawn(256, 2, 1822, BlockFace.SOUTH),
@@ -108,6 +113,7 @@ public enum GameConfig {
             GameJungleJump.class, "Jungle Jump", Material.JUNGLE_WOOD_STAIRS,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
+                    new BlockRange2d(-307, 2319, -175, 2302),
                     new GameSpawn(-181, 7, 2310, BlockFace.WEST)
             )
     ),
@@ -115,6 +121,7 @@ public enum GameConfig {
             GameLabEscape.class, "Lab Escape", Material.IRON_AXE,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.SURVIVAL, 180,
             new GameLoadInfo(
+                    new BlockRange2d(1407, -81, 1471, 144),
                     new GameSpawn(1429, 161, -117),
                     new GameSpawn(1437, 161, -101),
                     new GameSpawn(1437, 161, -125),
@@ -137,6 +144,7 @@ public enum GameConfig {
             GameLawnMoower.class, "Lawn Moower", new ItemStack(Material.LONG_GRASS, 1, (short)0, (byte)1),
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
+                    new BlockRange2d(-1124, 768, -1009, 656),
                     new GameSpawn(-1087, 47, 715),
                     new GameSpawn(-1083, 47, 703),
                     new GameSpawn(-1071, 47, 699),
@@ -151,6 +159,7 @@ public enum GameConfig {
             GameMinecartRacing.class, "Minecart Racing", Material.MINECART,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
+                    new BlockRange2d(-1729, -1648, -1701, -2082),
                     new GameSpawn(-1723, 50, -2073),
                     new GameSpawn(-1721, 50, -2073),
                     new GameSpawn(-1719, 50, -2073),
@@ -235,6 +244,7 @@ public enum GameConfig {
             GameTheFloorIsLava.class, "The Floor Is Lava", Material.COBBLESTONE_STAIRS,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,
             new GameLoadInfo(
+                    new BlockRange2d(-305, 2302, -177, 2287),
                     new GameSpawn(-181, 7, 2293, BlockFace.WEST)
             )
     ),
@@ -242,6 +252,7 @@ public enum GameConfig {
             GameTrampolinio.class, "Trampolinio", Material.SLIME_BLOCK,
             GameStyle.POINTS, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
+                    new BlockRange2d(2543,-1831,2623, -1915),
                     new GameSpawn(GameTrampolinio.CENTER_BLOCK_POS)
             )
     ),
@@ -249,6 +260,7 @@ public enum GameConfig {
             GameVolcano.class, "Volcano", Material.LAVA_BUCKET,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
+                    new BlockRange2d(-400, -1765, -175, -2014),
                     new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
     ),
@@ -256,6 +268,7 @@ public enum GameConfig {
             GamePunchTheBats.class, "Punch The Bats", ItemUtil.getSpawnEgg(EntityType.BAT),
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
+                    new BlockRange2d(1888, -1857, 1918, -1886),
                     new GameSpawn(GamePunchTheBats.CENTER_SPAWN_POS)
             )
     )

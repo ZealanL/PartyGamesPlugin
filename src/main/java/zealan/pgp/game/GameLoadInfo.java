@@ -1,18 +1,13 @@
 package zealan.pgp.game;
 
-import zealan.pgp.math.Vec3i;
+import zealan.pgp.math.BlockRange2d;
 
 public class GameLoadInfo {
-    public final Vec3i regionAroundLoc;
+    public final BlockRange2d loadRange;
     public final GameSpawn[] spawns;
 
-    public GameLoadInfo(Vec3i regionAroundLoc, GameSpawn... spawns) {
-        this.regionAroundLoc = regionAroundLoc;
-        this.spawns = spawns;
-    }
-
-    public GameLoadInfo(GameSpawn... spawns) {
-        this.regionAroundLoc = Vec3i.from(spawns[0].pos);
+    public GameLoadInfo(BlockRange2d loadRange, GameSpawn... spawns) {
+        this.loadRange = loadRange;
         this.spawns = spawns;
     }
 }
