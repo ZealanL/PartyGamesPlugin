@@ -84,9 +84,7 @@ public abstract class GameParkourBase extends Game {
                     gamer.player.playSound(loc, Sound.NOTE_PLING, 0.8f, 1.75f);
                     checkpointedPlayers.add(gamer);
                 }
-            }
-
-            if (blockX == FINISH_X && blockY >= FINISH_MIN_Y && gamer.player.isOnGround()) {
+            } else if (blockX == FINISH_X && blockY >= FINISH_MIN_Y && gamer.player.isOnGround()) {
                 gamer.player.playSound(loc, Sound.LEVEL_UP, 0.8f, 1.0f);
                 double finishTime = getTicksElapsed() / 20.0;
                 Display.sendMsg(gamer.player, "&aYou finished the parkour in " + finishTime + "s!");
