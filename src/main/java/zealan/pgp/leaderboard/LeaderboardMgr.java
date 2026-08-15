@@ -100,7 +100,7 @@ public class LeaderboardMgr extends AutoListener {
 
                         if (lbNum <= 3) {
                             Display.sendMsg(
-                                    player,
+                                    otherPlayer,
                                     Display.format(
                                             "{} is now {} on the {} leaderboard!",
                                             player,
