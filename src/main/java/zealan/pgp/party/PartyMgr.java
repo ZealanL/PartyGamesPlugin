@@ -99,7 +99,7 @@ public class PartyMgr extends AutoListener {
         } else {
             baseMsg = Display.format("&6{} invited you to join {}'s party!", party.getLeader());
         }
-        baseMsg += " &n&9[CLICK TO ACCEPT]";
+        baseMsg += " &9&n[CLICK TO ACCEPT]";
 
         Display.sendCommandMsg(
                 to, "party accept " + from.getName(), "Click to accept the invite", baseMsg
