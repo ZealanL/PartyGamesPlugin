@@ -47,7 +47,7 @@ public class FakeArmorStand {
     }
 
     public void clearName() {
-        setName(null);
+        setName("");
     }
 
     private void sendSpawnPacket(Player player) {
