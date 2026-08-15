@@ -30,7 +30,7 @@ public class LobbyMgr extends AutoListener {
 
     public void sendToLobby(Player player, boolean sendMessage) {
         player.teleport(WorldUtil.getMainWorld().getSpawnLocation());
-        player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(GameMode.SURVIVAL);
         PlayerUtil.cleanPlayer(player);
         PLAYER_MGR.setFakeSpectator(player, false);
 
