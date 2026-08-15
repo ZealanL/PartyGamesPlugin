@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
 import java.time.Instant;
@@ -28,14 +29,27 @@ import static zealan.pgp.Globals.PLOG;
 
 public class Display {
     public static String BAR = "&7" + ("=".repeat(40));
-    public record TicksTime(int numTicks, boolean showDecimals) {}
-    public record UnixTime(long secs) {}
+    public record TicksTime(int numTicks, boolean showDecimals) {
+        @Override
+        public @NotNull String toString() {
+            double secs = (numTicks % (60 * 20)) / 20.0;
+            int mins = numTicks / (60 * 20);
+            String s;
+            if (showDecimals) {
+                s = MessageFormat.format("{0,number}:{1,number,00.00}", mins, secs);
+            } else {
+                s = MessageFormat.format("{0,number,00}:{1,number,00}", mins, secs);
+            }
 
-    public static String format(Object arg) {
-        if (arg instanceof Entity e) {
-            return ("&e" + e.getName());
-        } else if (arg instanceof UnixTime unixTime) {
-            var instant = Instant.ofEpochSecond(unixTime.secs);
+            while (showDecimals && s.length() > 1 && (s.charAt(0) == '0' ||  s.charAt(0) == ':'))
+                s = s.substring(1);
+            return "&b" + s.replace(":", "&f:&b");
+        }
+    }
+    public record UnixTime(long secs) {
+        @Override
+        public @NotNull String toString() {
+            var instant = Instant.ofEpochSecond(secs);
             var zdt = instant.atZone(ZoneId.systemDefault());
 
             String formatted;
@@ -49,14 +63,12 @@ public class Display {
             }
 
             return "&b" + formatted;
-        } else if (arg instanceof TicksTime ticksTime) {
-            double secs = (ticksTime.numTicks % (60 * 20)) / 20.0;
-            int mins = ticksTime.numTicks / (60 * 20);
-            if (ticksTime.showDecimals) {
-                return MessageFormat.format("&b{0,number,00}:{1,number,00.00}", mins, secs);
-            } else {
-                return MessageFormat.format("&b{0,number,00}:{1,number,00}", mins, secs);
-            }
+        }
+    }
+
+    public static String format(Object arg) {
+        if (arg instanceof Entity e) {
+            return ("&e" + e.getName());
         } else if (arg instanceof String str) {
             return str.replace('&', ChatColor.COLOR_CHAR);
         } else if (arg instanceof Double || arg instanceof Float) {

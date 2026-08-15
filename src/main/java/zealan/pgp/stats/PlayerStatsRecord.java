@@ -84,8 +84,8 @@ public class PlayerStatsRecord {
 
         String toPrintOutText(UUID playerUUID) {
             var dataMap = new LinkedHashMap<String, Object>();
-            dataMap.put("Times played", this.timesPlayed);
-            dataMap.put("Total playtime", new Display.TicksTime(this.totalTicksPlayed, false));
+            dataMap.put("&7Times played", this.timesPlayed);
+            dataMap.put("&7Total playtime", new Display.TicksTime(this.totalTicksPlayed, false));
 
             for (var pbEntry : variantPBs.entrySet()) {
                 var valueText = pbEntry.getValue().toMsgPart();
@@ -108,7 +108,7 @@ public class PlayerStatsRecord {
 
                 }
 
-                dataMap.put("PB (" + pbEntry.getKey() + ")", valueText);
+                dataMap.put("&f&lPB&r (" + pbEntry.getKey() + ")", valueText);
             }
 
             return mapToMsg(
