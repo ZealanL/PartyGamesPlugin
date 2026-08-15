@@ -20,8 +20,9 @@ import java.util.stream.IntStream;
 import static zealan.pgp.Globals.*;
 
 public class GameMgr extends AutoListener {
+    private record LastPlayedGame(GameConfig config, GameVariant variant) {}
     private final HashSet<Game> activeGames = new HashSet<>();
-    private final WeakHashMap<Player, GameConfig> lastPlayedGames = new WeakHashMap<>();
+    private final WeakHashMap<Player, LastPlayedGame> lastPlayedGames = new WeakHashMap<>();
     private final HashMap<Player, Gamer> gamerMap = new HashMap<>();
 
     private final AtomicInteger numLoadingGames = new AtomicInteger(0);
@@ -108,11 +109,14 @@ public class GameMgr extends AutoListener {
                 "playagain",
                 "Play the party game you just played",
                 ctx -> {
-                    GameConfig lastGame = lastPlayedGames.get(ctx.sender);
+                    var lastGame = lastPlayedGames.get(ctx.sender);
                     if (lastGame == null)
                         return CommandResult.failure("You haven't played a game since you joined!");
 
-                    COMMAND_SYS.playerExecute(ctx.sender, "play " + lastGame.snakeCaseName);
+                    COMMAND_SYS.playerExecute(
+                            ctx.sender, 
+                            "play " + lastGame.config.snakeCaseName + " " + lastGame.variant.id()
+                    );
                     return CommandResult.ok();
                 }
         );
@@ -184,7 +188,7 @@ public class GameMgr extends AutoListener {
 
             for (var gamer : gamers) {
                 gamerMap.put(gamer.player, gamer);
-                lastPlayedGames.put(gamer.player, gameConfig);
+                lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant));
                 gamer.setGame(game);
                 Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + gameConfig.properName);
             }
