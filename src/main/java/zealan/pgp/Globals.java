@@ -33,6 +33,7 @@ public class Globals {
     public static LeaderboardMgr LEADERBOARD_MGR;
     public static ArmorStandMgr ARMOR_STAND_MGR;
     public static LobbyMgr LOBBY_MGR;
+    public static MOTDMgr MOTD_MGR;
 
     private static boolean initialized = false;
     public static void initialize(PartyGamesPlugin plugin) {
@@ -58,6 +59,7 @@ public class Globals {
             LEADERBOARD_MGR = new LeaderboardMgr();
             ARMOR_STAND_MGR = new ArmorStandMgr();
             LOBBY_MGR = new LobbyMgr();
+            MOTD_MGR = new MOTDMgr();
         } else {
             throw new RuntimeException("Cannot initialize globals twice");
         }
