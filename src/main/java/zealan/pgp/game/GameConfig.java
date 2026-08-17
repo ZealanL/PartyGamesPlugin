@@ -271,6 +271,23 @@ public enum GameConfig {
                     new BlockRange2d(1888, -1857, 1918, -1886),
                     new GameSpawn(GamePunchTheBats.CENTER_SPAWN_POS)
             )
+    ),
+    BoatRace(
+            GameBoatRace.class, "Boat Race", Material.BOAT,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
+            new GameLoadInfo(
+                    new BlockRange2d(2428, -2418, 2722, -2504),
+
+                    // TODO: Estimated based on limited video evidence
+                    new GameSpawn(2449, 139, -2468 - 3, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468, BlockFace.EAST), // DanTDM spawned here-ish
+                    new GameSpawn(2449, 139, -2468 + 3, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468 + 6, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468 + 9, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468 + 12, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468 + 15, BlockFace.EAST),
+                    new GameSpawn(2449, 139, -2468 + 18, BlockFace.EAST)
+            )
     )
 
     ;

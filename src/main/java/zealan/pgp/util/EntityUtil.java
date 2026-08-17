@@ -122,7 +122,7 @@ public class EntityUtil {
         ((CraftLivingEntity)entity).getHandle().aK = yaw;
     }
 
-    public static void setPosOnly(LivingEntity entity, Vector pos) {
+    public static void setPosOnly(Entity entity, Vector pos) {
         var loc = entity.getLocation();
         loc.setX(pos.getX());
         loc.setY(pos.getY());
