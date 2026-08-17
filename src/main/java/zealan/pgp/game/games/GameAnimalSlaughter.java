@@ -157,6 +157,16 @@ public class GameAnimalSlaughter extends Game {
                             3
                     )
             );
+        } else {
+            animalEntity.addPotionEffect(
+                    new PotionEffect(
+                            PotionEffectType.SPEED,
+                            Integer.MAX_VALUE,
+                            1,
+                            false,
+                            false
+                    )
+            );
         }
 
         double maxHealth = isNegative ? NEGATIVE_ANIMAL_HEALTH : (double) chosenType.hitsToKill;
