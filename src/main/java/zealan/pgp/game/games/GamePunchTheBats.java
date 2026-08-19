@@ -12,7 +12,6 @@ import zealan.pgp.api.display.Display;
 import zealan.pgp.game.Game;
 import zealan.pgp.game.Gamer;
 import zealan.pgp.math.Vec3i;
-import zealan.pgp.util.EntityUtil;
 import zealan.pgp.util.PlayerUtil;
 
 import java.util.HashMap;
@@ -24,11 +23,13 @@ public class GamePunchTheBats extends Game {
     }
 
     public static final Vec3i CENTER_SPAWN_POS = new Vec3i(1902, 73, -1872);
-    private static final Vector BAT_SPAWN_CENTER = new Vector(1902.5, 82.0, -1871.5);
-    private static final double BAT_SPAWN_RADIUS = 3.0;
 
-    private static final int NUM_BATS_NORMAL = 30;
-    private static final int NUM_BATS_BONUS = 3;
+    // In reality its 5 per player, but having only 5 bats when soloing is very boring
+    private static final int TOTAL_BATS = 40;
+    private static final Vector BAT_SPAWN_CENTER = new Vector(1902.5, 81.0, -1871.5);
+    private static final Vector BAT_SPAWN_HALF_AREA = new Vector(4.0, 1.0, 4.0);
+    private static final double BONUS_BAT_CHANCE = 0.1;
+    private static final int BAT_RESPAWN_INTERVAL = 20 * 10;
 
     private static final int DOUBLE_JUMP_COOLDOWN_TICKS = 40;
 
@@ -36,17 +37,18 @@ public class GamePunchTheBats extends Game {
 
     private final HashMap<Gamer, Integer> doubleJumpCooldowns = new HashMap<>();
 
-    private final HashSet<Bat> normalBats = new HashSet<>();
-    private final HashSet<Bat> bonusBats = new HashSet<>();
+    private final HashSet<Bat> bats = new HashSet<>();
 
-    private void spawnBat(boolean isBonus) {
-        Vector spawnPos = BAT_SPAWN_CENTER.clone().add(
-                new Vector(
-                    rand.nextDouble() * BAT_SPAWN_RADIUS - (BAT_SPAWN_RADIUS / 2),
-                    rand.nextDouble() * BAT_SPAWN_RADIUS - (BAT_SPAWN_RADIUS / 2),
-                    rand.nextDouble() * BAT_SPAWN_RADIUS - (BAT_SPAWN_RADIUS / 2)
-                )
+    private void spawnBat() {
+        boolean isBonus = rand.nextDouble() < BONUS_BAT_CHANCE;
+
+        var spawnOffsetScale = new Vector(
+                rand.nextDouble() * 2 - 1,
+                rand.nextDouble() * 2 - 1,
+                rand.nextDouble() * 2 - 1
         );
+
+        var spawnPos = BAT_SPAWN_CENTER.clone().add(BAT_SPAWN_HALF_AREA.clone().multiply(spawnOffsetScale));
 
         Bat bat = (Bat)world.spawnEntity(
                 new Location(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()),
@@ -57,11 +59,7 @@ public class GamePunchTheBats extends Game {
         bat.setCustomNameVisible(true);
         bat.setCustomName(customName);
 
-        if (isBonus) {
-            bonusBats.add(bat);
-        } else {
-            normalBats.add(bat);
-        }
+        bats.add(bat);
     }
 
     @Override
@@ -101,17 +99,15 @@ public class GamePunchTheBats extends Game {
             PlayerUtil.sendAbilities(gamer.player);
         }
 
-        normalBats.removeIf(Entity::isDead);
-        bonusBats.removeIf(Entity::isDead);
+        bats.removeIf(Entity::isDead);
 
-        if (normalBats.size() < NUM_BATS_NORMAL)
-            spawnBat(false);
-        if (bonusBats.size() < NUM_BATS_BONUS)
-            spawnBat(true);
+        if (getTicksElapsed() % BAT_RESPAWN_INTERVAL == 0) {
+            while (bats.size() < TOTAL_BATS) {
+                spawnBat();
+            }
+        }
 
-        for (var bat : normalBats)
-            bat.setAwake(true);
-        for (var bat : bonusBats)
+        for (var bat : bats)
             bat.setAwake(true);
     }
 
@@ -129,7 +125,7 @@ public class GamePunchTheBats extends Game {
 
             event.setDamage(999);
 
-            boolean isBonus = bonusBats.contains(bat);
+            boolean isBonus = bat.getCustomName().contains("Bonus");
             if (isBonus) {
                 player.playSound(player.getLocation(), Sound.LEVEL_UP, 0.7f, 1.0f);
                 gamer.points += 4;
