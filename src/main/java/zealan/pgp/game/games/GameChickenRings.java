@@ -3,7 +3,6 @@ package zealan.pgp.game.games;
 import net.minecraft.server.v1_8_R3.EntityChicken;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftChicken;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

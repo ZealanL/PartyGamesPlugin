@@ -6,6 +6,8 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -143,11 +145,27 @@ public class Display {
     }
 
     public static void sendTitle(Player player, String title, String subtitle) {
-        player.sendTitle(Display.format(title), Display.format(subtitle));
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        PlayerConnection connection = craftPlayer.getHandle().playerConnection;
+
+        PacketPlayOutTitle lengthPacket = new PacketPlayOutTitle(2, 20, 2);
+        connection.sendPacket(lengthPacket);
+
+        if (title != null) {
+            IChatBaseComponent titleComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Display.format(title) + "\"}");
+            PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleComponent);
+            connection.sendPacket(titlePacket);
+        }
+
+        if (subtitle != null) {
+            IChatBaseComponent subComponent = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + Display.format(subtitle) + "\"}");
+            PacketPlayOutTitle subPacket = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subComponent);
+            connection.sendPacket(subPacket);
+        }
     }
 
     public static void clearTitle(Player player) {
-        player.sendTitle("", "");
+        sendTitle(player, null, null);
     }
 
     public static void sendPopupText(Player player, String message, Object ... args) {
