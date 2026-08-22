@@ -205,8 +205,10 @@ public class GameChickenRings extends Game {
             var gamer = playingGamers.get(i);
             Vector ridePos = SPAWN_RIGHTMOST_POS.clone().subtract(new Vector(-i, 0, 0));
             Location spawnLoc = new Location(world, ridePos.getX(), ridePos.getY(), ridePos.getZ(), -180, 0);
-
+            if (!spawnLoc.getChunk().isLoaded())
+                    spawnLoc.getChunk().load();
             Chicken chicken = (Chicken) world.spawnEntity(spawnLoc, EntityType.CHICKEN);
+            chicken.setRemoveWhenFarAway(false);
             var controller = new ChickenController(gamer.player, chicken, spawnLoc.toVector());
             chickenControllers.put(gamer, controller);
 

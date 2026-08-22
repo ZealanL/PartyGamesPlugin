@@ -1,6 +1,7 @@
 package zealan.pgp.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -197,7 +198,6 @@ public class GameMgr extends AutoListener {
 
             var elapsedMs = System.currentTimeMillis() - startMs;
             PLOG.info("Created new game world in " + elapsedMs + " ms!");
-
             game.onLoaded();
             numLoadingGames.getAndDecrement();
         });

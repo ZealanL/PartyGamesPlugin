@@ -61,7 +61,7 @@ public enum GameConfig {
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
                     new BlockRange2d(2392, 574, 2700, -633),
-                    new GameSpawn(2517, 72, 220, BlockFace.NORTH)
+                    new GameSpawn(2492, 71, 220, BlockFace.NORTH)
             )
     ),
     Dive(
