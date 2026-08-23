@@ -73,6 +73,12 @@ public class Vec3i {
         );
     }
 
+    public Vector alongBlockFace(BlockFace blockFace, double amount) {
+        return this.getCenter().add(new Vector(
+                blockFace.getModX() * amount, blockFace.getModY() * amount, blockFace.getModZ() * amount
+        ));
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

@@ -214,14 +214,16 @@ public enum GameConfig {
                     }
             )
     ),
+    */
     SpiderMaze(
-            GameSpiderMaze.class, "Spider Maze", Items.SPIDER_SPAWN_EGG,
-            GameStyle.RACE, 120,
+            GameSpiderMaze.class, "Spider Maze", ItemUtil.getSpawnEgg(EntityType.SPIDER),
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
             new GameLoadInfo(
-                    new BlockPos(44, 1, 2098),
+                    new BlockRange2d(-28, 2172, 117, 2027),
                     GameSpiderMaze.SPAWNS
             )
     ),
+    /*
     SuperSheep(
             GameSuperSheep.class, "Super Sheep", Items.WHITE_WOOL,
             GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
