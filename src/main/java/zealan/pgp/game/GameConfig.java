@@ -223,12 +223,11 @@ public enum GameConfig {
                     GameSpiderMaze.SPAWNS
             )
     ),
-    /*
     SuperSheep(
-            GameSuperSheep.class, "Super Sheep", Items.WHITE_WOOL,
-            GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
+            GameSuperSheep.class, "Super Sheep", ItemUtil.getSpawnEgg(EntityType.SHEEP),
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    new BlockPos(-911, 23, -3609),
+                    new BlockRange2d(-961, -3559, -860, -3660),
                     new GameSpawn[] {
                             new GameSpawn(-942, 2, -3580),
                             new GameSpawn(-942, 2, -3608),
@@ -241,7 +240,6 @@ public enum GameConfig {
                     }
             )
     ),
-    */
     TheFloorIsLava(
             GameTheFloorIsLava.class, "The Floor Is Lava", Material.COBBLESTONE_STAIRS,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 90,

@@ -143,11 +143,12 @@ public class EntityUtil {
             craftPlayer.getHandle().playerConnection.sendPacket(packet);
             craftPlayer.getHandle().setPosition(pos.getX(), pos.getY(), pos.getZ());
         } else {
-            var loc = entity.getLocation();
-            loc.setX(pos.getX());
-            loc.setY(pos.getY());
-            loc.setZ(pos.getZ());
-            entity.teleport(loc);
+            var nmsEnt = ((CraftEntity)entity).getHandle();
+            nmsEnt.setPosition(pos.getX(), pos.getY(), pos.getZ());
         }
+    }
+
+    public static boolean isCollidedHorizontally(Entity entity) {
+        return ((CraftEntity)entity).getHandle().F;
     }
 }
