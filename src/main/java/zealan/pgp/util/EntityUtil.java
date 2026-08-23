@@ -7,14 +7,17 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityTeleport;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.MathHelper;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftFallingSand;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -123,10 +126,28 @@ public class EntityUtil {
     }
 
     public static void setPosOnly(Entity entity, Vector pos) {
-        var loc = entity.getLocation();
-        loc.setX(pos.getX());
-        loc.setY(pos.getY());
-        loc.setZ(pos.getZ());
-        entity.teleport(loc);
+        if (entity instanceof Player player) {
+
+            java.util.Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> flags = java.util.EnumSet.of(
+                    PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT,
+                    PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT
+            );
+
+            PacketPlayOutPosition packet = new PacketPlayOutPosition(
+                    pos.getX(), pos.getY(), pos.getZ(),
+                    0f, 0f,
+                    flags
+            );
+
+            CraftPlayer craftPlayer = (CraftPlayer) player;
+            craftPlayer.getHandle().playerConnection.sendPacket(packet);
+            craftPlayer.getHandle().setPosition(pos.getX(), pos.getY(), pos.getZ());
+        } else {
+            var loc = entity.getLocation();
+            loc.setX(pos.getX());
+            loc.setY(pos.getY());
+            loc.setZ(pos.getZ());
+            entity.teleport(loc);
+        }
     }
 }
