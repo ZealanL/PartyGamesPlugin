@@ -103,11 +103,10 @@ public class GameChickenRings extends Game {
             loc.setYaw(yaw);
             loc.setPitch(0);
 
-            Location fromLoc = loc.clone();
-
             EntityChicken nmsChicken = ((CraftChicken) chicken).getHandle();
             nmsChicken.setPosition(this.curPos.getX(), this.curPos.getY(), this.curPos.getZ());
             if (allowedMove) {
+                Location fromLoc = chicken.getLocation();
                 nmsChicken.move(curMoveDelta.getX(), curMoveDelta.getY(), curMoveDelta.getZ());
                 this.curPos = new Vector(nmsChicken.locX, nmsChicken.locY, nmsChicken.locZ);
                 curMoveDelta = this.curPos.clone().subtract(fromLoc.toVector());
@@ -362,7 +361,8 @@ public class GameChickenRings extends Game {
                 if (controller.curMoveDelta.lengthSquared() > 1e-6) {
                     if (!PLAYABLE_BOUNDS.contains(chickenBlockPos)) {
                         Vec3i resetVec = (controller.ringsPassed > 0) ?
-                                nextRingPos : new Vec3i(SPAWN_RIGHTMOST_POS.getBlockX(), SPAWN_RIGHTMOST_POS.getBlockY(), SPAWN_RIGHTMOST_POS.getBlockZ());
+                                nextRingPos.add(0, -3, -1) :
+                                new Vec3i(SPAWN_RIGHTMOST_POS.getBlockX(), SPAWN_RIGHTMOST_POS.getBlockY(), SPAWN_RIGHTMOST_POS.getBlockZ());
 
                         Location resetLoc = new Location(
                                 world, resetVec.x + 0.5, resetVec.y, resetVec.z + 0.5, 0f, 0f
@@ -370,6 +370,9 @@ public class GameChickenRings extends Game {
 
                         controller.chicken.teleport(resetLoc);
                         gamer.player.teleport(resetLoc);
+
+                        PlayerUtil.syncMount(gamer.player, controller.chicken);
+
                         controller.curPos = resetLoc.toVector();
                         controller.curMoveDelta = new Vector(0, 0, 0);
 
