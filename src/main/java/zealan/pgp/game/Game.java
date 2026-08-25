@@ -130,6 +130,13 @@ public abstract class Game implements WorldEvents {
     }
 
     public final void onTick() {
+
+        // Early-out if everyone left during game-start
+        if (state == State.STARTING && this.getGamers().isEmpty()) {
+            this.state = State.ENDED;
+            return;
+        }
+
         innerOnTick();
 
         switch (state) {
@@ -137,6 +144,7 @@ public abstract class Game implements WorldEvents {
                 if (countdownTicks > 0) {
                     if (countdownTicks % 20 == 0) {
                         for (var gamer : this.gamers) {
+
                             Display.sendTitle(gamer.player, "&a" + (countdownTicks / 20), "");
                             gamer.player.playSound(
                                     gamer.player.getLocation(), Sound.CLICK, 0.9f, 1.0f

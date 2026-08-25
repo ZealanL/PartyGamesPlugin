@@ -121,7 +121,7 @@ public enum GameConfig {
             GameLabEscape.class, "Lab Escape", Material.IRON_AXE,
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.SURVIVAL, 180,
             new GameLoadInfo(
-                    new BlockRange2d(1407, -81, 1471, 144),
+                    new BlockRange2d(1407, -81, 1471, -144),
                     new GameSpawn(1429, 161, -117),
                     new GameSpawn(1437, 161, -101),
                     new GameSpawn(1437, 161, -125),

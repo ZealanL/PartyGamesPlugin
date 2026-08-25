@@ -13,7 +13,10 @@ import zealan.pgp.api.command.CommandResult;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.menu.MenuInv;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,13 +24,13 @@ import java.util.stream.IntStream;
 import static zealan.pgp.Globals.*;
 
 public class GameMgr extends AutoListener {
-    private record LastPlayedGame(GameConfig config, GameVariant variant) {}
-    private final HashSet<Game> activeGames = new HashSet<>();
-    private final WeakHashMap<Player, LastPlayedGame> lastPlayedGames = new WeakHashMap<>();
-    private final HashMap<Player, Gamer> gamerMap = new HashMap<>();
+    private record LastPlayedGame(GameConfig config, GameVariant variant, Instant when) {}
+    private final Set<Game> activeGames = ConcurrentHashMap.newKeySet();
+    private final ConcurrentHashMap<Player, LastPlayedGame> lastPlayedGames = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Player, Gamer> gamerMap = new ConcurrentHashMap<>();
 
     private final AtomicInteger numLoadingGames = new AtomicInteger(0);
-    private static final int MAX_LOADING_GAMES = 4;
+    private static final int MAX_LOADING_GAMES = 2;
 
     public GameMgr() {
         var playVariantRoot = CommandNode.make(
@@ -134,6 +137,11 @@ public class GameMgr extends AutoListener {
         if (gamerMap.containsKey(player)) {
             return getGamerFromPlayer(player).game;
         } else {
+            for (var game : activeGames) {
+                if (game.getGamer(player) != null) {
+                    throw new RuntimeException("Wtf");
+                }
+            }
             return null;
         }
     }
@@ -150,6 +158,19 @@ public class GameMgr extends AutoListener {
                     "&cThe server is overloaded trying to start " + numGamesAlreadyLoading + " games!" +
                             "Try again in a sec."
             );
+            return false;
+        }
+
+        var lastPlayed = lastPlayedGames.get(starter);
+        if (lastPlayed != null) {
+            var timeSince = Duration.between(lastPlayed.when, Instant.now());
+            if (timeSince.getSeconds() < 2) {
+                Display.sendMsg(
+                        starter,
+                        "&cPlease wait a sec before starting another game!"
+                );
+                return false;
+            }
         }
 
         var party = PARTY_MGR.getParty(starter);
@@ -162,6 +183,7 @@ public class GameMgr extends AutoListener {
             playersForGame.add(starter);
         }
 
+        PLOG.info("Started loading game...");
         int numSpawns = gameConfig.loadInfo.spawns.length;
         ArrayList<Integer> spawnShuffle = IntStream.range(0, numSpawns)
                 .boxed().collect(Collectors.toCollection(ArrayList::new));
@@ -189,10 +211,11 @@ public class GameMgr extends AutoListener {
 
             for (var gamer : gamers) {
                 gamerMap.put(gamer.player, gamer);
-                lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant));
+                lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant, Instant.now()));
                 gamer.setGame(game);
                 Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + gameConfig.properName);
             }
+
             activeGames.add(game);
             WORLD_EVENTS_MGR.register(world, game);
 
@@ -200,6 +223,7 @@ public class GameMgr extends AutoListener {
             PLOG.info("Created new game world in " + elapsedMs + " ms!");
             game.onLoaded();
             numLoadingGames.getAndDecrement();
+            PLOG.info("Finished loading game");
         });
 
         return true;
@@ -209,7 +233,13 @@ public class GameMgr extends AutoListener {
         if (game.hasEnded())
             return false;
 
+        PLOG.info("Ending game...");
+
         game.end();
+        WORLD_EVENTS_MGR.unregister(game.world, game);
+        for (var gamer : game.getGamers())
+            gamerMap.remove(gamer.player);
+        activeGames.remove(game);
         return true;
     }
 
@@ -221,8 +251,8 @@ public class GameMgr extends AutoListener {
                 gamer.stopPlaying(false);
             gamerMap.remove(quitEvent.getPlayer());
         }
+        lastPlayedGames.remove(quitEvent.getPlayer());
     }
-
 
     @Override
     public void onTick() {
@@ -239,11 +269,15 @@ public class GameMgr extends AutoListener {
             game.onTick();
 
             if (game.hasEnded()) {
-                WORLD_EVENTS_MGR.unregister(game.world, game);
+                try {
+                    WORLD_EVENTS_MGR.unregister(game.world, game);
+                } catch (IllegalStateException e) {
+                    PLOG.warning("Game unregistration failed");
+                }
                 for (var gamer : game.getGamers())
                     gamerMap.remove(gamer.player);
+                activeGames.remove(game);
             }
         }
-        activeGames.removeIf(game -> game.hasEnded());
     }
 }
