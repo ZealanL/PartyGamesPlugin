@@ -24,7 +24,9 @@ import java.util.stream.IntStream;
 import static zealan.pgp.Globals.*;
 
 public class GameMgr extends AutoListener {
-    private record LastPlayedGame(GameConfig config, GameVariant variant, Instant when) {}
+    private record LastPlayedGame(GameConfig config, GameVariant variant, Instant when) {
+    }
+
     private final Set<Game> activeGames = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<Player, LastPlayedGame> lastPlayedGames = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Player, Gamer> gamerMap = new ConcurrentHashMap<>();
@@ -118,7 +120,7 @@ public class GameMgr extends AutoListener {
                         return CommandResult.failure("You haven't played a game since you joined!");
 
                     COMMAND_SYS.playerExecute(
-                            ctx.sender, 
+                            ctx.sender,
                             "play " + lastGame.config.snakeCaseName + " " + lastGame.variant.id()
                     );
                     return CommandResult.ok();

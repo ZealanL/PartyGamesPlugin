@@ -104,7 +104,7 @@ public class GameMinecartRacing extends Game {
             gamer.player.getInventory().setItem(0, bowStack);
             gamer.player.getInventory().setItem(1, new ItemStack(Material.ARROW));
 
-            Location spawnLoc = gamer.player.getLocation();
+            Location spawnLoc = getGamerSpawn(gamer).toLocation(world);
             Location minecartSpawnLoc = new Location(
                     world,
                     spawnLoc.getBlockX() + 0.5,
