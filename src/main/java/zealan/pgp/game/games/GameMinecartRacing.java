@@ -215,83 +215,13 @@ public class GameMinecartRacing extends Game {
         }
     }
 
-    Location extrapProjectileHit(Projectile projectile) {
-        var curLoc = projectile.getLocation();
-        for (int i = 0; i < 6; i++) {
-            if (!world.getBlockAt(curLoc).isEmpty())
-                return curLoc;
-
-            curLoc = curLoc.add(projectile.getVelocity().multiply(0.5));
-        }
-        return curLoc;
-    }
-
-    /*
-    @Override
-    public void onProjectileHit(Projectile projectile) {
-        var shooter = projectile.getShooter();
-        if (shooter instanceof Player && projectile instanceof Arrow) {
-            Location hitLocation = extrapProjectileHit(projectile);
-            Block hitBlock = world.getBlockAt(hitLocation);
-
-            if (hitBlock.getType() == Material.WOOL) {
-                byte hitWoolData = hitBlock.getData();
-                for (Gamer gamer : getPlayingGamers()) {
-                    byte teamWoolData = TEAM_WOOL_DATA[gamer.spawnIdx % TEAM_WOOL_DATA.length];
-                    if (hitWoolData == teamWoolData) {
-                        MinecartController minecartController = minecarts.get(gamer);
-                        if (minecartController != null) {
-                            minecartController.curSpeed = Math.max(
-                                    MINECART_MIN_BOOSTED_SPEED,
-                                    minecartController.curSpeed * (1.0 + MINECART_BOOST_BONUS)
-                            );
-                            gamer.player.playSound(gamer.player.getLocation(), Sound.SUCCESSFUL_HIT, 0.9f, 1.0f);
-                            world.playEffect(gamer.player.getLocation(), Effect.LAVA_POP, 4);
-                        }
-                        break;
-                    }
-                }
-
-                WorldUtil.breakBlock(world, hitBlock);
-                projectile.remove();
-            }
-
-            PLOG.info("Arrow hit z=" + projectile.getLocation().getZ() + ", real: " + hitLocation.getZ());
-        }
-    }
-*/
-    /*
-    @Override
-    public void onProjectileHit(Projectile projectile, Block hitBlock) {
-        if (hitBlock != null && WOOLS_BLOCK_RANGE.contains(hitBlock.getLocation())) {
-            if (projectile instanceof Arrow) {
-                if (hitBlock.getType() == Material.WOOL) {
-                    byte hitWoolData = hitBlock.getData();
-                    for (Gamer gamer : getPlayingGamers()) {
-                        byte teamWoolData = TEAM_WOOL_DATA[gamer.spawnIdx % TEAM_WOOL_DATA.length];
-                        if (hitWoolData == teamWoolData) {
-                            MinecartController minecartController = minecarts.get(gamer);
-                            if (minecartController != null) {
-                                minecartController.curSpeed = Math.max(
-                                        MINECART_MIN_BOOSTED_SPEED,
-                                        minecartController.curSpeed * (1.0 + MINECART_BOOST_BONUS)
-                                );
-                                gamer.player.playSound(gamer.player.getLocation(), Sound.SUCCESSFUL_HIT, 0.9f, 1.0f);
-                                world.playEffect(gamer.player.getLocation(), Effect.LAVA_POP, 4);
-                            }
-                            break;
-                        }
-                    }
-
-                    hitBlock.setType(Material.AIR);
-                    projectile.remove();
-                }
-            }
-        }
-    }*/
-
     @Override
     public boolean canUseItem(Player player, ItemStack item) {
         return item.getType() == Material.BOW;
+    }
+
+    @Override
+    public boolean canInteractBlock(Player player, Block block) {
+        return true;
     }
 }
