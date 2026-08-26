@@ -26,8 +26,6 @@ public class SidebarMgr extends AutoListener {
 
     @Override
     public void onTick() {
-        final String bar = "&7----------";
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             List<String> lines = new ArrayList<>();
 
@@ -36,7 +34,7 @@ public class SidebarMgr extends AutoListener {
             if (game != null) {
                 lines.add("&e&l" + game.config.properName);
 
-                var gamePlayer = game.getGamer(player);
+                var gamePlayer = game.getPlayingGamer(player);
                 if (gamePlayer != null) {
                     if (!game.hasStarted()) {
                         lines.add("&a&oStarting...");

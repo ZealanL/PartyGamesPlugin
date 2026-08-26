@@ -29,9 +29,11 @@ public abstract class Game implements WorldEvents {
         RUNNING,
         ENDED
     }
+
     private State state = State.STARTING;
 
-    public record InitParams(GameConfig config, GameVariant variant, List<Gamer> gamers, World world) { }
+    public record InitParams(GameConfig config, GameVariant variant, List<Gamer> gamers, World world) {
+    }
 
     public Game(InitParams params) {
         this.config = params.config;
@@ -61,13 +63,29 @@ public abstract class Game implements WorldEvents {
         return gamers.stream().filter(Gamer::isPlaying).toList();
     }
 
-    public final Gamer getGamer(Player player) {
-        return gamers.stream().filter(g -> g.player == player).findFirst().orElse(null);
+    public final Gamer getPlayingGamer(Player player) {
+        return gamers.stream().filter(
+                g -> g.player == player && g.isPlaying()
+        ).findFirst().orElse(null);
     }
 
-    public final State getState() { return state; }
-    public final boolean hasStarted() { return state != State.STARTING; }
-    public final boolean hasEnded() { return state == State.ENDED; }
+    public final Gamer getGamer(Player player) {
+        return gamers.stream().filter(
+                g -> g.player == player
+        ).findFirst().orElse(null);
+    }
+
+    public final State getState() {
+        return state;
+    }
+
+    public final boolean hasStarted() {
+        return state != State.STARTING;
+    }
+
+    public final boolean hasEnded() {
+        return state == State.ENDED;
+    }
 
     public void onLoaded() {
         for (var gamer : gamers)
@@ -77,6 +95,7 @@ public abstract class Game implements WorldEvents {
     }
 
     private boolean hasStartedStarting = false;
+
     public void start() {
         if (hasStartedStarting)
             throw new IllegalStateException("Cannot start game twice!");
@@ -118,6 +137,7 @@ public abstract class Game implements WorldEvents {
     public final void end() {
         end(false);
     }
+
     protected final void end(boolean endedNaturally) {
         state = State.ENDED;
         for (var gamer : getPlayingGamers())
@@ -132,7 +152,7 @@ public abstract class Game implements WorldEvents {
     public final void onTick() {
 
         // Early-out if everyone left during game-start
-        if (state == State.STARTING && this.getGamers().isEmpty()) {
+        if (state == State.STARTING && this.getPlayingGamers().isEmpty()) {
             this.state = State.ENDED;
             return;
         }
@@ -208,7 +228,7 @@ public abstract class Game implements WorldEvents {
         return switch (config.style) {
             case RACE, POINTS -> new BossBarContent(
                     Display.format("Time left: {}s", secondsRemaining),
-                    getTicksRemaining() / (double)config.maxDurationTicks()
+                    getTicksRemaining() / (double) config.maxDurationTicks()
             );
             case SURVIVAL -> new BossBarContent(
                     Display.format("Survived for: {}s", secondsElapsed),
@@ -220,12 +240,14 @@ public abstract class Game implements WorldEvents {
     // ////////
 
     protected abstract void innerOnStart();
+
     protected abstract void innerOnTick();
+
     protected abstract void innerOnEnd();
 
     @Override
     public void onPlayerDeath(Player player) {
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer != null) {
             spawnGamer(gamer);
             gamer.stopPlaying(config.style != GameStyle.RACE);

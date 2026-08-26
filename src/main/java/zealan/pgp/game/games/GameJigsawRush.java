@@ -164,7 +164,7 @@ public class GameJigsawRush extends Game {
 
         var blockPos = new Vec3i(block.getX(), block.getY(), block.getZ());
 
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer != null && gamer.isPlaying()) {
             var boardBlocks = getPlayerBoardBlocks(gamer);
             for (int i = 0; i < 9; i++) {

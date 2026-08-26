@@ -119,7 +119,7 @@ public class GamePunchTheBats extends Game {
     @Override
     public boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
         if (entity instanceof Bat bat) {
-            var gamer = getGamer(player);
+            var gamer = getPlayingGamer(player);
             if (gamer == null)
                 return false;
 
@@ -143,7 +143,7 @@ public class GamePunchTheBats extends Game {
     @Override
     public boolean canStartFlying(Player player) {
 
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer != null) {
             var cooldown = doubleJumpCooldowns.getOrDefault(gamer, 0);
             if (cooldown <= 0) {

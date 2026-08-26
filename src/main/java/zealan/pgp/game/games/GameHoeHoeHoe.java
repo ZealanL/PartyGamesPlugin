@@ -70,7 +70,7 @@ public class GameHoeHoeHoe extends Game {
         if (!hasStarted())
             return false;
 
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer == null)
             return false;
 

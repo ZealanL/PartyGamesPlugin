@@ -1,7 +1,6 @@
 package zealan.pgp.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -29,7 +28,6 @@ public class GameMgr extends AutoListener {
 
     private final Set<Game> activeGames = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<Player, LastPlayedGame> lastPlayedGames = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Player, Gamer> gamerMap = new ConcurrentHashMap<>();
 
     private final AtomicInteger numLoadingGames = new AtomicInteger(0);
     private static final int MAX_LOADING_GAMES = 2;
@@ -132,26 +130,25 @@ public class GameMgr extends AutoListener {
     }
 
     public Gamer getGamerFromPlayer(Player player) {
-        return gamerMap.get(player);
+        for (var game : activeGames) {
+            var gamer = game.getPlayingGamer(player);
+            if (gamer != null) {
+                return gamer;
+            }
+        }
+        return null;
     }
 
     public Game getGameFromPlayer(Player player) {
-        if (gamerMap.containsKey(player)) {
-            return getGamerFromPlayer(player).game;
-        } else {
-            for (var game : activeGames) {
-                if (game.getGamer(player) != null) {
-                    throw new RuntimeException("Wtf");
-                }
+        for (var game : activeGames) {
+            if (game.getPlayingGamer(player) != null) {
+                return game;
             }
-            return null;
         }
+        return null;
     }
 
     public boolean tryStartGame(Player starter, GameConfig gameConfig, GameVariant variant) {
-        var prevGame = getGameFromPlayer(starter);
-        if (prevGame != null)
-            endGame(prevGame);
 
         int numGamesAlreadyLoading = numLoadingGames.get();
         if (numLoadingGames.get() >= MAX_LOADING_GAMES) {
@@ -212,7 +209,6 @@ public class GameMgr extends AutoListener {
             }
 
             for (var gamer : gamers) {
-                gamerMap.put(gamer.player, gamer);
                 lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant, Instant.now()));
                 gamer.setGame(game);
                 Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + gameConfig.properName);
@@ -231,27 +227,11 @@ public class GameMgr extends AutoListener {
         return true;
     }
 
-    public boolean endGame(Game game) {
-        if (game.hasEnded())
-            return false;
-
-        PLOG.info("Ending game...");
-
-        game.end();
-        WORLD_EVENTS_MGR.unregister(game.world, game);
-        for (var gamer : game.getGamers())
-            gamerMap.remove(gamer.player);
-        activeGames.remove(game);
-        return true;
-    }
-
     @EventHandler
     void handle(PlayerQuitEvent quitEvent) {
-        if (gamerMap.containsKey(quitEvent.getPlayer())) {
-            var gamer = gamerMap.get(quitEvent.getPlayer());
-            if (gamer.isPlaying())
-                gamer.stopPlaying(false);
-            gamerMap.remove(quitEvent.getPlayer());
+        var gamer = getGamerFromPlayer(quitEvent.getPlayer());
+        if (gamer != null) {
+            gamer.stopPlaying(false);
         }
         lastPlayedGames.remove(quitEvent.getPlayer());
     }
@@ -276,8 +256,6 @@ public class GameMgr extends AutoListener {
                 } catch (IllegalStateException e) {
                     PLOG.warning("Game unregistration failed");
                 }
-                for (var gamer : game.getGamers())
-                    gamerMap.remove(gamer.player);
                 activeGames.remove(game);
             }
         }

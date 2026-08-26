@@ -5,23 +5,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import zealan.pgp.api.display.Display;
 import zealan.pgp.game.Game;
 import zealan.pgp.game.GameVariant;
 import zealan.pgp.game.Gamer;
 import zealan.pgp.math.BlockRange;
-import zealan.pgp.math.BoundingBox;
 import zealan.pgp.math.Vec3i;
 
 import java.util.HashMap;
-
-import static zealan.pgp.Globals.PLOG;
 
 public class GameCannonPainting extends Game {
     public static final GameVariant VARIANT_NO_COOLDOWN = new GameVariant(
@@ -112,7 +105,7 @@ public class GameCannonPainting extends Game {
 
     @Override
     public boolean canUseItem(Player player, ItemStack item) {
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer == null)
             return false;
 
@@ -143,7 +136,7 @@ public class GameCannonPainting extends Game {
     public void onProjectileHit(Projectile projectile) {
         var shooter = projectile.getShooter();
         if (shooter instanceof Player player && projectile instanceof Egg egg) {
-            var gamer = getGamer(player);
+            var gamer = getPlayingGamer(player);
             if (gamer == null)
                 return;
 

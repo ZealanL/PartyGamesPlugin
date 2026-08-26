@@ -203,7 +203,7 @@ public class GameAnimalSlaughter extends Game {
 
     @Override
     public boolean canAttackEntity(Player player, Entity attacked, EntityDamageEvent event) {
-        var gamer = getGamer(player);
+        var gamer = getPlayingGamer(player);
         if (gamer == null)
             return false;
 
