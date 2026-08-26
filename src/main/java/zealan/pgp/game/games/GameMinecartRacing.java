@@ -188,6 +188,8 @@ public class GameMinecartRacing extends Game {
                     forwardLoc = forwardLoc.add(direction.multiply(0.2));
 
                 var hitBlock = forwardLoc.getBlock();
+                if (!WOOLS_BLOCK_RANGE.contains(new Vec3i(hitBlock.getX(), hitBlock.getY(), hitBlock.getZ())))
+                    continue;
 
                 if (hitBlock.getType() == Material.WOOL) {
                     byte hitWoolData = hitBlock.getData();
