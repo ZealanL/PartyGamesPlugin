@@ -137,6 +137,12 @@ public abstract class Game implements WorldEvents {
             return;
         }
 
+        for (var gamer : getPlayingGamers()) {
+            if (gamer.player.getWorld() != world) {
+                gamer.stopPlaying(false);
+            }
+        }
+
         innerOnTick();
 
         switch (state) {

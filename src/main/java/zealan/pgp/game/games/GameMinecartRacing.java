@@ -96,7 +96,7 @@ public class GameMinecartRacing extends Game {
 
     @Override
     protected void innerOnStart() {
-        for (Gamer gamer : getGamers()) {
+        for (Gamer gamer : getPlayingGamers()) {
             // Give bow with infinity
             ItemStack bowStack = new ItemStack(Material.BOW);
             bowStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
