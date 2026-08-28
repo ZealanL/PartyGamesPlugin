@@ -27,8 +27,8 @@ public class GameAnvilSpleef extends Game {
             new GameVariant("fast_anvils", "Fast Anvils", "Anvils fall much faster!", Material.PISTON_BASE);
 
     public static final BlockRange FLOOR_AREA = BlockRange.fromCorners(
-            -264, 0, -3628,
-            -223, 0, -3589
+            -264, 0, -3629,
+            -224, 0, -3589
     );
     public static final int ANVIL_SPAWN_HEIGHT = 25;
     public static final BlockRange SPAWN_AREA = FLOOR_AREA
