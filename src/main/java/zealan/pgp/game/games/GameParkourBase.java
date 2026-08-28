@@ -62,7 +62,7 @@ public abstract class GameParkourBase extends Game {
 
     @Override
     protected void innerOnTick() {
-        for (Gamer gamer : getGamers()) {
+        for (Gamer gamer : getPlayingGamers()) {
             Location loc = gamer.player.getLocation();
             int blockX = loc.getBlockX();
             int blockY = loc.getBlockY();
