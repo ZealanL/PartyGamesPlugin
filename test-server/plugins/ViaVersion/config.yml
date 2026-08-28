@@ -63,18 +63,18 @@ send-server-details: true
 packet-limiter:
   enabled: true
   # The maximum packets a client can send per second.
-  max-per-second: 800
-  max-per-second-kick-message: You are sending too many packets!
+  max-per-second: 5000
+  max-per-second-kick-message: You are sending too many packets (sudden) (pps=%pps)
   #
   # We can also kick them if they repeatedly send too many packets over a longer period of time.
   # E.g. if a player sends over 200 packets per second for 4 out of 7 seconds, we kick them.
   # The maximum packets per second a client can send over a longer period of time.
-  sustained-max-per-second: 200
+  sustained-max-per-second: 2000
   # Period to track in seconds.
   sustained-period-seconds: 7
   # The number of seconds within the interval that the client can exceed the limit before being kicked.
   sustained-threshold: 4
-  sustained-kick-message: You are sending too many packets, :(
+  sustained-kick-message: You are sending too many packets (sustained)
 # Limits the size of packets in kilobytes sent per second.
 packet-size-limiter:
   enabled: false
