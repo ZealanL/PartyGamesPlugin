@@ -92,8 +92,6 @@ public class GameSpiderMaze extends Game {
             44, 2, 2098
     );
 
-    private static final double PLAYER_MOVEMENT_SPEED = 0.115; // TODO: Guess
-
     @Override
     public void onLoaded() {
         super.onLoaded();
