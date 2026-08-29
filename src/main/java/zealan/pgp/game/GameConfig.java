@@ -1,5 +1,6 @@
 package zealan.pgp.game;
 
+import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -77,6 +78,30 @@ public enum GameConfig {
                     new GameSpawn(955, 78, -3621),
                     new GameSpawn(947, 78, -3624),
                     new GameSpawn(939, 78, -3621)
+            )
+    ),
+    HighGround(
+            GameHighGround.class, "High Ground", ItemUtil.getColoredWool(DyeColor.RED),
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
+            new GameLoadInfo(
+                    new BlockRange2d(315, 788, 447, 672),
+
+                    new GameSpawn(374, 39, 734),
+                    new GameSpawn(374, 39, 730),
+                    new GameSpawn(379, 39, 722),
+                    new GameSpawn(384, 39, 720),
+                    new GameSpawn(388, 39, 720),
+                    new GameSpawn(393, 39, 722),
+                    new GameSpawn(396, 39, 725),
+                    new GameSpawn(398, 39, 730),
+                    new GameSpawn(398, 39, 734),
+                    new GameSpawn(396, 39, 739),
+                    new GameSpawn(393, 39, 742),
+                    new GameSpawn(388, 39, 744),
+                    new GameSpawn(384, 39, 744),
+                    new GameSpawn(379, 39, 742),
+                    new GameSpawn(376, 39, 739)
+
             )
     ),
     HoeHoeHoe(
