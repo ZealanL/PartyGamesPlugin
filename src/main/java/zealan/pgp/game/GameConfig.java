@@ -217,24 +217,22 @@ public enum GameConfig {
                     new GameSpawn(-1709, 50, -2073)
             )
     ),
-    /*
     PigFishing(
-            GamePigFishing.class, "Pig Fishing", Items.FISHING_ROD,
-            GameStyle.POINTS, 75,
+            GamePigFishing.class, "Pig Fishing", Material.FISHING_ROD,
+            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 75,
             new GameLoadInfo(
-                    new BlockPos(436, 27, -1877),
-                    new GameSpawn[]{
-                            new GameSpawn(435, 27, -1875, Direction.EAST),
-                            new GameSpawn(435, 27, -1864, Direction.EAST),
-                            new GameSpawn(444, 27, -1855, Direction.NORTH),
-                            new GameSpawn(455, 27, -1855, Direction.NORTH),
-                            new GameSpawn(464, 27, -1864, BlockFace.WEST),
-                            new GameSpawn(464, 27, -1875, BlockFace.WEST),
-                            new GameSpawn(455, 27, -1884, Direction.SOUTH),
-                            new GameSpawn(444, 27, -1884, Direction.SOUTH),
-                    }
+                    new BlockRange2d(418, -1840, 479, -1902),
+
+                    new GameSpawn(435, 27, -1875, BlockFace.EAST),
+                    new GameSpawn(435, 27, -1864, BlockFace.EAST),
+                    new GameSpawn(444, 27, -1855, BlockFace.NORTH),
+                    new GameSpawn(455, 27, -1855, BlockFace.NORTH),
+                    new GameSpawn(464, 27, -1864, BlockFace.WEST),
+                    new GameSpawn(464, 27, -1875, BlockFace.WEST),
+                    new GameSpawn(455, 27, -1884, BlockFace.SOUTH),
+                    new GameSpawn(444, 27, -1884, BlockFace.SOUTH)
             )
-    ),*/
+    ),
     PigJousting(
             GamePigJousting.class, "Pig Jousting", Material.SADDLE,
             GameStyle.SURVIVAL, null, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
