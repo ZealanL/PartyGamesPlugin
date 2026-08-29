@@ -117,6 +117,10 @@ public class EntityUtil {
         ((CraftFallingSand)fbe).getHandle().ticksLived = 1;
     }
 
+    public static float getYaw(Entity entity) {
+        return ((CraftEntity)entity).getHandle().yaw;
+    }
+
     public static void setYaw(Entity entity, float yaw) {
         ((CraftEntity)entity).getHandle().yaw = yaw;
     }

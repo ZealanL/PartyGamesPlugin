@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -148,6 +149,11 @@ public class WorldEventsMgr extends AutoListener {
             return getWorldPerms(world);
         }
 
+        if (event instanceof EntityEvent) {
+            World world = ((EntityEvent)event).getEntity().getWorld();
+            return getWorldPerms(world);
+        }
+
         return null;
     }
 
@@ -208,9 +214,15 @@ public class WorldEventsMgr extends AutoListener {
     void handle(EntityDamageByEntityEvent event) {
         WorldEvents worldEvents = getWorldEventsFromEvent(event);
         if (worldEvents == null) return;
+
         if (event.getDamager() instanceof Player) {
             if (!worldEvents.canAttackEntity((Player)event.getDamager(), event.getEntity(), event))
                 event.setCancelled(true);
+        } else if (event.getDamager() instanceof Projectile projectile) {
+            if (projectile.getShooter() instanceof Player player) {
+                if (!worldEvents.canAttackEntity(player, event.getEntity(), event))
+                    event.setCancelled(true);
+            }
         }
     }
 
@@ -274,6 +286,11 @@ public class WorldEventsMgr extends AutoListener {
             event.setCancelled(true);
         if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
             event.setCancelled(true);
+    }
+
+    @EventHandler
+    void handle(EntityCombustEvent event) {
+        event.setCancelled(true);
     }
 
     // Never allow items to be damaged

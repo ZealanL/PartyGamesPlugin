@@ -30,16 +30,14 @@ public enum GameConfig {
                     new GameSpawn(-243, 1, -3608)
             )
     ),
-    /*
     Avalanche(
-            GameAvalanche.class, "Avalanche", Items.ICE,
-            GameStyle.SURVIVAL, GameConfig.MAX_GAME_DURATION,
+            GameAvalanche.class, "Avalanche", Material.ICE,
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
-                    new BlockPos(-2393, 46, -1878),
-                    new GameSpawn[]{new GameSpawn(-2393, 46, -1878)}
+                    new BlockRange2d(-2415, -1859, -2371, -1906),
+                    new GameSpawn(-2394, 45, -1881)
             )
     ),
-   */
     Bombardment(
             GameBombardment.class, "Bombardment", Material.COAL_BLOCK,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
@@ -213,40 +211,40 @@ public enum GameConfig {
                             new GameSpawn(435, 27, -1864, Direction.EAST),
                             new GameSpawn(444, 27, -1855, Direction.NORTH),
                             new GameSpawn(455, 27, -1855, Direction.NORTH),
-                            new GameSpawn(464, 27, -1864, Direction.WEST),
-                            new GameSpawn(464, 27, -1875, Direction.WEST),
+                            new GameSpawn(464, 27, -1864, BlockFace.WEST),
+                            new GameSpawn(464, 27, -1875, BlockFace.WEST),
                             new GameSpawn(455, 27, -1884, Direction.SOUTH),
                             new GameSpawn(444, 27, -1884, Direction.SOUTH),
                     }
             )
-    ),
+    ),*/
+    
     ShootingRange(
-            GameShootingRange.class, "Shooting Range", Items.BOW,
-            GameStyle.POINTS, 120,
+            GameShootingRange.class, "Shooting Range", Material.BOW,
+            GameStyle.POINTS, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
 
             new GameLoadInfo(
-                    new BlockPos(1141, 30, 726),
+                    new BlockRange2d(1071, 767, 1152, 689),
                     new GameSpawn[]{
-                            new GameSpawn(1141, 30, 748, Direction.WEST),
-                            new GameSpawn(1141, 30, 746, Direction.WEST),
-                            new GameSpawn(1141, 30, 744, Direction.WEST),
-                            new GameSpawn(1141, 30, 742, Direction.WEST),
-                            new GameSpawn(1141, 30, 740, Direction.WEST),
-                            new GameSpawn(1141, 30, 738, Direction.WEST),
-                            new GameSpawn(1141, 30, 736, Direction.WEST),
-                            new GameSpawn(1141, 30, 734, Direction.WEST),
-                            new GameSpawn(1141, 30, 732, Direction.WEST),
-                            new GameSpawn(1141, 30, 730, Direction.WEST),
-                            new GameSpawn(1141, 30, 728, Direction.WEST),
-                            new GameSpawn(1141, 30, 726, Direction.WEST),
-                            new GameSpawn(1141, 30, 724, Direction.WEST),
-                            new GameSpawn(1141, 30, 722, Direction.WEST),
-                            new GameSpawn(1141, 30, 720, Direction.WEST),
-                            new GameSpawn(1141, 30, 718, Direction.WEST),
+                            new GameSpawn(1141, 30, 748, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 746, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 744, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 742, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 740, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 738, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 736, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 734, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 732, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 730, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 728, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 726, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 724, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 722, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 720, BlockFace.WEST),
+                            new GameSpawn(1141, 30, 718, BlockFace.WEST),
                     }
             )
     ),
-    */
     SpiderMaze(
             GameSpiderMaze.class, "Spider Maze", ItemUtil.getSpawnEgg(EntityType.SPIDER),
             GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,
