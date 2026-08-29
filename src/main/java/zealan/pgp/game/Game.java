@@ -103,10 +103,17 @@ public abstract class Game implements WorldEvents {
         innerOnStart();
     }
 
+    public String getFullName() {
+        String result = config.properName;
+        if (variant != GameVariant.NONE)
+            result += " (" + variant.name() + ")";
+        return result;
+    }
+
     // TODO: Messy and duplicates logic elsewhere (like player stats manager)
     private String generateEndPrintout() {
         var lines = new ArrayList<String>();
-        lines.add("&7Game ended: &6" + config.properName);
+        lines.add("&7Game ended: &6" + this.getFullName());
         List<Gamer> gamersByScore = new ArrayList<>(getGamers());
         gamersByScore.sort(Comparator.comparingInt(Gamer::getScore).reversed());
 

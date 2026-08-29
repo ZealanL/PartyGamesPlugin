@@ -211,7 +211,7 @@ public class GameMgr extends AutoListener {
             for (var gamer : gamers) {
                 lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant, Instant.now()));
                 gamer.setGame(game);
-                Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + gameConfig.properName);
+                Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + game.getFullName());
             }
 
             activeGames.add(game);
