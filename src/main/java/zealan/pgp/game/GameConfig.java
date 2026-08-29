@@ -84,6 +84,13 @@ public enum GameConfig {
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.SURVIVAL, 60,
             new GameLoadInfo(
                     new BlockRange2d(1151, -1850, 1190, -1888),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
+                    new GameSpawn(1171, 112, -1867),
                     new GameSpawn(1171, 112, -1867)
             )
     ),

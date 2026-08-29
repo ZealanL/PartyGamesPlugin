@@ -108,7 +108,7 @@ public class GameHoeHoeHoe extends Game {
         }
 
         block.setType(Material.WOOL);
-        block.setData(playerDye.getData());
+        block.setData(playerDye.getWoolData());
         gamer.points++;
         world.playSound(block.getLocation(), Sound.LAVA_POP, 1.0f, 0.5f);
         PlayerUtil.makeSwingHand(player);
