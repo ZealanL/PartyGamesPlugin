@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -202,7 +203,7 @@ public class GameAnimalSlaughter extends Game {
     }
 
     @Override
-    public boolean canAttackEntity(Player player, Entity attacked, EntityDamageEvent event) {
+    public boolean canAttackEntity(Player player, Entity attacked, EntityDamageByEntityEvent event) {
         var gamer = getPlayingGamer(player);
         if (gamer == null)
             return false;

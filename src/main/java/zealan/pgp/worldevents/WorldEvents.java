@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ public interface WorldEvents {
         return false;
     }
 
-    default boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
+    default boolean canAttackEntity(Player player, Entity entity, EntityDamageByEntityEvent event) {
         return false;
     }
 

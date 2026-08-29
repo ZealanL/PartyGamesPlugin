@@ -31,7 +31,7 @@ public enum GameConfig {
             )
     ),
     Avalanche(
-            GameAvalanche.class, "Avalanche", Material.ICE,
+            GameAvalanche.class, "Avalanche", Material.SNOW_BLOCK,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
             new GameLoadInfo(
                     new BlockRange2d(-2415, -1859, -2371, -1906),
@@ -78,9 +78,26 @@ public enum GameConfig {
                     new GameSpawn(939, 78, -3621)
             )
     ),
+    FrozenFloor(
+            GameFrozenFloor.class, "Frozen Floor", Material.ICE,
+            GameStyle.SURVIVAL, null, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+            new GameLoadInfo(
+                    new BlockRange2d(-621, 1663, -517, 1559),
+
+                    // TODO: Guesses from replays
+                    new GameSpawn(-572, 59, 1591),
+                    new GameSpawn(-572, 59, 1620),
+                    new GameSpawn(-572, 59, 1615),
+                    new GameSpawn(-575, 59, 1600),
+                    new GameSpawn(-557, 59, 1596),
+                    new GameSpawn(-556, 59, 1618),
+                    new GameSpawn(-555, 59, 1607),
+                    new GameSpawn(-567, 59, 1595)
+            )
+    ),
     HighGround(
             GameHighGround.class, "High Ground", ItemUtil.getColoredWool(DyeColor.RED),
-            GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,
+            GameStyle.POINTS, null, GameMode.ADVENTURE, 60,
             new GameLoadInfo(
                     new BlockRange2d(315, 788, 447, 672),
 
@@ -218,7 +235,33 @@ public enum GameConfig {
                     }
             )
     ),*/
-    
+    PigJousting(
+            GamePigJousting.class, "Pig Jousting", Material.SADDLE,
+            GameStyle.SURVIVAL, null, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+            new GameLoadInfo(
+                    new BlockRange2d(-2483, 752, -2430, 698),
+
+                    new GameSpawn(-2470, 30, 748),
+                    new GameSpawn(-2461, 30, 748),
+                    new GameSpawn(-2452, 30, 748),
+                    new GameSpawn(-2443, 30, 748),
+
+                    new GameSpawn(-2480, 30, 711),
+                    new GameSpawn(-2480, 30, 720),
+                    new GameSpawn(-2480, 30, 729),
+                    new GameSpawn(-2480, 30, 728),
+
+                    new GameSpawn(-2470, 30, 701),
+                    new GameSpawn(-2461, 30, 701),
+                    new GameSpawn(-2452, 30, 701),
+                    new GameSpawn(-2443, 30, 701),
+
+                    new GameSpawn(-2433, 30, 711),
+                    new GameSpawn(-2433, 30, 720),
+                    new GameSpawn(-2433, 30, 729),
+                    new GameSpawn(-2433, 30, 728)
+            )
+    ),
     ShootingRange(
             GameShootingRange.class, "Shooting Range", Material.BOW,
             GameStyle.POINTS, GameRecordStyle.FASTEST_TIME, GameMode.ADVENTURE, 120,

@@ -153,4 +153,9 @@ public class GameCannonPainting extends Game {
             }
         }
     }
+
+    @Override
+    public boolean canInteractBlock(Player player, Block block) {
+        return true;
+    }
 }

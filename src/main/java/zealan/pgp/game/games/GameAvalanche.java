@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import zealan.pgp.api.display.Display;
@@ -192,7 +193,7 @@ public class GameAvalanche extends Game {
     }
 
     @Override
-    public boolean canAttackEntity(Player player, Entity attacked, EntityDamageEvent event) {
+    public boolean canAttackEntity(Player player, Entity attacked, EntityDamageByEntityEvent event) {
         return waveIdx > WAVES.length;
     }
 }

@@ -164,7 +164,7 @@ public class PlayerStatsRecord {
         gameStats.timesPlayed++;
         gameStats.totalTicksPlayed += gamer.getTicksPlayedFor();
 
-        if (finished) {
+        if (finished && game.config.recordStyle != null) {
             var variant = game.variant;
             var existingPB = gameStats.variantPBs.get(variant.name());
             var candidatePB = new GamePB(game.config, gamer);

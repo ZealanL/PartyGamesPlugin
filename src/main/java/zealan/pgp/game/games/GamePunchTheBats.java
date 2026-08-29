@@ -6,6 +6,7 @@ import org.bukkit.entity.Bat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 import zealan.pgp.api.display.Display;
@@ -117,7 +118,7 @@ public class GamePunchTheBats extends Game {
     }
 
     @Override
-    public boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
+    public boolean canAttackEntity(Player player, Entity entity, EntityDamageByEntityEvent event) {
         if (entity instanceof Bat bat) {
             var gamer = getPlayingGamer(player);
             if (gamer == null)

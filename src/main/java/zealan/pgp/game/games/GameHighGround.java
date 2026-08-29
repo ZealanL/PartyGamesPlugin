@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,7 +28,7 @@ public class GameHighGround extends Game {
             var slapFish = new ItemStack(Material.RAW_FISH);
             slapFish.addUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
             var meta = slapFish.getItemMeta();
-            meta.setDisplayName("Northern Pike (Cancelled)");
+            meta.setDisplayName("Fishy");
             slapFish.setItemMeta(meta);
 
             gamer.player.getInventory().setItem(0, slapFish);
@@ -60,7 +61,7 @@ public class GameHighGround extends Game {
     }
 
     @Override
-    public boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
+    public boolean canAttackEntity(Player player, Entity entity, EntityDamageByEntityEvent event) {
         event.setDamage(1e-5);
         return hasStarted();
     }

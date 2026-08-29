@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -276,7 +277,7 @@ public class GameShootingRange extends Game {
     }
 
     @Override
-    public boolean canAttackEntity(Player player, Entity entity, EntityDamageEvent event) {
+    public boolean canAttackEntity(Player player, Entity entity, EntityDamageByEntityEvent event) {
         if (!hasStarted())
             return false;
 
