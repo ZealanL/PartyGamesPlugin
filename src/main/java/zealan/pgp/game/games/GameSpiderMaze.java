@@ -87,10 +87,8 @@ public class GameSpiderMaze extends Game {
     private static final int SPIDER_RELEASE_DELAY_TICKS = 3 * 20;
     private final HashMap<Spider, Gamer> spiders = new HashMap<>();
 
-    public static final BlockRange WIN_BLOCK_RANGE = BlockRange.fromCorners(
-            45, 2, 2099,
-            44, 2, 2098
-    );
+    public static final Vector WIN_POS = new Vector(45, 2, 2099);
+    public static final double WIN_RANGE = 1.5;
 
     @Override
     public void onLoaded() {
@@ -217,7 +215,8 @@ public class GameSpiderMaze extends Game {
 
         for (Gamer gp : getPlayingGamers()) {
             Location loc = gp.player.getLocation();
-            if (WIN_BLOCK_RANGE.contains(new Vec3i(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()))) {
+            var winDelta2d = WIN_POS.clone().subtract(loc.toVector()).setY(0);
+            if (winDelta2d.length() <= WIN_RANGE) {
                 for (Gamer ogp : getPlayingGamers())
                     Display.sendMsg(world, "{} finished the maze!", ogp.player);
                 gp.stopPlaying(true);
