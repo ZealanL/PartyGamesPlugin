@@ -32,7 +32,7 @@ public class GameLawnMoower extends Game {
     private static final double MOO_CHANCE_PER_TICK = 0.005;
     private static final double COW_MOVEMENT_LERP = 0.07;
 
-    public class CowController {
+    public static class CowController {
         public final Player player;
         public final Entity vehicle;
         protected Vector prevMovementInput = new Vector(0,0,0);
@@ -114,7 +114,7 @@ public class GameLawnMoower extends Game {
                 boolean moveFaster = realPlayerInput.forward != 0 || realPlayerInput.sideways != 0;
                 double cowSpeed = moveFaster ? COW_FASTER_SPEED : COW_BASE_SPEED;
 
-                controller.updateMovement(fakePlayerInput.multiply(cowSpeed), COW_MOVEMENT_LERP);
+                controller.updateMovement(fakePlayerInput.multiply(cowSpeed), getTicksElapsed() > 0 ? COW_MOVEMENT_LERP : 1.0);
 
                 Location cowLoc = cow.getLocation();
                 Block block = world.getBlockAt(cowLoc.getBlockX(), cowLoc.getBlockY(), cowLoc.getBlockZ());
