@@ -174,6 +174,8 @@ public class WorldMgr extends AutoListener {
         world.setTicksPerAnimalSpawns(999999);
         world.setTicksPerMonsterSpawns(999999);
 
+        world.setPVP(true);
+
         world.setTime(23000);
         {
             world.setGameRuleValue("doDaylightCycle", "false");

@@ -47,8 +47,11 @@ public interface WorldEvents {
         return true;
     }
 
-    default void onPlayerDeath(Player player) {
+    default void onEntityDamage(Entity entity, EntityDamageEvent.DamageCause source) {
 
+    }
+
+    default void onPlayerDeath(Player player) {
     }
 
     default void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {

@@ -42,6 +42,9 @@ public class PlayerUtil {
         // Remove fire
         player.setFireTicks(0);
 
+        // Fix collision
+        player.spigot().setCollidesWithEntities(true);
+
         if (player.getVehicle() != null)
             player.getVehicle().remove();
     }

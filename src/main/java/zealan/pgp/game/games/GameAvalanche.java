@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -174,56 +175,22 @@ public class GameAvalanche extends Game {
 
 
     @Override
-    public void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
-        if (!(projectile instanceof Snowball snowball) || !snowballs.remove(snowball))
-            return;
-
-        Vector hitLoc = snowball.getLocation().toVector();
-        Gamer nearest = null;
-        double nearestDistSq = Double.MAX_VALUE;
-        for (Gamer gamer : getPlayingGamers()) {
-
-            // TODO: Hardcoded calculation
-            Vector hitboxMin = gamer.player.getLocation().toVector().subtract(new Vector(0.3, 0, 0.3));
-            Vector hitboxMax = gamer.player.getLocation().toVector().add(new Vector(0.3, 1.8, 0.3));
-
-            Vector clippedHitLoc = new Vector(
-                    Math.clamp(hitLoc.getX(), hitboxMin.getX(), hitboxMax.getX()),
-                    Math.clamp(hitLoc.getY(), hitboxMin.getY(), hitboxMax.getY()),
-                    Math.clamp(hitLoc.getZ(), hitboxMin.getZ(), hitboxMax.getZ())
-            );
-
-            Vector hitOffset = hitLoc.clone().subtract(clippedHitLoc);
-            final double SNOWBALL_HITBOX_EXTENT = 0.25 / 2;
-            if (Math.abs(hitOffset.getX()) > SNOWBALL_HITBOX_EXTENT
-                    || Math.abs(hitOffset.getY()) > SNOWBALL_HITBOX_EXTENT
-                    || Math.abs(hitOffset.getZ()) > SNOWBALL_HITBOX_EXTENT) {
-                continue;
+    public void onEntityDamage(Entity entity, EntityDamageEvent.DamageCause cause) {
+        if (entity instanceof Player player && cause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+            boolean blockAbovePlayer = false;
+            Location playerLoc = player.getLocation();
+            for (int i = 0; i < 5; i++) {
+                Block above = world.getBlockAt(playerLoc.getBlockX(), playerLoc.getBlockY() + i, playerLoc.getBlockZ());
+                if (above.getType() != Material.AIR) {
+                    blockAbovePlayer = true;
+                    break;
+                }
             }
 
-            double distSq = hitOffset.lengthSquared();
-            if (distSq < nearestDistSq) {
-                nearestDistSq = distSq;
-                nearest = gamer;
+            if (!blockAbovePlayer) {
+                player.damage(999);
+                Display.sendMsg(world, "&7{} was hit by a snowball!", player);
             }
-        }
-
-        if (nearest == null)
-            return;
-
-        boolean blockAbovePlayer = false;
-        Location playerLoc = nearest.player.getLocation();
-        for (int i = 0; i < 5; i++) {
-            Block above = world.getBlockAt(playerLoc.getBlockX(), playerLoc.getBlockY() + i, playerLoc.getBlockZ());
-            if (above.getType() != Material.AIR) {
-                blockAbovePlayer = true;
-                break;
-            }
-        }
-
-        if (!blockAbovePlayer) {
-            nearest.player.damage(999);
-            Display.sendMsg(world, "&7{} was hit by a snowball!", nearest.player);
         }
     }
 

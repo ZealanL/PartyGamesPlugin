@@ -286,6 +286,10 @@ public class WorldEventsMgr extends AutoListener {
             event.setCancelled(true);
         if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
             event.setCancelled(true);
+
+        WorldEvents worldEvents = getWorldPerms(event.getEntity().getWorld());
+        if (worldEvents == null) return;
+        worldEvents.onEntityDamage(event.getEntity(), event.getCause());
     }
 
     @EventHandler
