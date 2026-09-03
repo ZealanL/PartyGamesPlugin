@@ -113,14 +113,10 @@ public class GameSpiderMaze extends Game {
 
                 Spider spider = (Spider) world.spawnEntity(spiderSpawnPos, EntityType.SPIDER);
 
-                // TODO: No clean 1.8 Bukkit equivalent for a custom EntityLiving subclass with
-                //  fully-overridden AI goals (no LOS requirement, ignores range, doesn't climb).
-                //  We approximate the base-stat tweaks via the NMS handle (closest existing pattern
-                //  in this codebase, see CraftArrow usage in GameMinecartRacing), and approximate the
-                //  "always chase, ignore line of sight, don't climb" targeting behavior manually in
-                //  innerOnTick() below instead of via registerGoals()/customServerAiStep() overrides.
                 EntityLiving nmsSpider = ((CraftLivingEntity) spider).getHandle();
-                nmsSpider.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.3);
+                nmsSpider.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(
+                        (variant == VARIANT_SUPER_SPIDERS) ? 0.8 : 0.3
+                );
                 nmsSpider.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0);
                 nmsSpider.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(128.0);
 
@@ -186,10 +182,6 @@ public class GameSpiderMaze extends Game {
             }
         }
 
-        // TODO: Approximation of the OLD NMS custom AI (NearestAttackableTargetGoal + a manual
-        //  customServerAiStep override that ignores line-of-sight/range). 1.8 Bukkit gives no hook to
-        //  register/override mob goals, so instead we manually steer each spider toward its target
-        //  player every tick once released, ignoring walls/LOS like the original did.
         if (getTicksElapsed() >= SPIDER_RELEASE_DELAY_TICKS) {
             for (var entry : spiders.entrySet()) {
                 Spider spider = entry.getKey();
@@ -199,16 +191,9 @@ public class GameSpiderMaze extends Game {
                 if (target.player.getGameMode() == GameMode.SPECTATOR)
                     continue;
 
-                Location spiderLoc = spider.getLocation();
-                Location targetLoc = target.player.getLocation();
-                Vector dir = targetLoc.toVector().subtract(spiderLoc.toVector());
-
                 var nmsSpider = ((CraftSpider)spider).getHandle();
-                nmsSpider.setGoalTarget(((CraftPlayer)target.player).getHandle());
-                if (dir.lengthSquared() > 1e-5) {
-                    dir.normalize();
-                    double speed = (variant == VARIANT_SUPER_SPIDERS) ? 0.7 : 0.3;
-                   // spider.setVelocity(dir.multiply(speed / 4.0));
+                if (nmsSpider != null && target.player != null) {
+                    nmsSpider.setGoalTarget(((CraftPlayer) target.player).getHandle());
                 }
             }
         }
@@ -217,8 +202,7 @@ public class GameSpiderMaze extends Game {
             Location loc = gp.player.getLocation();
             var winDelta2d = WIN_POS.clone().subtract(loc.toVector()).setY(0);
             if (winDelta2d.length() <= WIN_RANGE) {
-                for (Gamer ogp : getPlayingGamers())
-                    Display.sendMsg(world, "{} finished the maze!", ogp.player);
+                Display.sendMsg(world, "{} finished the maze!", gp.player);
                 gp.stopPlaying(true);
                 gp.player.playSound(gp.player.getLocation(), org.bukkit.Sound.LEVEL_UP, 0.8f, 1.5f);
             }
