@@ -19,7 +19,8 @@ import static zealan.pgp.Globals.GAME_MGR;
 
 public class SidebarMgr extends AutoListener {
 
-    private record ScoreboardData(String title, List<String> lines) { }
+    private record ScoreboardData(String title, List<String> lines) {
+    }
 
     private static final String OBJECTIVE_NAME = "pg_sidebar";
     private final Map<UUID, ScoreboardData> cachedData = new HashMap<>();
@@ -84,10 +85,16 @@ public class SidebarMgr extends AutoListener {
         ScoreboardData existing = cachedData.get(uuid);
 
         Scoreboard board = player.getScoreboard();
+        boolean freshBoard = false;
 
         if (board == null || board.equals(Bukkit.getScoreboardManager().getMainScoreboard())) {
             board = Bukkit.getScoreboardManager().getNewScoreboard();
             player.setScoreboard(board);
+            freshBoard = true;
+        }
+
+        if (freshBoard) {
+            existing = null;
         }
 
         Objective objective = board.getObjective(OBJECTIVE_NAME);
@@ -120,14 +127,17 @@ public class SidebarMgr extends AutoListener {
 
         for (int i = 0; i < newSize; i++) {
             String rawText = newLines.get(i);
+            String entryKey = makeEntryKey(i);
+            int score = newSize - i;
 
-            if (existing != null && i < oldSize && oldLines.get(i).equals(rawText)) {
+            objective.getScore(entryKey).setScore(score);
+
+            boolean textUnchanged = existing != null && i < oldSize && oldLines.get(i).equals(rawText);
+            if (textUnchanged) {
                 continue;
             }
 
             String formattedText = Display.format(rawText);
-            String entryKey = makeEntryKey(i);
-            int score = newSize - i;
 
             Team team = board.getTeam("sb_line_" + i);
             if (team == null) {
@@ -138,8 +148,6 @@ public class SidebarMgr extends AutoListener {
             String[] split = smartSplitLine(formattedText);
             team.setPrefix(split[0]);
             team.setSuffix(split[1]);
-
-            objective.getScore(entryKey).setScore(score);
         }
 
         cachedData.put(uuid, data);
@@ -155,28 +163,49 @@ public class SidebarMgr extends AutoListener {
     }
 
     private String[] smartSplitLine(String text) {
-        if (text.length() <= 16) {
-            return new String[]{text, ""};
+        StringBuilder prefix = new StringBuilder();
+        int visibleCount = 0;
+        int i = 0;
+
+        while (i < text.length() && visibleCount < 16) {
+            char c = text.charAt(i);
+            if (c == ChatColor.COLOR_CHAR && i + 1 < text.length()) {
+                prefix.append(c).append(text.charAt(i + 1));
+                i += 2;
+            } else {
+                prefix.append(c);
+                visibleCount++;
+                i++;
+            }
         }
 
-        String prefix = text.substring(0, 16);
-        String suffix;
+        String prefixStr = prefix.toString();
+        String remainder = text.substring(i);
 
-        if (prefix.charAt(15) == ChatColor.COLOR_CHAR) {
-            // Special case
-            prefix = prefix.substring(0, 15);
-            suffix = text.substring(15);
-        } else {
-            suffix = text.substring(16);
+        if (remainder.isEmpty()) {
+            return new String[]{
+                    prefixStr, ""
+            };
         }
 
-        String lastColors = ChatColor.getLastColors(prefix);
-        suffix = lastColors + suffix;
+        String lastColors = ChatColor.getLastColors(prefixStr);
+        String suffixText = lastColors + remainder;
 
-        if (suffix.length() > 16) {
-            suffix = suffix.substring(0, 16);
+        StringBuilder suffix = new StringBuilder();
+        visibleCount = 0;
+        i = 0;
+        while (i < suffixText.length() && visibleCount < 16) {
+            char c = suffixText.charAt(i);
+            if (c == ChatColor.COLOR_CHAR && i + 1 < suffixText.length()) {
+                suffix.append(c).append(suffixText.charAt(i + 1));
+                i += 2;
+            } else {
+                suffix.append(c);
+                visibleCount++;
+                i++;
+            }
         }
 
-        return new String[]{prefix, suffix};
+        return new String[]{prefixStr, suffix.toString()};
     }
 }
