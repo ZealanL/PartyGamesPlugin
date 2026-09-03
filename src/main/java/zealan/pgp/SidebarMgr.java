@@ -60,9 +60,8 @@ public class SidebarMgr extends AutoListener {
 
                         if (gameStyle == GameStyle.SURVIVAL) {
                             if (gamePlayer.isPlaying()) {
-                                lines.add("&fSurvived: &7(&f" +
-                                        Display.format(new Display.TicksTime(game.getTicksElapsed(), false)) +
-                                        "&7)"
+                                lines.add("&fSurvived: " +
+                                        Display.format(new Display.TicksTime(game.getTicksElapsed(), false))
                                 );
                             }
                             lines.add("&fPlayers: " + game.getPlayingGamers().size() + "&7/" + game.getGamers().size());
@@ -163,49 +162,30 @@ public class SidebarMgr extends AutoListener {
     }
 
     private String[] smartSplitLine(String text) {
-        StringBuilder prefix = new StringBuilder();
-        int visibleCount = 0;
-        int i = 0;
-
-        while (i < text.length() && visibleCount < 16) {
-            char c = text.charAt(i);
-            if (c == ChatColor.COLOR_CHAR && i + 1 < text.length()) {
-                prefix.append(c).append(text.charAt(i + 1));
-                i += 2;
-            } else {
-                prefix.append(c);
-                visibleCount++;
-                i++;
-            }
-        }
-
-        String prefixStr = prefix.toString();
-        String remainder = text.substring(i);
+        String prefix = limitLength(text);
+        String remainder = text.substring(prefix.length());
 
         if (remainder.isEmpty()) {
-            return new String[]{
-                    prefixStr, ""
-            };
+            return new String[]{prefix, ""};
         }
 
-        String lastColors = ChatColor.getLastColors(prefixStr);
-        String suffixText = lastColors + remainder;
+        String lastColors = ChatColor.getLastColors(prefix);
+        String suffixSource = lastColors + remainder;
+        String suffix = limitLength(suffixSource);
 
-        StringBuilder suffix = new StringBuilder();
-        visibleCount = 0;
-        i = 0;
-        while (i < suffixText.length() && visibleCount < 16) {
-            char c = suffixText.charAt(i);
-            if (c == ChatColor.COLOR_CHAR && i + 1 < suffixText.length()) {
-                suffix.append(c).append(suffixText.charAt(i + 1));
-                i += 2;
-            } else {
-                suffix.append(c);
-                visibleCount++;
-                i++;
-            }
+        return new String[]{prefix, suffix};
+    }
+
+    private String limitLength(String text) {
+        if (text.length() <= 16) {
+            return text;
         }
 
-        return new String[]{prefixStr, suffix.toString()};
+        int cut = 16;
+        if (text.charAt(cut - 1) == ChatColor.COLOR_CHAR) {
+            cut -= 1;
+        }
+
+        return text.substring(0, cut);
     }
 }
