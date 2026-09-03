@@ -303,7 +303,7 @@ public class WorldEventsMgr extends AutoListener {
     void handle(ProjectileHitEvent event) {
         WorldEvents worldEvents = getWorldPerms(event.getEntity().getWorld());
         if (worldEvents == null) return;
-        worldEvents.onProjectileHit(event.getEntity());
+        worldEvents.onProjectileHit(event.getEntity(), event);
     }
 
     // Never allow a vehicle to be damaged

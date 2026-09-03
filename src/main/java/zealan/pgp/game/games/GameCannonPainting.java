@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import zealan.pgp.game.Game;
 import zealan.pgp.game.GameVariant;
@@ -133,7 +134,7 @@ public class GameCannonPainting extends Game {
     }
 
     @Override
-    public void onProjectileHit(Projectile projectile) {
+    public void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
         var shooter = projectile.getShooter();
         if (shooter instanceof Player player && projectile instanceof Egg egg) {
             var gamer = getPlayingGamer(player);

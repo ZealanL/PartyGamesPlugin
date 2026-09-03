@@ -5,16 +5,19 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.bossbar.BossBarContent;
 import zealan.pgp.game.Game;
+import zealan.pgp.game.GameVariant;
 import zealan.pgp.game.Gamer;
 import zealan.pgp.math.BlockRange;
 import zealan.pgp.math.Vec3i;
@@ -22,7 +25,13 @@ import zealan.pgp.math.Vec3i;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static zealan.pgp.Globals.PLOG;
+
 public class GameAvalanche extends Game {
+    public static final GameVariant VARIANT_DODGING = new GameVariant(
+            "dodge", "Dodging Practice", "No cover, just snowballs!", Material.SNOW_BALL
+    );
+
     public GameAvalanche(InitParams params) {
         super(params);
     }
@@ -48,7 +57,9 @@ public class GameAvalanche extends Game {
     private static final int SNOWBALLS_PER_TICK = 60;
     private static final int SNOWBALLS_PHASE_TICKS = 4 * 20;
 
-    private record Wave(int prepareSecs, int numSafePoints) {}
+    private record Wave(int prepareSecs, int numSafePoints) {
+    }
+
     private static final Wave[] WAVES = {
             new Wave(8, 4),
             new Wave(7, 4),
@@ -96,7 +107,11 @@ public class GameAvalanche extends Game {
     }
 
     private Wave getCurWave() {
-        return WAVES[Math.max(0, Math.min(waveIdx, WAVES.length - 1))];
+        if (variant == VARIANT_DODGING) {
+            return new Wave(0, 0);
+        }
+
+        return WAVES[Math.clamp(waveIdx, 0, WAVES.length - 1)];
     }
 
     private boolean inSnowballPhase() {
@@ -124,7 +139,7 @@ public class GameAvalanche extends Game {
         } else {
             String name = "&e&lWave " + (waveIdx + 1);
             int ticksTillSnowballs = waveTicksRemaining - SNOWBALLS_PHASE_TICKS;
-            double frac = (double) ticksTillSnowballs / (double) (getCurWave().prepareSecs() * 20);
+            double frac = (double) ticksTillSnowballs / (double) Math.max(1, getCurWave().prepareSecs() * 20);
             return new BossBarContent(name, (float) frac);
         }
     }
@@ -157,23 +172,43 @@ public class GameAvalanche extends Game {
             progressWave();
     }
 
+
     @Override
-    public void onProjectileHit(Projectile projectile) {
+    public void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
         if (!(projectile instanceof Snowball snowball) || !snowballs.remove(snowball))
             return;
 
-        Location hitLoc = snowball.getLocation();
+        Vector hitLoc = snowball.getLocation().toVector();
         Gamer nearest = null;
         double nearestDistSq = Double.MAX_VALUE;
         for (Gamer gamer : getPlayingGamers()) {
-            double distSq = gamer.player.getLocation().distanceSquared(hitLoc);
+
+            // TODO: Hardcoded calculation
+            Vector hitboxMin = gamer.player.getLocation().toVector().subtract(new Vector(0.3, 0, 0.3));
+            Vector hitboxMax = gamer.player.getLocation().toVector().add(new Vector(0.3, 1.8, 0.3));
+
+            Vector clippedHitLoc = new Vector(
+                    Math.clamp(hitLoc.getX(), hitboxMin.getX(), hitboxMax.getX()),
+                    Math.clamp(hitLoc.getY(), hitboxMin.getY(), hitboxMax.getY()),
+                    Math.clamp(hitLoc.getZ(), hitboxMin.getZ(), hitboxMax.getZ())
+            );
+
+            Vector hitOffset = hitLoc.clone().subtract(clippedHitLoc);
+            final double SNOWBALL_HITBOX_EXTENT = 0.25 / 2;
+            if (Math.abs(hitOffset.getX()) > SNOWBALL_HITBOX_EXTENT
+                    || Math.abs(hitOffset.getY()) > SNOWBALL_HITBOX_EXTENT
+                    || Math.abs(hitOffset.getZ()) > SNOWBALL_HITBOX_EXTENT) {
+                continue;
+            }
+
+            double distSq = hitOffset.lengthSquared();
             if (distSq < nearestDistSq) {
                 nearestDistSq = distSq;
                 nearest = gamer;
             }
         }
 
-        if (nearest == null || nearestDistSq > 3.0)
+        if (nearest == null)
             return;
 
         boolean blockAbovePlayer = false;

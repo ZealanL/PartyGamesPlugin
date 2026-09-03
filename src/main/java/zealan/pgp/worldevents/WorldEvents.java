@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -50,6 +51,6 @@ public interface WorldEvents {
 
     }
 
-    default void onProjectileHit(Projectile projectile) {
+    default void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
     }
 }

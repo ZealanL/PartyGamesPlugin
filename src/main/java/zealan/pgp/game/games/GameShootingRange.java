@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import zealan.pgp.api.display.Display;
@@ -291,7 +292,7 @@ public class GameShootingRange extends Game {
     }
 
     @Override
-    public void onProjectileHit(Projectile projectile) {
+    public void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
         if (!(projectile instanceof Arrow arrow) || !arrow.isCustomNameVisible())
             return;
 
