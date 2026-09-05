@@ -82,7 +82,7 @@ public class GameAvalanche extends Game {
     private void progressWave() {
         waveIdx++;
         waveTicksRemaining = (getCurWave().prepareSecs() * 20) + SNOWBALLS_PHASE_TICKS;
-        if (waveIdx > FINAL_WAVE_IDX) {
+        if (waveIdx > FINAL_WAVE_IDX && variant != VARIANT_DODGING) {
             end(true);
             return;
         }
