@@ -25,7 +25,7 @@ public class GamePigJousting extends Game {
     private static final double MOVE_SPEED = 7.0;
 
     private final HashMap<Gamer, Pig> pigMap = new HashMap<>();
-    private int deathmatchTimer = 10;
+    private int deathmatchTimer = 60;
 
     public GamePigJousting(InitParams params) {
         super(params);
@@ -47,9 +47,12 @@ public class GamePigJousting extends Game {
     public void spawnGamer(Gamer gamer) {
         super.spawnGamer(gamer);
 
+        var chunk = gamer.player.getLocation().getChunk();
+        if (!chunk.isLoaded())
+            chunk.load();
         Pig pig = (Pig) world.spawnEntity(gamer.player.getLocation(), EntityType.PIG);
+        pig.setRemoveWhenFarAway(false);
         pig.setSaddle(true);
-        EntityUtil.setNoAI(pig, true);
         pigMap.put(gamer, pig);
 
         gamer.player.getInventory().setItem(0, new ItemStack(Material.IRON_SWORD));
@@ -94,7 +97,7 @@ public class GamePigJousting extends Game {
 
             if (deathmatchTimer <= 0) {
                 for (var gamer : getPlayingGamers())
-                    gamer.player.damage(2.0);
+                    gamer.player.damage(1.0);
             }
         }
 
