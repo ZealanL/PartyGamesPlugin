@@ -233,7 +233,7 @@ public class GameAnimalSlaughter extends Game {
                             pitch
                     );
                 } else if (animalsNeg.contains(animal)) {
-                    gamer.points /= 2;
+                    gamer.points -= (gamer.points / 2);
                     gamer.player.playSound(gamer.player.getLocation(), Sound.HURT_FLESH, 1.0f, 0.5f);
                 }
             }
