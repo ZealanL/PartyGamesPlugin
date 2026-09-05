@@ -7,6 +7,9 @@ import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientSteerVehicle;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerAttachEntity;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnLivingEntity;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnPlayer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -48,6 +51,23 @@ public class PlayerMgr extends AutoListener {
                 var spawnPacket = new WrapperPlayServerSpawnPlayer(event);
                 if (fakeSpectatorUUIDs.contains(spawnPacket.getUUID())) {
                     event.setCancelled(true);
+                }
+            } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
+                // TODO: Move code
+                var spawnPacket = new WrapperPlayServerSpawnLivingEntity(event);
+                int entityId = spawnPacket.getEntityId();
+                var player = (Player) event.getPlayer();
+                if (player.getVehicle() != null && player.getVehicle().getEntityId() == entityId) {
+                    WrapperPlayServerAttachEntity attachPacket = new WrapperPlayServerAttachEntity(
+                            player.getEntityId(),
+                            entityId,
+                            false
+                    );
+
+                    Bukkit.getScheduler().runTask(PLUGIN, () -> {
+                        event.getUser().sendPacket(attachPacket);
+                    });
+
                 }
             }
         }

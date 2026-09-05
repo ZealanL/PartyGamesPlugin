@@ -64,12 +64,7 @@ public class GameLawnMoower extends Game {
 
             Location loc = gamer.player.getLocation();
             Cow cow = (Cow) world.spawnEntity(loc, EntityType.COW);
-
-            Bukkit.getScheduler().runTaskLater(
-                    PLUGIN,
-                    () ->  PlayerUtil.syncMount(gamer.player, cow),
-                    1
-            );
+            cow.setPassenger(gamer.player);
 
             CowController controller = new CowController(gamer.player, cow);
             vehicleControllers.put(gamer, controller);
@@ -80,7 +75,9 @@ public class GameLawnMoower extends Game {
     protected void innerOnStart() {
         for (Gamer gamer : getPlayingGamers()) {
             CowController controller = vehicleControllers.get(gamer);
-            PlayerUtil.syncMount(gamer.player, controller.vehicle);
+            if (gamer.player.getVehicle() != controller.vehicle) {
+                PlayerUtil.syncMount(gamer.player, controller.vehicle);
+            }
         }
     }
 
@@ -105,6 +102,7 @@ public class GameLawnMoower extends Game {
 
         for (Gamer gamer : getPlayingGamers()) {
             CowController controller = vehicleControllers.get(gamer);
+
             if (controller != null && controller.vehicle instanceof Cow cow && cow.isValid()) {
                 cow.getLocation().setYaw(gamer.player.getLocation().getYaw());
 
@@ -114,7 +112,7 @@ public class GameLawnMoower extends Game {
                 boolean moveFaster = realPlayerInput.forward != 0 || realPlayerInput.sideways != 0;
                 double cowSpeed = moveFaster ? COW_FASTER_SPEED : COW_BASE_SPEED;
 
-                controller.updateMovement(fakePlayerInput.multiply(cowSpeed), getTicksElapsed() > 0 ? COW_MOVEMENT_LERP : 1.0);
+                controller.updateMovement(fakePlayerInput.multiply(cowSpeed), COW_MOVEMENT_LERP);
 
                 Location cowLoc = cow.getLocation();
                 Block block = world.getBlockAt(cowLoc.getBlockX(), cowLoc.getBlockY(), cowLoc.getBlockZ());
