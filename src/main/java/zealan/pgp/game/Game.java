@@ -231,6 +231,11 @@ public abstract class Game implements WorldEvents {
         var spawn = getGamerSpawn(gamer);
         gamer.player.teleport(spawn.toLocation(world));
         gamer.player.setGameMode(config.gameMode);
+
+        var chunk = gamer.player.getLocation().getChunk();
+        if (!chunk.isLoaded()) {
+            chunk.load();
+        }
     }
 
     public BossBarContent updateBossBar(Gamer gamer) {
