@@ -29,6 +29,9 @@ public class PlayerUtil {
         player.getInventory().clear();
         player.getInventory().setHeldItemSlot(0);
 
+        // Clear equipment
+        player.getEquipment().clear();
+
         // Reset attributes
         player.setWalkSpeed(0.2f);
         player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
