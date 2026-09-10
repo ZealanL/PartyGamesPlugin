@@ -33,7 +33,7 @@ public class PlayerUtil {
         player.setWalkSpeed(0.2f);
         player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE);
         player.setFlying(false);
-        player.setFlySpeed(0.05f);
+        player.setFlySpeed(0.1f);
 
         // Clear XP
         player.setLevel(0);

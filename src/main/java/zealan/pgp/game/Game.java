@@ -55,6 +55,10 @@ public abstract class Game implements WorldEvents {
         return Math.max(config.maxDurationTicks() - ticksElapsed, 0);
     }
 
+    protected void overrideCountdownTicks(int amount) {
+        countdownTicks = amount;
+    }
+
     public final List<Gamer> getGamers() {
         return gamers;
     }

@@ -47,6 +47,10 @@ public interface WorldEvents {
         return true;
     }
 
+    default boolean canSendMessage(Player player, String message) {
+        return true;
+    }
+
     default void onEntityDamage(Entity entity, EntityDamageEvent.DamageCause source) {
 
     }
@@ -56,4 +60,5 @@ public interface WorldEvents {
 
     default void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
     }
+
 }

@@ -322,6 +322,14 @@ public class WorldEventsMgr extends AutoListener {
         return worldEvents.canStartFlying(player);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    void handle(PlayerChatEvent event) {
+        WorldEvents worldEvents = getWorldPerms(event.getPlayer().getWorld());
+        if (worldEvents == null) return;
+        if (!worldEvents.canSendMessage(event.getPlayer(), event.getMessage()))
+            event.setCancelled(true);
+    }
+
     // //////////
 
     @Override

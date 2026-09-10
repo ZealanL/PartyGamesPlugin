@@ -1,9 +1,6 @@
 package zealan.pgp.game.games;
 
-import org.bukkit.Effect;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
@@ -16,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import zealan.pgp.Globals;
 import zealan.pgp.api.display.Display;
 import zealan.pgp.game.Game;
 import zealan.pgp.game.GameVariant;
@@ -38,26 +36,12 @@ public class GameSpiderMaze extends Game {
 
     public GameSpiderMaze(InitParams params) {
         super(params);
+
+        overrideCountdownTicks(4 * 20);
     }
 
     public static final GameSpawn[] SPAWNS = new GameSpawn[]{
-            new GameSpawn(new Vector(93, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(77, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(61, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(45, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(29, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(13, 5, 2037), BlockFace.SOUTH),
-            new GameSpawn(new Vector(-3, 5, 2037), BlockFace.SOUTH),
-
-            new GameSpawn(new Vector(-17, 5, 2051), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2067), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2083), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2099), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2115), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2131), BlockFace.EAST),
-            new GameSpawn(new Vector(-17, 5, 2147), BlockFace.EAST),
-
-            new GameSpawn(new Vector(-3, 5, 2161), BlockFace.NORTH),
+            new GameSpawn(new Vector(-3, 5, 2161), BlockFace.NORTH), // N1
             new GameSpawn(new Vector(13, 5, 2161), BlockFace.NORTH),
             new GameSpawn(new Vector(29, 5, 2161), BlockFace.NORTH),
             new GameSpawn(new Vector(45, 5, 2161), BlockFace.NORTH),
@@ -65,7 +49,23 @@ public class GameSpiderMaze extends Game {
             new GameSpawn(new Vector(77, 5, 2161), BlockFace.NORTH),
             new GameSpawn(new Vector(93, 5, 2161), BlockFace.NORTH),
 
-            new GameSpawn(new Vector(107, 5, 2147), BlockFace.WEST),
+            new GameSpawn(new Vector(93, 5, 2037), BlockFace.SOUTH), // S1
+            new GameSpawn(new Vector(77, 5, 2037), BlockFace.SOUTH),
+            new GameSpawn(new Vector(61, 5, 2037), BlockFace.SOUTH),
+            new GameSpawn(new Vector(45, 5, 2037), BlockFace.SOUTH),
+            new GameSpawn(new Vector(29, 5, 2037), BlockFace.SOUTH),
+            new GameSpawn(new Vector(13, 5, 2037), BlockFace.SOUTH),
+            new GameSpawn(new Vector(-3, 5, 2037), BlockFace.SOUTH),
+
+            new GameSpawn(new Vector(-17, 5, 2147), BlockFace.EAST), // E1
+            new GameSpawn(new Vector(-17, 5, 2131), BlockFace.EAST),
+            new GameSpawn(new Vector(-17, 5, 2115), BlockFace.EAST),
+            new GameSpawn(new Vector(-17, 5, 2099), BlockFace.EAST),
+            new GameSpawn(new Vector(-17, 5, 2083), BlockFace.EAST),
+            new GameSpawn(new Vector(-17, 5, 2067), BlockFace.EAST),
+            new GameSpawn(new Vector(-17, 5, 2051), BlockFace.EAST),
+
+            new GameSpawn(new Vector(107, 5, 2147), BlockFace.WEST), // W1
             new GameSpawn(new Vector(107, 5, 2131), BlockFace.WEST),
             new GameSpawn(new Vector(107, 5, 2115), BlockFace.WEST),
             new GameSpawn(new Vector(107, 5, 2099), BlockFace.WEST),
@@ -74,15 +74,15 @@ public class GameSpiderMaze extends Game {
             new GameSpawn(new Vector(107, 5, 2051), BlockFace.WEST),
     };
 
-    private static BlockFace getSpawnDirection(int spawnIdx) {
-        final BlockFace[] spawnDirs = {
-                BlockFace.SOUTH,
-                BlockFace.EAST,
-                BlockFace.NORTH,
-                BlockFace.WEST
-        };
-        return spawnDirs[spawnIdx / 8];
+    public static String getSpawnName(int spawnIdx) {
+        final char[] DIR_CHARS = new char[]{'N', 'S', 'E', 'W'};
+
+        int dirIdx = spawnIdx / 8;
+        int sideIdx = spawnIdx % 8;
+        return DIR_CHARS[dirIdx] + String.valueOf(sideIdx + 1);
     }
+
+    ;
 
     private static final int SPIDER_RELEASE_DELAY_TICKS = 3 * 20;
     private final HashMap<Spider, Gamer> spiders = new HashMap<>();
@@ -129,6 +129,11 @@ public class GameSpiderMaze extends Game {
                     nmsSpider.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.7);
             }
         }
+
+        Display.sendMsg(
+                world,
+                "&a&lTIP: &fPick your spawn by typing its code &7(e.g. \"&eN5&7\") &fin chat before the game starts."
+        );
     }
 
     @Override
@@ -164,6 +169,10 @@ public class GameSpiderMaze extends Game {
         if (!hasStarted()) {
             for (Gamer gp : getPlayingGamers()) {
                 EntityUtil.setPosOnly(gp.player, getGamerSpawn(gp).pos);
+                Display.sendPopupText(
+                        gp.player,
+                        "&7Your spawn: &e" + getSpawnName(gp.spawnIdx)
+                );
             }
         }
 
@@ -183,6 +192,8 @@ public class GameSpiderMaze extends Game {
         }
 
         if (getTicksElapsed() >= SPIDER_RELEASE_DELAY_TICKS) {
+            spiders.entrySet().removeIf(entry -> !entry.getValue().isPlaying());
+
             for (var entry : spiders.entrySet()) {
                 Spider spider = entry.getKey();
                 Gamer target = entry.getValue();
@@ -191,9 +202,12 @@ public class GameSpiderMaze extends Game {
                 if (target.player.getGameMode() == GameMode.SPECTATOR)
                     continue;
 
-                var nmsSpider = ((CraftSpider)spider).getHandle();
+                var nmsSpider = ((CraftSpider) spider).getHandle();
                 if (nmsSpider != null && target.player != null) {
-                    nmsSpider.setGoalTarget(((CraftPlayer) target.player).getHandle());
+                    try {
+                        nmsSpider.setGoalTarget(((CraftPlayer) target.player).getHandle());
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }
@@ -207,5 +221,26 @@ public class GameSpiderMaze extends Game {
                 gp.player.playSound(gp.player.getLocation(), org.bukkit.Sound.LEVEL_UP, 0.8f, 1.5f);
             }
         }
+    }
+
+    @Override
+    public boolean canSendMessage(Player player, String message) {
+        var gamer = getPlayingGamer(player);
+        if (gamer == null) return true;
+        for (int i = 0; i < SPAWNS.length; i++) {
+            if (message.equalsIgnoreCase(getSpawnName(i))) {
+                if (!hasStarted()) {
+                    gamer.spawnIdx = i;
+                    spawnGamer(gamer);
+                    Display.sendMsg(gamer.player, "&aSpawn changed!");
+                    gamer.player.playSound(gamer.player.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8f, 1.5f);
+                } else {
+                    Display.sendMsg(gamer.player, "&cThe game already started!");
+                }
+                return false;
+            }
+        }
+
+        return true;
     }
 }

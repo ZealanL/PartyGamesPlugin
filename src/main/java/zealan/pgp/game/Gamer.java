@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import static zealan.pgp.Globals.*;
 
 public class Gamer {
-    public final int spawnIdx;
+    public int spawnIdx;
     public final Player player;
     protected Game game;
 
