@@ -44,7 +44,7 @@ public abstract class Game implements WorldEvents {
 
     // ///////////////
 
-    private int countdownTicks = 4 * 20;
+    private int countdownTicks = 45;
     private int ticksElapsed = 0;
 
     public final int getTicksElapsed() {

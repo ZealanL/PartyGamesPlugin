@@ -359,8 +359,16 @@ public enum GameConfig {
                     new GameSpawn(2449, 139, -2468 + 15, BlockFace.EAST),
                     new GameSpawn(2449, 139, -2468 + 18, BlockFace.EAST)
             )
-    )
+    ),
+    FireLeapers2(
+            GameFireLeapers.class, "Fire Leapers 2", Material.FLINT_AND_STEEL,
+            GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
+                new GameLoadInfo(
+                        new BlockRange2d(-409, 2136, -358, 2179),
 
+                        new GameSpawn(GameFireLeapers.SPAWN_CENTER)
+                )
+            )
     ;
 
     public static final int MAX_GAME_DURATION = 60 * 60 * 100; // 100 hours
