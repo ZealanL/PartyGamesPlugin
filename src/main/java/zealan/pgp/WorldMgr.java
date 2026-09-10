@@ -142,10 +142,23 @@ public class WorldMgr extends AutoListener {
                     boolean shouldRemove = world.getPlayers().isEmpty();
 
                     if (shouldRemove) {
-                        var worldDir = WorldUtil.getWorldDir(world.getName());
+                        for (Entity entity : world.getEntities()) {
+                            entity.remove();
+                        }
+
                         Bukkit.unloadWorld(world, false);
 
                         try {
+                            net.minecraft.server.v1_8_R3.MinecraftServer mcServer =
+                                    ((org.bukkit.craftbukkit.v1_8_R3.CraftServer) Bukkit.getServer()).getServer();
+
+                            mcServer.worlds.remove(((org.bukkit.craftbukkit.v1_8_R3.CraftWorld) world).getHandle());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            var worldDir = WorldUtil.getWorldDir(world.getName());
                             try (var stream = Files.walk(worldDir.toPath())) {
                                 stream.sorted(Comparator.reverseOrder())
                                         .map(Path::toFile)

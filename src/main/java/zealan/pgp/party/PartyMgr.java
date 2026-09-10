@@ -14,12 +14,13 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.WeakHashMap;
 
 import static zealan.pgp.Globals.COMMAND_SYS;
 
 public class PartyMgr extends AutoListener {
     private final List<Party> parties = new LinkedList<>();
-    private final HashMap<Player, Party> partyMap = new HashMap<>();
+    private final WeakHashMap<Player, Party> partyMap = new WeakHashMap<>();
 
     public final int MAX_INVITE_SECS = 60;
 

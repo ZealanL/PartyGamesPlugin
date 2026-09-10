@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import zealan.pgp.AutoListener;
 import zealan.pgp.api.display.Display;
 
@@ -101,6 +102,11 @@ public class AntiSpam extends AutoListener {
         if (reason != null && (reason.contains("disconnect.spam") || reason.toLowerCase().contains("spamming"))) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        spamAccums.remove(event.getPlayer().getUniqueId());
     }
 }
 

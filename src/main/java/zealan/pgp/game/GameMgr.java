@@ -27,7 +27,7 @@ public class GameMgr extends AutoListener {
     }
 
     private final Set<Game> activeGames = ConcurrentHashMap.newKeySet();
-    private final ConcurrentHashMap<Player, LastPlayedGame> lastPlayedGames = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, LastPlayedGame> lastPlayedGames = new ConcurrentHashMap<>();
 
     private final AtomicInteger numLoadingGames = new AtomicInteger(0);
     private static final int MAX_LOADING_GAMES = 2;
@@ -113,7 +113,7 @@ public class GameMgr extends AutoListener {
                 "playagain",
                 "Play the party game you just played",
                 ctx -> {
-                    var lastGame = lastPlayedGames.get(ctx.sender);
+                    var lastGame = lastPlayedGames.get(ctx.sender.getUniqueId());
                     if (lastGame == null)
                         return CommandResult.failure("You haven't played a game since you joined!");
 
@@ -160,7 +160,7 @@ public class GameMgr extends AutoListener {
             return false;
         }
 
-        var lastPlayed = lastPlayedGames.get(starter);
+        var lastPlayed = lastPlayedGames.get(starter.getUniqueId());
         if (lastPlayed != null) {
             var timeSince = Duration.between(lastPlayed.when, Instant.now());
             if (timeSince.getSeconds() < 2) {
@@ -209,7 +209,7 @@ public class GameMgr extends AutoListener {
             }
 
             for (var gamer : gamers) {
-                lastPlayedGames.put(gamer.player, new LastPlayedGame(gameConfig, variant, Instant.now()));
+                lastPlayedGames.put(gamer.player.getUniqueId(), new LastPlayedGame(gameConfig, variant, Instant.now()));
                 gamer.setGame(game);
                 Display.sendMsg(gamer.player, "&aStarting game {}...", "&6" + game.getFullName());
             }
@@ -233,7 +233,7 @@ public class GameMgr extends AutoListener {
         if (gamer != null) {
             gamer.stopPlaying(false);
         }
-        lastPlayedGames.remove(quitEvent.getPlayer());
+        lastPlayedGames.remove(quitEvent.getPlayer().getUniqueId());
     }
 
     @Override
