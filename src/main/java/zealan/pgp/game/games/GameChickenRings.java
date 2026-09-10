@@ -374,7 +374,6 @@ public class GameChickenRings extends Game {
                         PlayerUtil.syncMount(gamer.player, controller.chicken);
 
                         controller.curPos = resetLoc.toVector();
-                        controller.curMoveDelta = new Vector(0, 0, 0);
 
                         world.playSound(chickenLoc, Sound.ENDERMAN_TELEPORT, 1.0f, 1.2f);
                         world.playSound(resetLoc, Sound.ENDERMAN_TELEPORT, 2.0f, 1.1f);
