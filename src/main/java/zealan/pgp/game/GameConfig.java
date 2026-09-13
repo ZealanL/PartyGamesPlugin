@@ -361,12 +361,12 @@ public enum GameConfig {
             )
     ),
     FireLeapers2(
-            GameFireLeapers.class, "Fire Leapers 2", Material.FLINT_AND_STEEL,
+            GameFireLeapers2.class, "Fire Leapers 2", Material.FLINT_AND_STEEL,
             GameStyle.SURVIVAL, GameRecordStyle.LONGEST_TIME, GameMode.ADVENTURE, GameConfig.MAX_GAME_DURATION,
                 new GameLoadInfo(
                         new BlockRange2d(-409, 2136, -358, 2179),
 
-                        new GameSpawn(GameFireLeapers.SPAWN_CENTER)
+                        new GameSpawn(GameFireLeapers2.SPAWN_CENTER)
                 )
             )
     ;

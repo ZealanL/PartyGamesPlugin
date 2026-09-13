@@ -14,7 +14,7 @@ import zealan.pgp.math.Vec3i;
 
 import java.util.ArrayList;
 
-public class GameFireLeapers extends Game {
+public class GameFireLeapers2 extends Game {
     public static final Vec3i SPAWN_CENTER = new Vec3i(-383, 89, 2156);
     public static final int AREA_SQUARE_RADIUS = 14;
     public static final BlockFace[] DIRS = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST };
@@ -40,7 +40,7 @@ public class GameFireLeapers extends Game {
     private int totalWaves = 0;
     private int spawnDelay = 0;
 
-    public GameFireLeapers(InitParams params) {
+    public GameFireLeapers2(InitParams params) {
         super(params);
     }
 
