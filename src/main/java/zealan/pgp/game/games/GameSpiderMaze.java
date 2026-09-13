@@ -203,7 +203,7 @@ public class GameSpiderMaze extends Game {
                     continue;
 
                 var nmsSpider = ((CraftSpider) spider).getHandle();
-                if (nmsSpider != null && target.player != null) {
+                if (nmsSpider != null && nmsSpider.goalSelector != null && target.player != null) {
                     try {
                         nmsSpider.setGoalTarget(((CraftPlayer) target.player).getHandle());
                     } catch (Exception ignored) {
