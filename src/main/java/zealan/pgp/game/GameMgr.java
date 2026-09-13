@@ -183,6 +183,10 @@ public class GameMgr extends AutoListener {
         }
 
         PLOG.info("Started loading game...");
+
+        for (var player : playersForGame)
+            Display.sendPopupText(player, "&oLoading...");
+
         int numSpawns = gameConfig.loadInfo.spawns.length;
         ArrayList<Integer> spawnShuffle = IntStream.range(0, numSpawns)
                 .boxed().collect(Collectors.toCollection(ArrayList::new));
@@ -197,7 +201,7 @@ public class GameMgr extends AutoListener {
             var startMs = System.currentTimeMillis();
             numLoadingGames.getAndIncrement();
 
-            var world = WORLD_MGR.createTempWorldOf(loadRange);
+            var world = WORLD_MGR.getOrMakeTempWorldOf(loadRange);
 
             Game game;
             try {
@@ -218,7 +222,8 @@ public class GameMgr extends AutoListener {
             WORLD_EVENTS_MGR.register(world, game);
 
             var elapsedMs = System.currentTimeMillis() - startMs;
-            PLOG.info("Created new game world in " + elapsedMs + " ms!");
+            PLOG.info("Set up game world in " + elapsedMs + " ms!");
+
             game.onLoaded();
             numLoadingGames.getAndDecrement();
             PLOG.info("Finished loading game");

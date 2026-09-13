@@ -10,6 +10,7 @@ import zealan.pgp.leaderboard.LeaderboardMgr;
 import zealan.pgp.menu.MenuMgr;
 import zealan.pgp.party.PartyMgr;
 import zealan.pgp.stats.PlayerStatsMgr;
+import zealan.pgp.world.WorldMgr;
 import zealan.pgp.worldevents.WorldEventsMgr;
 
 import java.util.logging.Logger;
