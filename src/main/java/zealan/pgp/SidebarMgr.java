@@ -52,9 +52,8 @@ public class SidebarMgr extends AutoListener {
                         }
 
                         if (gameStyle != GameStyle.SURVIVAL) {
-                            lines.add("&fTime left: &7(&f" +
-                                    Display.format(new Display.TicksTime(game.getTicksRemaining(), false)) +
-                                    "&7)"
+                            lines.add("&fTime left: " +
+                                    Display.format(new Display.TicksTime(game.getTicksRemaining(), false))
                             );
                         }
 
