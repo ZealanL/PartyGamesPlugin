@@ -7,6 +7,8 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,7 +29,7 @@ public interface WorldEvents {
         return false;
     }
 
-    default boolean canInteractInv(Player player, Inventory inv) {
+    default boolean canInteractInv(Player player, Inventory inv, InventoryInteractEvent event) {
         return false;
     }
 
@@ -40,6 +42,14 @@ public interface WorldEvents {
     }
 
     default boolean canDropItem(Player player, ItemStack item) {
+        return false;
+    }
+
+    default boolean canDamageBlock(Player player, Block block) {
+        return true;
+    }
+
+    default boolean canPlaceBlock(Player player, Block block) {
         return false;
     }
 
@@ -60,5 +70,4 @@ public interface WorldEvents {
 
     default void onProjectileHit(Projectile projectile, ProjectileHitEvent event) {
     }
-
 }

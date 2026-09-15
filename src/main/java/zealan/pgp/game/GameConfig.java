@@ -335,6 +335,14 @@ public enum GameConfig {
                     new GameSpawn(GameVolcano.CENTER_BLOCK_POS)
             )
     ),
+    Workshop(
+            GameWorkshop.class, "Workshop", Material.WORKBENCH,
+            GameStyle.RACE, GameRecordStyle.FASTEST_TIME, GameMode.SURVIVAL, 120,
+            new GameLoadInfo(
+                    new BlockRange2d(-1866, 775, -1684, 704),
+                    GameWorkshop.SPAWNS
+            )
+    ),
     PunchTheBats(
             GamePunchTheBats.class, "Punch The Bats", ItemUtil.getSpawnEgg(EntityType.BAT),
             GameStyle.POINTS, GameRecordStyle.POINTS, GameMode.ADVENTURE, 60,

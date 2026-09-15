@@ -42,9 +42,15 @@ public class WorldMgr extends AutoListener {
     }
 
     private World getOrMakeTempWorld() {
-        for (var world : tempWorlds)
-            if (world.getPlayers().isEmpty())
+        for (var world : tempWorlds) {
+            if (world.getPlayers().isEmpty()) {
+                for (var entity : world.getEntities()) {
+                    entity.remove();
+                }
+
                 return world;
+            }
+        }
 
         PLOG.info("Creating new blank runtime world...");
         String tempWorldName = TEMP_WORLD_PREFIX + "_" + RAND.nextInt();
@@ -127,12 +133,6 @@ public class WorldMgr extends AutoListener {
     }
 
     @EventHandler
-    void handle(ChunkLoadEvent event) {
-        World world = event.getWorld();
-        fixWorld(world);
-    }
-
-    @EventHandler
     void handle(PluginDisableEvent event) {
         for (World world : this.tempWorlds) {
             Bukkit.unloadWorld(world, false);
@@ -142,6 +142,9 @@ public class WorldMgr extends AutoListener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChunkLoad(ChunkLoadEvent event) {
+        World world = event.getWorld();
+        fixWorld(world);
+
         for (Entity entity : event.getChunk().getEntities()) {
             if (!(entity instanceof Player)) {
                 entity.remove();

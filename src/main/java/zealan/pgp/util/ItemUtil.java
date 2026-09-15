@@ -16,4 +16,8 @@ public class ItemUtil {
     public static ItemStack getColoredWool(DyeColor color) {
         return new Wool(color).toItemStack();
     }
+
+    public static String getMaterialNameLower(Material material) {
+        return material.name().replace("_", " ").toLowerCase();
+    }
 }

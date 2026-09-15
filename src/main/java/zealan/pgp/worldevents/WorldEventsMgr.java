@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -16,10 +17,10 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.InventoryHolder;
@@ -134,6 +135,13 @@ public class WorldEventsMgr extends AutoListener {
             }
         }
 
+
+        if (event instanceof InventoryInteractEvent inventoryInteractEvent) {
+            if (inventoryInteractEvent.getWhoClicked() instanceof Player player) {
+                return player;
+            }
+        }
+
         return null;
     }
 
@@ -168,29 +176,17 @@ public class WorldEventsMgr extends AutoListener {
             event.setCancelled(true);
     }
 
-    // TODO: Unused, replaced with PlayerInteractEvent
-    /*
-    @EventHandler
-    void handle(BlockPlaceEvent event) {
-        WorldPerms worldPerms = getEventWorldPerms(event);
-        if (worldPerms == null) return;
-
-        if (!worldPerms.canPlaceBlock(event.getPlayer(), event.getBlock())) {
-            event.setCancelled(true);
-            needsInvUpdate.add(event.getPlayer());
-        }
-    }
-    */
-
     @EventHandler
     void handle(PlayerInteractEvent event) {
         WorldEvents worldEvents = getWorldEventsFromEvent(event);
         if (worldEvents == null) return;
 
         if (event.hasItem() && event.useItemInHand() != Event.Result.DENY) {
-            if (!worldEvents.canUseItem(event.getPlayer(), event.getItem())) {
-                event.setCancelled(true);
-                needsInvUpdateSet.add(event.getPlayer());
+            if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
+                if (!worldEvents.canUseItem(event.getPlayer(), event.getItem())) {
+                    event.setCancelled(true);
+                    needsInvUpdateSet.add(event.getPlayer());
+                }
             }
         }
 
@@ -232,7 +228,17 @@ public class WorldEventsMgr extends AutoListener {
 
         WorldEvents worldEvents = getWorldEventsFromEvent(event);
         if (worldEvents == null) return;
-        if (!worldEvents.canInteractInv((Player)event.getWhoClicked(), event.getInventory()))
+        if (!worldEvents.canInteractInv((Player)event.getWhoClicked(), event.getInventory(), event))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    void handle(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+
+        WorldEvents worldEvents = getWorldEventsFromEvent(event);
+        if (worldEvents == null) return;
+        if (!worldEvents.canInteractInv((Player)event.getWhoClicked(), event.getInventory(), event))
             event.setCancelled(true);
     }
 
@@ -327,6 +333,22 @@ public class WorldEventsMgr extends AutoListener {
         WorldEvents worldEvents = getWorldPerms(event.getPlayer().getWorld());
         if (worldEvents == null) return;
         if (!worldEvents.canSendMessage(event.getPlayer(), event.getMessage()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    void handle(BlockDamageEvent event) {
+        WorldEvents worldEvents = getWorldPerms(event.getPlayer().getWorld());
+        if (worldEvents == null) return;
+        if (!worldEvents.canDamageBlock(event.getPlayer(), event.getBlock()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    void handle(BlockPlaceEvent event) {
+        WorldEvents worldEvents = getWorldPerms(event.getPlayer().getWorld());
+        if (worldEvents == null) return;
+        if (!worldEvents.canPlaceBlock(event.getPlayer(), event.getBlock()))
             event.setCancelled(true);
     }
 
