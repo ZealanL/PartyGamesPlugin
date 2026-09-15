@@ -1,6 +1,7 @@
 package zealan.pgp.game.games;
 
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
@@ -159,7 +160,18 @@ public class GameFireLeapers2 extends Game {
                     final double FROM_PADDING = 0.25;
                     if (fromOffset - FROM_PADDING <= playerOffset && toOffset >= playerOffset) {
                         switch (wave.kind) {
-                            case NORMAL -> gamer.player.damage(2);
+                            case NORMAL -> {
+                                if (gamer.player.getNoDamageTicks() == 0) {
+                                    final int DAMAGE_AMOUNT = 2;
+                                    if (gamer.player.getHealth() > DAMAGE_AMOUNT) {
+                                        gamer.player.setHealth(gamer.player.getHealth() - DAMAGE_AMOUNT);
+                                        gamer.player.playEffect(EntityEffect.HURT);
+                                        gamer.player.setNoDamageTicks(10);
+                                    } else {
+                                        gamer.player.damage(DAMAGE_AMOUNT);
+                                    }
+                                }
+                            }
                             case HEAL -> {
                                 gamer.player.playSound(gamer.player.getLocation(), Sound.ORB_PICKUP, 0.75f, 1.0f);
                                 gamer.player.setHealth(
