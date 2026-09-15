@@ -175,13 +175,15 @@ public class GameWorkshop extends Game {
 
         var shuffledCrafts = new ArrayList<>(List.of(CRAFTS.clone()));
         Collections.shuffle(shuffledCrafts, this.rand);
-        this.crafts = shuffledCrafts.subList(0, 6).toArray(Material[]::new);
+        this.crafts = shuffledCrafts.subList(0, 5).toArray(Material[]::new);
 
         playInfos = new PlayInfo[SPAWNS.length];
         for (var gamer : getPlayingGamers()) {
             int spawnIdx = gamer.spawnIdx;
             playInfos[spawnIdx] = new PlayInfo(gamer);
         }
+
+        overrideCountdownTicks(6 * 20);
     }
 
     private static List<Material> getIngredientsFor(Material targetMaterial) {
@@ -446,6 +448,8 @@ public class GameWorkshop extends Game {
         if (smeltingStack == null)
             return;
         var smeltingResult = getSmeltingResult(smeltingStack.getType());
+        if (smeltingResult == null)
+            smeltingResult = new ItemStack(smeltingStack.getType());
         if (smeltingResult != null) {
             smeltingResult.setAmount(Math.min(smeltingStack.getAmount() * smeltingResult.getAmount(), 64));
 
@@ -482,8 +486,15 @@ public class GameWorkshop extends Game {
             var playInfo = playInfos[gamer.spawnIdx];
             if (!playInfo.isDone() && !playInfo.isProgressing()) {
                 var targetCraft = crafts[playInfo.craftIdx];
-                var held = player.getInventory().getItemInHand();
-                if (held != null && held.getType() == targetCraft) {
+                boolean hasCraft = false;
+                for (var stack : player.getInventory().getContents()) {
+                    if (stack != null && stack.getType() == targetCraft) {
+                        hasCraft = true;
+                        break;
+                    }
+                }
+
+                if (hasCraft) {
                     Display.sendPopupText(player, "&aComplete! &f[{}/{}]", playInfo.craftIdx + 1, crafts.length);
                     if (playInfo.craftIdx < crafts.length - 1) {
                         player.playSound(villager.getLocation(), Sound.ORB_PICKUP, 1, 1);
@@ -501,9 +512,9 @@ public class GameWorkshop extends Game {
                             "&d" + ItemUtil.getMaterialNameLower(crafts[playInfo.craftIdx]),
                             new Display.TicksTime(playInfo.craftTicks, true)
                     );
-                } else if (held != null && held.getType() != Material.AIR) {
+                } else {
                     player.playSound(villager.getLocation(), Sound.NOTE_PLING, 1, 0.5f);
-                    Display.sendPopupText(player, "&cWrong item!");
+                    Display.sendPopupText(player, "&cYou don't have the item!");
                 }
             }
         }
