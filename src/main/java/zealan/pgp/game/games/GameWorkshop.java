@@ -102,7 +102,9 @@ public class GameWorkshop extends Game {
             Material.DIAMOND_BOOTS,
 
             Material.COAL_BLOCK,
+
             Material.LAPIS_BLOCK,
+
             Material.EMERALD_BLOCK,
             Material.IRON_BLOCK,
             Material.GOLD_BLOCK,
@@ -229,6 +231,7 @@ public class GameWorkshop extends Game {
             case DIAMOND -> Material.DIAMOND_ORE;
             case REDSTONE -> Material.REDSTONE_ORE;
             case EMERALD -> Material.EMERALD_ORE;
+            case INK_SACK -> Material.LAPIS_ORE;
             default -> material;
         };
         block.setType(blockType);
@@ -420,14 +423,15 @@ public class GameWorkshop extends Game {
     }
 
     private void onGamerMineResourceBlock(Gamer gamer, Block block) {
-        Material material = block.getType();
+        var resultStack = new ItemStack(block.getType());
         var blockDrops = block.getDrops();
         if (!blockDrops.isEmpty()) {
-            material = blockDrops.iterator().next().getType();
+            resultStack = blockDrops.iterator().next();
         }
+        resultStack.setAmount(1);
 
         WorldUtil.breakBlock(world, block);
-        gamer.player.getInventory().addItem(new ItemStack(material));
+        gamer.player.getInventory().addItem(resultStack);
     }
 
     private ItemStack getSmeltingResult(Material material) {
