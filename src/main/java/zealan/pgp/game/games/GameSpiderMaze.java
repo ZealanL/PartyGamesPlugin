@@ -77,8 +77,8 @@ public class GameSpiderMaze extends Game {
     public static String getSpawnName(int spawnIdx) {
         final char[] DIR_CHARS = new char[]{'N', 'S', 'E', 'W'};
 
-        int dirIdx = spawnIdx / 8;
-        int sideIdx = spawnIdx % 8;
+        int dirIdx = spawnIdx / 7;
+        int sideIdx = spawnIdx % 7;
         return DIR_CHARS[dirIdx] + String.valueOf(sideIdx + 1);
     }
 
@@ -168,11 +168,13 @@ public class GameSpiderMaze extends Game {
     protected void innerOnTick() {
         if (!hasStarted()) {
             for (Gamer gp : getPlayingGamers()) {
-                EntityUtil.setPosOnly(gp.player, getGamerSpawn(gp).pos);
                 Display.sendPopupText(
                         gp.player,
                         "&7Your spawn: &e" + getSpawnName(gp.spawnIdx)
                 );
+                if (Math.abs(gp.player.getLocation().getY() - getGamerSpawn(gp).pos.getY()) > 1e-3) {
+                    EntityUtil.setPosOnly(gp.player, getGamerSpawn(gp).pos);
+                }
             }
         }
 
